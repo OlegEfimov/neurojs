@@ -56,7 +56,7 @@ function world() {
 
     this.brains.shared = new window.neurojs.Shared.ConfigPool()
 
-    this.brains.shared.set('actor', this.brains.actor.newConfiguration())
+    // this.brains.shared.set('actor', this.brains.actor.newConfiguration())
     this.brains.shared.set('critic', this.brains.critic.newConfiguration())
 };
 
