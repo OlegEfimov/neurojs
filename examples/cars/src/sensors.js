@@ -82,9 +82,11 @@ class DistanceSensor extends Sensor {
     }
 
     draw(g) {
-        var dist = this.hit ? this.distance : 1.0
+        // var dist = this.hit ? this.distance : 1.0
+        var dist = Math.random();
         var c = color.rgbToHex(Math.floor((1-dist) * 255), Math.floor((dist) * 128), 128)
-        g.lineStyle(this.highlighted ? 0.04 : 0.01, c, 0.5)
+        // g.lineStyle(this.highlighted ? 0.04 : 0.01, c, 0.5)
+        g.lineStyle(this.highlighted ? 0.04 : 0.05, c, 1.0)
         g.moveTo(this.start[0], this.start[1]);
         g.lineTo(this.start[0] + this.direction[0] * this.length * dist, this.start[1] + this.direction[1] * this.length * dist);
     }

@@ -86,9 +86,9 @@ agent.prototype.step = function (dt) {
         this.car.step()
     }
     
-    if (this.action) {
-        this.car.handle(this.action[0], this.action[1])
-    }
+    // if (this.action) {
+    //     this.car.handle(this.action[0], this.action[1])
+    // }
 
     return this.timer % this.timerFrequency === 0
 };
