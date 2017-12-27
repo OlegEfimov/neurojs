@@ -16,8 +16,8 @@ var neurojs = {
 	NetOnDisk: require('./storage.js'),
 	FileLoader: require('./util/downloader.js'),
 	Binary: require('./util/file.js'),
-	Shared: require('./shared.js')
-
+	Shared: require('./shared.js'),
+	SensorData: require('./wsServer.js')
 }
 
 if (typeof window !== 'undefined') {

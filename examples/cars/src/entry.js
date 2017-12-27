@@ -1,6 +1,25 @@
 var app = require('./index.js');
 var car = require('./car.js');
 
+var socket = new WebSocket("ws://127.0.0.1:8001/");
+
+function openSocket() {
+// text.html("Socket open");
+// socket.send("Hello server");
+}
+
+function showData(result) {
+// when the server returns, show the result in the div:
+// text.html("Sensor reading:" + result.data);
+var foundPos = result.data.indexOf('mm');
+if (foundPos == -1) return;
+var strPos = result.data.substring(1,foundPos+1);
+var xPos = int(strPos);        // convert result to an integer
+// text.position(xPos/2, 10);        // position the text
+this.world && this.world.sensorData = xPos;
+
+}
+
 function createLossChart() {
     var data = {
         series: [[], []]
@@ -12,6 +31,9 @@ function createLossChart() {
 }
 
 function boot() {
+    socket.onopen = openSocket;
+    socket.onmessage = showData;
+
     this.world = new app.world();
     this.renderer = new app.renderer(this.world, document.getElementById("container"));
 
