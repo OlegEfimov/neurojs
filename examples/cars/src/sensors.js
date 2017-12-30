@@ -82,8 +82,15 @@ class DistanceSensor extends Sensor {
     }
 
     draw(g) {
+        var dist = 1.0;
+        var vehicleBody = this.car.chassisBody;
+        if (window.sensorData !== null && window.sensorData < 700) {
+            dist = window.sensorData/700;
+            console.log(' = ' + dist);
+        }
+
         // var dist = this.hit ? this.distance : 1.0
-        var dist = Math.random();
+        // var dist = Math.random();
         var c = color.rgbToHex(Math.floor((1-dist) * 255), Math.floor((dist) * 128), 128)
         // g.lineStyle(this.highlighted ? 0.04 : 0.01, c, 0.5)
         g.lineStyle(this.highlighted ? 0.04 : 0.05, c, 1.0)

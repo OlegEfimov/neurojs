@@ -7,17 +7,17 @@ function openSocket() {
 // text.html("Socket open");
 // socket.send("Hello server");
 }
-
+window.sensorData = null;
 function showData(result) {
 // when the server returns, show the result in the div:
 // text.html("Sensor reading:" + result.data);
 var foundPos = result.data.indexOf('mm');
 if (foundPos == -1) return;
-var strPos = result.data.substring(1,foundPos+1);
-var xPos = int(strPos);        // convert result to an integer
+var strPos = result.data.substring(1,foundPos);
+var xPos = parseInt(strPos, 10);        // convert result to an integer
 // text.position(xPos/2, 10);        // position the text
-this.world && this.world.sensorData = xPos;
-
+window.sensorData = xPos;
+// console.log('------!!! = ' + strPos);
 }
 
 function createLossChart() {
@@ -31,10 +31,8 @@ function createLossChart() {
 }
 
 function boot() {
-    socket.onopen = openSocket;
-    socket.onmessage = showData;
-
     this.world = new app.world();
+    worldSelf = this.world;
     this.renderer = new app.renderer(this.world, document.getElementById("container"));
 
     this.world.init(this.renderer)
@@ -44,6 +42,9 @@ function boot() {
     this.dispatcher.begin();
 
     this.world.chart = createLossChart();
+
+    socket.onopen = openSocket;
+    socket.onmessage = showData;
 
     return this.dispatcher;
 };
