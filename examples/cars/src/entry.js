@@ -11,13 +11,26 @@ window.sensorData = null;
 function showData(result) {
 // when the server returns, show the result in the div:
 // text.html("Sensor reading:" + result.data);
-var foundPos = result.data.indexOf('mm');
-if (foundPos == -1) return;
-var strPos = result.data.substring(1,foundPos);
-var xPos = parseInt(strPos, 10);        // convert result to an integer
-// text.position(xPos/2, 10);        // position the text
-window.sensorData = xPos;
-// console.log('------!!! = ' + strPos);
+
+var str = result.data;
+str = str.substring(1,str.length-3)
+var temp = new Array();
+// this will return an array with strings "1", "2", etc.
+temp = str.split(",");
+
+for (a in temp ) {
+    temp[a] = parseInt(temp[a], 10);
+}
+
+window.sensorData = temp;
+
+// var foundPos = result.data.indexOf('mm');
+// if (foundPos == -1) return;
+// var strPos = result.data.substring(1,foundPos);
+// var xPos = parseInt(strPos, 10);        // convert result to an integer
+// // text.position(xPos/2, 10);        // position the text
+// window.sensorData = xPos;
+// // console.log('------!!! = ' + strPos);
 }
 
 function createLossChart() {

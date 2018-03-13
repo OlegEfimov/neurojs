@@ -81,12 +81,16 @@ class DistanceSensor extends Sensor {
         }
     }
 
-    draw(g) {
+    draw(g, sensorData) {
+        console.log('------!!! sensor -> draw(g)');
         var dist = 1.0;
         var vehicleBody = this.car.chassisBody;
-        if (window.sensorData !== null && window.sensorData < 700) {
-            dist = window.sensorData/700;
-            console.log(' = ' + dist);
+        if (sensorData !== null && sensorData !== 0 && sensorData < 350) {
+            dist = sensorData/350;
+            console.log(' dist = sensorData/700 = ' + dist);
+        } else {
+            console.log(' dist = 1.0 = ' + dist);
+
         }
 
         // var dist = this.hit ? this.distance : 1.0
@@ -119,7 +123,7 @@ class SpeedSensor extends Sensor {
 
     draw(g) {
         if (g.__label === undefined) {
-            g.__label = new PIXI.Text('0 km/h', { font: '80px Helvetica Neue' });
+            g.__label = new PIXI.Text('0 km/h', { font: '120px Helvetica Neue' });
             g.__label.scale.x = (g.__label.scale.y = 3e-3);
             g.addChild(g.__label);
         }
@@ -160,8 +164,12 @@ class SensorArray {
     }
 
     draw(g) {
-        for (var i = 0; i < this.sensors.length; i++) {
-            this.sensors[i].draw(g)
+        if (window.sensorData != null) {
+            for (var i = 0; i < this.sensors.length; i++) {
+                // if (window.sensorData[i]) {
+                    this.sensors[i].draw(g, window.sensorData[i])
+                // }
+            }
         }
     }
 
