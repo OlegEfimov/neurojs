@@ -82,14 +82,14 @@ class DistanceSensor extends Sensor {
     }
 
     draw(g, sensorData) {
-        console.log('------!!! sensor -> draw(g)');
+        // console.log('------!!! sensor -> draw(g)');
         var dist = 1.0;
         var vehicleBody = this.car.chassisBody;
-        if (sensorData !== null && sensorData !== 0 && sensorData < 350) {
-            dist = sensorData/350;
-            console.log(' dist = sensorData/700 = ' + dist);
+        if (sensorData !== null && sensorData !== 0 && sensorData < 700) {
+            dist = sensorData/700;
+            // console.log(' dist = sensorData/700 = ' + dist);
         } else {
-            console.log(' dist = 1.0 = ' + dist);
+            // console.log(' dist = 1.0 = ' + dist);
 
         }
 

@@ -1,7 +1,7 @@
 var app = require('./index.js');
 var car = require('./car.js');
 
-var socket = new WebSocket("ws://127.0.0.1:8001/");
+var socket = new WebSocket("ws://192.168.1.33:81/");
 
 function openSocket() {
 // text.html("Socket open");
@@ -13,7 +13,9 @@ function showData(result) {
 // text.html("Sensor reading:" + result.data);
 
 var str = result.data;
-str = str.substring(1,str.length-3)
+console.log(str);
+// str = str.substring(1,str.length-3)
+// console.log('str2= ' + str);
 var temp = new Array();
 // this will return an array with strings "1", "2", etc.
 temp = str.split(",");
