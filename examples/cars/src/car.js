@@ -150,11 +150,13 @@ class Car {
         this.wheels.topRight.rotation = this.frontWheel.steerValue * 0.7071067812
     }
 
-    handleKeyboard(k) {
+    handleKeyInput(k) {
         // To enable control of a car through the keyboard, uncomment:
         // this.handle((k.getN(38) - k.getN(40)), (k.getN(37) - k.getN(39)))
+        this.handle((k.getN(87) - k.getN(83)), (k.getN(65) - k.getN(68)))
+        // this.handle((k.getN(119) - k.getN(115)), (k.getN(97) - k.getN(100)))
 
-        if (k.getD(83) === 1) {
+        if (k.getD(86) === 1) {
             this.overlay.visible = !this.overlay.visible;
         }
     }
