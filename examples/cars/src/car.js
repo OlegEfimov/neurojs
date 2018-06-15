@@ -51,61 +51,94 @@ class Car {
 
             sprite.addChild(this.overlay);
 
-            var wheels = new PIXI.Graphics()
-            sprite.addChild(wheels)
+            // var wheels = new PIXI.Graphics()
+            // sprite.addChild(wheels)
 
-            var w = 0.12, h = 0.22
-            var space = 0.07
-            var col = "#" + this.chassisBody.color.toString(16)
-                col = parseInt(tc(col).darken(50).toHex(), 16)
-            var alpha = 0.35, alphal = 0.9
+            // var w = 0.12, h = 0.22
+            // var space = 0.07
+            // var col = "#" + this.chassisBody.color.toString(16)
+            //     col = parseInt(tc(col).darken(50).toHex(), 16)
+            // var alpha = 0.35, alphal = 0.9
 
-            var tl = new PIXI.Graphics()
-            var tr = new PIXI.Graphics()
+            // var tl = new PIXI.Graphics()
+            // var tr = new PIXI.Graphics()
 
-            tl.beginFill(col, alpha)
-            tl.position.x = -0.25
-            tl.position.y = 0.5 - h / 2 - space
-            tl.drawRect(-w / 2, -h / 2, w, h)
-            tl.endFill()
+            // tl.beginFill(col, alpha)
+            // tl.position.x = -0.25
+            // tl.position.y = 0.5 - h / 2 - space
+            // tl.drawRect(-w / 2, -h / 2, w, h)
+            // tl.endFill()
 
-            tr.beginFill(col, alpha)
-            tr.position.x = 0.25
-            tr.position.y = 0.5 - h / 2 - space
-            tr.drawRect(-w / 2, -h / 2, w, h)
-            tr.endFill()
+            // tr.beginFill(col, alpha)
+            // tr.position.x = 0.25
+            // tr.position.y = 0.5 - h / 2 - space
+            // tr.drawRect(-w / 2, -h / 2, w, h)
+            // tr.endFill()
 
-            this.wheels.topLeft = tl
-            this.wheels.topRight = tr
+            // this.wheels.topLeft = tl
+            // this.wheels.topRight = tr
 
-            wheels.addChild(tl)
-            wheels.addChild(tr)
+            // wheels.addChild(tl)
+            // wheels.addChild(tr)
 
-            wheels.beginFill(col, alpha)
-            // wheels.lineStyle(0.01, col, alphal)
-            wheels.drawRect(-0.25 - w / 2, -0.5 + space, w, h)
-            wheels.endFill()
+            // wheels.beginFill(col, alpha)
+            // // wheels.lineStyle(0.01, col, alphal)
+            // wheels.drawRect(-0.25 - w / 2, -0.5 + space, w, h)
+            // wheels.endFill()
 
-            wheels.beginFill(col, alpha)
-            // wheels.lineStyle(0.01, col, alphal)
-            wheels.drawRect(0.25 - w / 2, -0.5 + space, w, h)
-            wheels.endFill()
+            // wheels.beginFill(col, alpha)
+            // // wheels.lineStyle(0.01, col, alphal)
+            // wheels.drawRect(0.25 - w / 2, -0.5 + space, w, h)
+            // wheels.endFill()
+
+
+            // var bl = new PIXI.Graphics()
+            // var br = new PIXI.Graphics()
+
+            // bl.beginFill(col, alpha)
+            // bl.position.x = -0.25
+            // bl.position.y = 0.5 + h / 2 - space
+            // bl.drawRect(-w / 2, -h / 2, w, h)
+            // bl.endFill()
+
+            // br.beginFill(col, alpha)
+            // br.position.x = 0.25
+            // br.position.y = 0.5 + h / 2 - space
+            // br.drawRect(-w / 2, -h / 2, w, h)
+            // br.endFill()
+
+            // this.wheels.backLeft = bl
+            // this.wheels.backRight = br
+
+            // wheels.addChild(br)
+            // wheels.addChild(br)
+
         }).bind(this); 
 
         // Create the vehicle
         this.vehicle = new p2.TopDownVehicle(this.chassisBody);
 
         // Add one front wheel and one back wheel - we don't actually need four :)
-        this.frontWheel = this.vehicle.addWheel({
-            localPosition: [0, 0.5] // front
+        this.frontWheelLeft = this.vehicle.addWheel({
+            localPosition: [-0.5, 0.5] // front
         });
-        this.frontWheel.setSideFriction(50);
+        this.frontWheelLeft.setSideFriction(50);
+
+        this.frontWheelRight = this.vehicle.addWheel({
+            localPosition: [0.5, 0.5] // front
+        });
+        this.frontWheelRight.setSideFriction(50);
 
         // Back wheel
-        this.backWheel = this.vehicle.addWheel({
-            localPosition: [0, -0.5] // back
+        this.backWheelLeft = this.vehicle.addWheel({
+            localPosition: [-0.5, -0.5] // back
         })
-        this.backWheel.setSideFriction(45) // Less side friction on back wheel makes it easier to drift
+        this.backWheelLeft.setSideFriction(50) // Less side friction on back wheel makes it easier to drift
+
+        this.backWheelRight = this.vehicle.addWheel({
+            localPosition: [0.5, -0.5] // back
+        })
+        this.backWheelRight.setSideFriction(50) // Less side friction on back wheel makes it easier to drift
     }
 
     update() {
@@ -126,34 +159,87 @@ class Car {
     }
 
     handle(throttle, steer) {
+
+        console.log("throttle=" + throttle + "  steer=" + steer);
         // Steer value zero means straight forward. Positive is left and negative right.
-        this.frontWheel.steerValue = this.maxSteer * steer
+        // this.frontWheelLeft.steerValue = this.maxSteer * steer;
+        // this.frontWheelRight.steerValue = this.maxSteer * steer;
+        // this.backWheelLeft.steerValue = this.maxSteer * -steer;
+        // this.backWheelRight.steerValue = this.maxSteer * -steer;
 
         // Engine force forward
         var force = throttle * this.maxEngineForce
-        if (force < 0) {
-            if (this.backWheel.getSpeed() > 0.1) {
-                this.backWheel.setBrakeForce(-throttle * this.maxBrakeForce)
-                this.backWheel.engineForce = 0.0
-            }
-            else {
-                this.backWheel.setBrakeForce(0)
-                this.backWheel.engineForce = throttle * this.maxBackwardForce
-            }
-        }
-        else {
-            this.backWheel.setBrakeForce(0)
-            this.backWheel.engineForce = force
+        // if (force < 0) {
+        //     if (this.backWheelLeft.getSpeed() > 0.1) {
+        //         this.backWheelLeft.setBrakeForce(-throttle * this.maxBrakeForce)
+        //         this.backWheelLeft.engineForce = 0.0
+        //     }
+        //     else {
+        //         this.backWheelLeft.setBrakeForce(0)
+        //         this.backWheelLeft.engineForce = throttle * this.maxBackwardForce
+        //     }
+        // }
+        // else {
+        //     this.backWheelLeft.setBrakeForce(0)
+        //     this.backWheelLeft.engineForce = force
+        // }
+
+        // if (force < 0) {
+        //     if (this.backWheelRight.getSpeed() > 0.1) {
+        //         this.backWheelRight.setBrakeForce(-throttle * this.maxBrakeForce)
+        //         this.backWheelRight.engineForce = 0.0
+        //     }
+        //     else {
+        //         this.backWheelRight.setBrakeForce(0)
+        //         this.backWheelRight.engineForce = throttle * this.maxBackwardForce
+        //     }
+        // }
+        // else {
+        //     this.backWheelRight.setBrakeForce(0)
+        //     this.backWheelRight.engineForce = force
+        // }
+
+        if (steer == 0) {
+            this.frontWheelLeft.setBrakeForce(0)
+            this.frontWheelRight.setBrakeForce(0)
+            this.backWheelLeft.setBrakeForce(0)
+            this.backWheelRight.setBrakeForce(0)
+            this.frontWheelLeft.engineForce = force;
+            this.frontWheelRight.engineForce = force;
+            this.backWheelLeft.engineForce = force
+            this.backWheelRight.engineForce = force
         }
 
-        this.wheels.topLeft.rotation = this.frontWheel.steerValue * 0.7071067812
-        this.wheels.topRight.rotation = this.frontWheel.steerValue * 0.7071067812
+        if (steer > 0) {
+            this.frontWheelLeft.setBrakeForce(this.maxBrakeForce)
+            this.frontWheelRight.setBrakeForce(0)
+            this.backWheelLeft.setBrakeForce(this.maxBrakeForce)
+            this.backWheelRight.setBrakeForce(0)
+            this.frontWheelLeft.engineForce = 0;
+            this.frontWheelRight.engineForce = force;
+            this.backWheelLeft.engineForce = 0
+            this.backWheelRight.engineForce = force
+        }
+
+        if (steer < 0) {
+            this.frontWheelLeft.setBrakeForce(0)
+            this.frontWheelRight.setBrakeForce(this.maxBrakeForce)
+            this.backWheelLeft.setBrakeForce(0)
+            this.backWheelRight.setBrakeForce(this.maxBrakeForce)
+            this.frontWheelLeft.engineForce = force;
+            this.frontWheelRight.engineForce = 0;
+            this.backWheelLeft.engineForce = force
+            this.backWheelRight.engineForce = 0
+        }
+
+        // this.wheels.topLeft.rotation = this.frontWheelLeft.steerValue * 0.7071067812
+        // this.wheels.topRight.rotation = this.frontWheelRight.steerValue * 0.7071067812
     }
 
     handleKeyInput(k) {
         // To enable control of a car through the keyboard, uncomment:
         // this.handle((k.getN(38) - k.getN(40)), (k.getN(37) - k.getN(39)))
-        this.handle((k.getN(87) - k.getN(83)), (k.getN(65) - k.getN(68)))
+        this.handle((k.getN(87) - k.getN(83)), (k.getN(68) - k.getN(65)))
         // this.handle((k.getN(119) - k.getN(115)), (k.getN(97) - k.getN(100)))
 
         if (k.getD(86) === 1) {
