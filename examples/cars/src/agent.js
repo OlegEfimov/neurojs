@@ -87,7 +87,7 @@ agent.prototype.step = function (dt) {
     }
     
     if (this.action) {
-        this.car.handle(this.action[0], this.action[1])
+        // this.car.handle(this.action[0], this.action[1])
     }
 
     return this.timer % this.timerFrequency === 0

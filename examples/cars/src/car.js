@@ -112,23 +112,23 @@ class Car {
         this.frontLeftWeel = this.vehicle.addWheel({
             localPosition: [-0.5, 0.5]
         });
-        this.frontLeftWeel.setSideFriction(50);
+        this.frontLeftWeel.setSideFriction(9);
 
         this.frontRightWeel = this.vehicle.addWheel({
             localPosition: [0.5, 0.5]
         });
-        this.frontRightWeel.setSideFriction(50);
+        this.frontRightWeel.setSideFriction(9);
 
         //back wells
         this.backLeftWeel = this.vehicle.addWheel({
             localPosition: [-0.5, -0.5]
         });
-        this.backLeftWeel.setSideFriction(50);
+        this.backLeftWeel.setSideFriction(9);
 
         this.backRightWeel = this.vehicle.addWheel({
             localPosition: [0.5, -0.5]
         });
-        this.backRightWeel.setSideFriction(50);
+        this.backRightWeel.setSideFriction(9);
 
 
 /////////////////////////////
@@ -151,42 +151,70 @@ class Car {
         this.sensors.draw(this.overlay)
     }
 
-    handle(throttle, steer) {
-        // Steer value zero means straight forward. Positive is left and negative right.
-        // this.frontLeftWeel.steerValue = this.maxSteer * steer
-        // this.frontRightWeel.steerValue = this.maxSteer * steer
+    // handle(throttle, steer) {
+    //     // Steer value zero means straight forward. Positive is left and negative right.
+    //     this.frontLeftWeel.steerValue = this.maxSteer * steer
+    //     this.frontRightWeel.steerValue = this.maxSteer * steer
 
-        // Engine force forward
-        var force = throttle * this.maxEngineForce
-        if (force < 0) {
-            if (this.backLeftWeel.getSpeed() > 0.1) {
-                this.backLeftWeel.setBrakeForce(-throttle * this.maxBrakeForce)
-                this.backLeftWeel.engineForce = 0.0
-                this.backRightWeel.setBrakeForce(-throttle * this.maxBrakeForce)
-                this.backRightWeel.engineForce = 0.0
-            }
-            else {
-                this.backLeftWeel.setBrakeForce(0)
-                this.backLeftWeel.engineForce = throttle * this.maxBackwardForce
-                this.backRightWeel.setBrakeForce(0)
-                this.backRightWeel.engineForce = throttle * this.maxBackwardForce
-            }
-        }
-        else {
+    //     // Engine force forward
+    //     var force = throttle * this.maxEngineForce
+    //     if (force < 0) {
+    //         if (this.backLeftWeel.getSpeed() > 0.1) {
+    //             this.backLeftWeel.setBrakeForce(-throttle * this.maxBrakeForce)
+    //             this.backLeftWeel.engineForce = 0.0
+    //             this.backRightWeel.setBrakeForce(-throttle * this.maxBrakeForce)
+    //             this.backRightWeel.engineForce = 0.0
+    //         }
+    //         else {
+    //             this.backLeftWeel.setBrakeForce(0)
+    //             this.backLeftWeel.engineForce = throttle * this.maxBackwardForce
+    //             this.backRightWeel.setBrakeForce(0)
+    //             this.backRightWeel.engineForce = throttle * this.maxBackwardForce
+    //         }
+    //     }
+    //     else {
+    //         this.backLeftWeel.setBrakeForce(0)
+    //         this.backLeftWeel.engineForce = force
+    //         this.backRightWeel.setBrakeForce(0)
+    //         this.backRightWeel.engineForce = force
+    //     }
+
+    //     // this.wheels.topLeft.rotation = this.frontLeftWeel.steerValue * 0.7071067812
+    //     // this.wheels.topRight.rotation = this.frontLeftWeel.steerValue * 0.7071067812
+    // }
+
+    handle(action1, action2) {
+        var forceLeft = action1 * this.maxEngineForce
+        var forceRight = action2 * this.maxEngineForce
+
+        if (forceLeft == 0) {
+            this.frontLeftWeel.setBrakeForce(8)
+            this.backLeftWeel.setBrakeForce(8)
+        } else {
+            this.frontLeftWeel.setBrakeForce(0)
             this.backLeftWeel.setBrakeForce(0)
-            this.backLeftWeel.engineForce = force
-            this.backRightWeel.setBrakeForce(0)
-            this.backRightWeel.engineForce = force
         }
 
-        // this.wheels.topLeft.rotation = this.frontLeftWeel.steerValue * 0.7071067812
-        // this.wheels.topRight.rotation = this.frontLeftWeel.steerValue * 0.7071067812
+        this.frontLeftWeel.engineForce = forceLeft
+        this.backLeftWeel.engineForce = forceLeft
+
+        if (forceRight == 0) {
+            this.frontRightWeel.setBrakeForce(8)
+            this.backRightWeel.setBrakeForce(8)
+        } else {
+            this.frontRightWeel.setBrakeForce(0)
+            this.backRightWeel.setBrakeForce(0)
+        }
+
+        this.frontRightWeel.engineForce = forceRight
+        this.backRightWeel.engineForce = forceRight
+
     }
 
     handleKeyInput(k) {
         // To enable control of a car through the keyboard, uncomment:
         // this.handle((k.getN(38) - k.getN(40)), (k.getN(37) - k.getN(39)))
-        this.handle((k.getN(87) - k.getN(83)), (k.getN(68) - k.getN(65)))
+        this.handle((k.getN(87) - k.getN(83)), (k.getN(69) - k.getN(68)))
 
         if (k.getD(86) === 1) {
             this.overlay.visible = !this.overlay.visible;
