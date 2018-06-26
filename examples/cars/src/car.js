@@ -153,17 +153,21 @@ class Car {
     handleKeyInput(k) {
         // To enable control of a car through the keyboard, uncomment:
         // this.handle((k.getN(38) - k.getN(40)), (k.getN(37) - k.getN(39)))
+        this.handle((k.getN(87) - k.getN(83)), (k.getN(68) - k.getN(65)))
 
-        if (k.getD(83) === 1) {
+        if (k.getD(86) === 1) {
             this.overlay.visible = !this.overlay.visible;
         }
     }
 
 
     addToWorld() {
-        this.chassisBody.position[0] = (Math.random() - .5) * this.world.size.w
-        this.chassisBody.position[1] = (Math.random() - .5) * this.world.size.h
-        this.chassisBody.angle = (Math.random() * 2.0 - 1.0) * Math.PI
+        // this.chassisBody.position[0] = (Math.random() - .5) * this.world.size.w
+        // this.chassisBody.position[1] = (Math.random() - .5) * this.world.size.h
+        // this.chassisBody.angle = (Math.random() * 2.0 - 1.0) * Math.PI
+        this.chassisBody.position[0] = 0//this.world.size.w / 2
+        this.chassisBody.position[1] = 0//this.world.size.h / 2
+        this.chassisBody.angle = 0//Math.PI
 
         this.world.p2.addBody(this.chassisBody)
         this.vehicle.addToWorld(this.world.p2)

@@ -14,13 +14,13 @@ function dispatcher(renderer, world) {
             this.world.agents[i].car.handleKeyInput(k);
         }
         
-        // if (k.get(189)) {
-        //     this.renderer.zoom(0.9);
-        // }
+        if (k.get(189)) {
+            this.renderer.zoom(0.9);
+        }
 
-        // if (k.get(187)) {
-        //     this.renderer.zoom(1.1);
-        // }
+        if (k.get(187)) {
+            this.renderer.zoom(1.1);
+        }
     }).bind(this));
 
     this.__loop = this.loop.bind(this);
