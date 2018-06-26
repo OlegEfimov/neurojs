@@ -160,7 +160,7 @@ world.prototype.init = function (renderer) {
 
 world.prototype.populate = function (n) {
     for (var i = 0; i < n; i++) {
-        var ag = new agent({}, this);
+        var ag = new agent({number: i}, this);
         this.agents.push(ag);
     }
 };

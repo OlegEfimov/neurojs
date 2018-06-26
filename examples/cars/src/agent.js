@@ -56,7 +56,7 @@ agent.prototype.init = function (actor, critic) {
     this.world.brains.shared.add('critic', this.brain.algorithm.critic)
 
     this.actions = actions
-    this.car.addToWorld()
+    this.car.addToWorld(this.options.number)
 	this.loaded = true
 };
 
