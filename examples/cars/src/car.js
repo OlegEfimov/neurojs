@@ -95,17 +95,43 @@ class Car {
         // Create the vehicle
         this.vehicle = new p2.TopDownVehicle(this.chassisBody);
 
-        // Add one front wheel and one back wheel - we don't actually need four :)
-        this.frontWheel = this.vehicle.addWheel({
-            localPosition: [0, 0.5] // front
-        });
-        this.frontWheel.setSideFriction(50);
+        // // Add one front wheel and one back wheel - we don't actually need four :)
+        // this.frontWheel = this.vehicle.addWheel({
+        //     localPosition: [0, 0.5] // front
+        // });
+        // this.frontWheel.setSideFriction(50);
 
-        // Back wheel
-        this.backWheel = this.vehicle.addWheel({
-            localPosition: [0, -0.5] // back
-        })
-        this.backWheel.setSideFriction(45) // Less side friction on back wheel makes it easier to drift
+        // // Back wheel
+        // this.backWheel = this.vehicle.addWheel({
+        //     localPosition: [0, -0.5] // back
+        // })
+        // this.backWheel.setSideFriction(45) // Less side friction on back wheel makes it easier to drift
+//////////////////////////////
+
+        //front wells
+        this.frontLeftWeel = this.vehicle.addWheel({
+            localPosition: [-0.5, 0.5]
+        });
+        this.frontLeftWeel.setSideFriction(50);
+
+        this.frontRightWeel = this.vehicle.addWheel({
+            localPosition: [0.5, 0.5]
+        });
+        this.frontRightWeel.setSideFriction(50);
+
+        //back wells
+        this.backLeftWeel = this.vehicle.addWheel({
+            localPosition: [-0.5, -0.5]
+        });
+        this.backLeftWeel.setSideFriction(50);
+
+        this.backRightWeel = this.vehicle.addWheel({
+            localPosition: [0.5, -0.5]
+        });
+        this.backRightWeel.setSideFriction(50);
+
+
+/////////////////////////////
     }
 
     update() {
@@ -127,27 +153,34 @@ class Car {
 
     handle(throttle, steer) {
         // Steer value zero means straight forward. Positive is left and negative right.
-        this.frontWheel.steerValue = this.maxSteer * steer
+        // this.frontLeftWeel.steerValue = this.maxSteer * steer
+        // this.frontRightWeel.steerValue = this.maxSteer * steer
 
         // Engine force forward
         var force = throttle * this.maxEngineForce
         if (force < 0) {
-            if (this.backWheel.getSpeed() > 0.1) {
-                this.backWheel.setBrakeForce(-throttle * this.maxBrakeForce)
-                this.backWheel.engineForce = 0.0
+            if (this.backLeftWeel.getSpeed() > 0.1) {
+                this.backLeftWeel.setBrakeForce(-throttle * this.maxBrakeForce)
+                this.backLeftWeel.engineForce = 0.0
+                this.backRightWeel.setBrakeForce(-throttle * this.maxBrakeForce)
+                this.backRightWeel.engineForce = 0.0
             }
             else {
-                this.backWheel.setBrakeForce(0)
-                this.backWheel.engineForce = throttle * this.maxBackwardForce
+                this.backLeftWeel.setBrakeForce(0)
+                this.backLeftWeel.engineForce = throttle * this.maxBackwardForce
+                this.backRightWeel.setBrakeForce(0)
+                this.backRightWeel.engineForce = throttle * this.maxBackwardForce
             }
         }
         else {
-            this.backWheel.setBrakeForce(0)
-            this.backWheel.engineForce = force
+            this.backLeftWeel.setBrakeForce(0)
+            this.backLeftWeel.engineForce = force
+            this.backRightWeel.setBrakeForce(0)
+            this.backRightWeel.engineForce = force
         }
 
-        this.wheels.topLeft.rotation = this.frontWheel.steerValue * 0.7071067812
-        this.wheels.topRight.rotation = this.frontWheel.steerValue * 0.7071067812
+        // this.wheels.topLeft.rotation = this.frontLeftWeel.steerValue * 0.7071067812
+        // this.wheels.topRight.rotation = this.frontLeftWeel.steerValue * 0.7071067812
     }
 
     handleKeyInput(k) {
