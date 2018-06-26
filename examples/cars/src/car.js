@@ -29,6 +29,7 @@ class Car {
     createPhysicalBody() {
         // Create a dynamic body for the chassis
         this.chassisBody = new p2.Body({
+            // position: {x: 100, y: 50},
             mass: 1,
             damping: 0.2,
             angularDamping: 0.3,
@@ -41,7 +42,7 @@ class Car {
         this.chassisBody.car = true;
         this.chassisBody.damping = this.linearDamping;
 
-        var boxShape = new p2.Box({ width: 0.5, height: 1 });
+        var boxShape = new p2.Box({ width: 0.6, height: 1 });
         boxShape.entity = Car.ShapeEntity
 
         this.chassisBody.addShape(boxShape);
@@ -55,7 +56,7 @@ class Car {
             sprite.addChild(wheels)
 
             var w = 0.12, h = 0.22
-            var space = 0.07
+            var space = 0.2  // distance weel center from front/back
             var col = "#" + this.chassisBody.color.toString(16)
                 col = parseInt(tc(col).darken(50).toHex(), 16)
             var alpha = 0.35, alphal = 0.9
@@ -153,7 +154,7 @@ class Car {
     handleKeyInput(k) {
         // To enable control of a car through the keyboard, uncomment:
         // this.handle((k.getN(38) - k.getN(40)), (k.getN(37) - k.getN(39)))
-        this.handle((k.getN(87) - k.getN(83)), (k.getN(65) - k.getN(68)))
+        this.handle((k.getN(87) - k.getN(83)), (k.getN(68) - k.getN(65)))
         // this.handle((k.getN(119) - k.getN(115)), (k.getN(97) - k.getN(100)))
 
         if (k.getD(86) === 1) {
@@ -163,9 +164,12 @@ class Car {
 
 
     addToWorld() {
-        this.chassisBody.position[0] = (Math.random() - .5) * this.world.size.w
-        this.chassisBody.position[1] = (Math.random() - .5) * this.world.size.h
-        this.chassisBody.angle = (Math.random() * 2.0 - 1.0) * Math.PI
+        // this.chassisBody.position[0] = (Math.random() - .5) * this.world.size.w
+        // this.chassisBody.position[1] = (Math.random() - .5) * this.world.size.h
+        // this.chassisBody.angle = (Math.random() * 2.0 - 1.0) * Math.PI
+        this.chassisBody.position[0] = 0//this.world.size.w / 2
+        this.chassisBody.position[1] = 0//this.world.size.h / 2
+        this.chassisBody.angle = 0//Math.PI
 
         this.world.p2.addBody(this.chassisBody)
         this.vehicle.addToWorld(this.world.p2)
