@@ -188,8 +188,8 @@ class Car {
         var forceRight = action2 * this.maxEngineForce
 
         if (forceLeft == 0) {
-            this.frontLeftWeel.setBrakeForce(8)
-            this.backLeftWeel.setBrakeForce(8)
+            this.frontLeftWeel.setBrakeForce(9)
+            this.backLeftWeel.setBrakeForce(9)
         } else {
             this.frontLeftWeel.setBrakeForce(0)
             this.backLeftWeel.setBrakeForce(0)
@@ -199,8 +199,8 @@ class Car {
         this.backLeftWeel.engineForce = forceLeft
 
         if (forceRight == 0) {
-            this.frontRightWeel.setBrakeForce(8)
-            this.backRightWeel.setBrakeForce(8)
+            this.frontRightWeel.setBrakeForce(9)
+            this.backRightWeel.setBrakeForce(9)
         } else {
             this.frontRightWeel.setBrakeForce(0)
             this.backRightWeel.setBrakeForce(0)
@@ -226,8 +226,8 @@ class Car {
         // this.chassisBody.position[0] = (Math.random() - .5) * this.world.size.w
         // this.chassisBody.position[1] = (Math.random() - .5) * this.world.size.h
         // this.chassisBody.angle = (Math.random() * 2.0 - 1.0) * Math.PI
-        this.chassisBody.position[0] = 0.1 * number * this.world.size.w
-        this.chassisBody.position[1] = 0 * number * this.world.size.h
+        this.chassisBody.position[0] = 0.05 * number * this.world.size.w
+        this.chassisBody.position[1] = 0.05 * number * this.world.size.h
         this.chassisBody.angle = 0 * Math.PI
 
         this.world.p2.addBody(this.chassisBody)
