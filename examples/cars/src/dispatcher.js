@@ -1,4 +1,5 @@
 var requestAnimFrame =  window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function(callback) { window.setTimeout(callback, 1000 / 60); };
+// var requestAnimFrame =  function(callback) { window.setTimeout(callback, 1000 / 60); };
 var keyboard = require('./keyboard.js');
 
 function dispatcher(renderer, world) {

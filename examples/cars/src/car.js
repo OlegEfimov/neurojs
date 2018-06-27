@@ -45,6 +45,26 @@ class Car {
         boxShape.entity = Car.ShapeEntity
 
         this.chassisBody.addShape(boxShape);
+
+        var w = 0.1, h = 0.25
+        var space = 0.15
+        var frontRightPos = {
+            x: -0.25 - w / 2,
+            y: 0.5 - h - space
+        }
+        var frontLeftPos = {
+            x: 0.25 - w / 2,
+            y: 0.5 - h - space
+        }
+        var backRightPos = {
+            x: -0.25 - w / 2,
+            y: -0.5 + space
+        }
+        var backLeftPos = {
+            x: 0.25 - w / 2,
+            y: -0.5 + space
+        }
+
         this.chassisBody.gl_create = (function (sprite, r) {
             this.overlay = new PIXI.Graphics();
             this.overlay.visible = true;
@@ -54,41 +74,65 @@ class Car {
             var wheels = new PIXI.Graphics()
             sprite.addChild(wheels)
 
-            var w = 0.12, h = 0.22
-            var space = 0.07
+            // var w = 0.1, h = 0.25
+            // var space = 0.15
             var col = "#" + this.chassisBody.color.toString(16)
                 col = parseInt(tc(col).darken(50).toHex(), 16)
             var alpha = 0.35, alphal = 0.9
 
-            var tl = new PIXI.Graphics()
-            var tr = new PIXI.Graphics()
+            // var tl = new PIXI.Graphics()
+            // var tr = new PIXI.Graphics()
 
-            tl.beginFill(col, alpha)
-            tl.position.x = -0.25
-            tl.position.y = 0.5 - h / 2 - space
-            tl.drawRect(-w / 2, -h / 2, w, h)
-            tl.endFill()
+            // var col1 = "#ff0000"
+            //     col1 = parseInt(tc(col1).darken(50).toHex(), 16)
 
-            tr.beginFill(col, alpha)
-            tr.position.x = 0.25
-            tr.position.y = 0.5 - h / 2 - space
-            tr.drawRect(-w / 2, -h / 2, w, h)
-            tr.endFill()
+            // tl.beginFill(col1, 0.25)
+            // tl.position.x = -0.25
+            // tl.position.y = 0.5 - h / 2 - space
+            // tl.drawRect(-w / 2, -h / 2, w, h)
+            // tl.endFill()
 
-            this.wheels.topLeft = tl
-            this.wheels.topRight = tr
+            // var col2 = "#00ff00"
+            //     col2 = parseInt(tc(col2).darken(50).toHex(), 16)
+            // tr.beginFill(col2, 0.5)
+            // tr.position.x = 0.25
+            // tr.position.y = 0.5 - h / 2 - space
+            // tr.drawRect(-w / 2, -h / 2, w, h)
+            // tr.endFill()
 
-            wheels.addChild(tl)
-            wheels.addChild(tr)
+            // // this.wheels.topLeft = tl
+            // // this.wheels.topRight = tr
 
-            wheels.beginFill(col, alpha)
+            // wheels.addChild(tl)
+            // wheels.addChild(tr)
+
+
+            var col1 = "#ff0000"
+                col1 = parseInt(tc(col1).darken(50).toHex(), 16)
+            wheels.beginFill(col1, 0.25)
             // wheels.lineStyle(0.01, col, alphal)
-            wheels.drawRect(-0.25 - w / 2, -0.5 + space, w, h)
+            wheels.drawRect( frontRightPos.x, frontRightPos.y, w, h)
             wheels.endFill()
 
-            wheels.beginFill(col, alpha)
+            var col2 = "#00ff00"
+                col2 = parseInt(tc(col2).darken(50).toHex(), 16)
+            wheels.beginFill(col2, 0.5)
             // wheels.lineStyle(0.01, col, alphal)
-            wheels.drawRect(0.25 - w / 2, -0.5 + space, w, h)
+            wheels.drawRect(frontLeftPos.x, frontLeftPos.y, w, h)
+            wheels.endFill()
+
+            var col3 = "#0000ff"
+                col3 = parseInt(tc(col3).darken(50).toHex(), 16)
+            wheels.beginFill(col3, 0.75)
+            // wheels.lineStyle(0.01, col, alphal)
+            wheels.drawRect(backRightPos.x, backRightPos.y, w, h)
+            wheels.endFill()
+
+            var col4 = "#000000"
+                col4 = parseInt(tc(col4).darken(50).toHex(), 16)
+            wheels.beginFill(col4, 1)
+            // wheels.lineStyle(0.01, col, alphal)
+            wheels.drawRect(backLeftPos.x, backLeftPos.y, w, h)
             wheels.endFill()
         }).bind(this); 
 
@@ -110,23 +154,23 @@ class Car {
 
         //front wells
         this.frontLeftWeel = this.vehicle.addWheel({
-            localPosition: [-0.5, 0.5]
+            localPosition: [frontLeftPos.x, frontLeftPos.y]
         });
         this.frontLeftWeel.setSideFriction(9);
 
         this.frontRightWeel = this.vehicle.addWheel({
-            localPosition: [0.5, 0.5]
+            localPosition: [frontRightPos.x, frontRightPos.y]
         });
         this.frontRightWeel.setSideFriction(9);
 
         //back wells
         this.backLeftWeel = this.vehicle.addWheel({
-            localPosition: [-0.5, -0.5]
+            localPosition: [backLeftPos.x, backLeftPos.y]
         });
         this.backLeftWeel.setSideFriction(9);
 
         this.backRightWeel = this.vehicle.addWheel({
-            localPosition: [0.5, -0.5]
+            localPosition: [backRightPos.x, backRightPos.y]
         });
         this.backRightWeel.setSideFriction(9);
 

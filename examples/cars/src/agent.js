@@ -79,6 +79,10 @@ agent.prototype.step = function (dt) {
             this.reward -= 1.0 
         }
 
+        // if (speed <= -1e-2) { // punish back movement
+        //     this.reward -= 1.0 
+        // }
+
         this.loss = this.brain.learn(this.reward)
         this.action = this.brain.policy(this.car.sensors.data)
         
@@ -87,7 +91,7 @@ agent.prototype.step = function (dt) {
     }
     
     if (this.action) {
-        this.car.handle(this.action[0], this.action[1])
+        // this.car.handle(this.action[0], this.action[1])
     }
 
     return this.timer % this.timerFrequency === 0
