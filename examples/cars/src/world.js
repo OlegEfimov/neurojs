@@ -120,8 +120,8 @@ world.prototype.addWall = function (start, end, width) {
     });
 
     var rectangleShape = new p2.Box({ width: w, height:  h });
-    // rectangleShape.color = 0xFFFFFF
-    b.hidden = true;
+    rectangleShape.color = 0xFF0000
+    b.hidden = false;
     b.addShape(rectangleShape);
     this.p2.addBody(b);
 
@@ -150,10 +150,14 @@ world.prototype.init = function (renderer) {
     var h = renderer.viewport.height / renderer.viewport.scale
     var wx = w / 2, hx = h / 2
 
-    this.addWall( [ -wx - 0.25, -hx ], [ -wx - 0.25, hx ], 0.5 )
-    this.addWall( [ wx + 0.25, -hx ], [ wx + 0.25, hx ], 0.5 )
-    this.addWall( [ -wx, -hx - 0.25 ], [ wx, -hx - 0.25 ], 0.5 )
-    this.addWall( [ -wx, hx + 0.25 ], [ wx, hx + 0.25 ], 0.5 )
+    // this.addWall( [ -wx - 0.25, -hx ], [ -wx - 0.25, hx ], 0.5 )
+    // this.addWall( [ wx + 0.25, -hx ], [ wx + 0.25, hx ], 0.5 )
+    // this.addWall( [ -wx, -hx - 0.25 ], [ wx, -hx - 0.25 ], 0.5 )
+    // this.addWall( [ -wx, hx + 0.25 ], [ wx, hx + 0.25 ], 0.5 )
+    this.addWall( [ -wx - 0.25, -hx ], [ -wx - 0.25, hx ], 1.0 )
+    this.addWall( [ wx + 0.25, -hx ], [ wx + 0.25, hx ], 1.0 )
+    this.addWall( [ -wx, -hx - 0.25 ], [ wx, -hx - 0.25 ], 1.0 )
+    this.addWall( [ -wx, hx + 0.25 ], [ wx, hx + 0.25 ], 1.0 )
 
     this.size = { w, h }
 };
