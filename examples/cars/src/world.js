@@ -22,7 +22,7 @@ function world() {
     this.chartDataPoints = 200
     this.smoothReward = 0
 
-    this.plotRewardOnly = false
+    this.plotRewardOnly = true
 
     this.obstacles = []
 
@@ -307,16 +307,16 @@ world.prototype.import = function (buf) {
         this.addBodyFromCompressedPoints(contents[++j])
     }
 
-    var agents = contents[++j]
+    // var agents = contents[++j]
 
-    if (agents.length !== this.agents.length) {
-        throw 'error';
-    }
+    // if (agents.length !== this.agents.length) {
+    //     throw 'error';
+    // }
 
-    for (var i = 0; i < agents.length; i++) {
-        this.agents[i].car.chassisBody.position = agents[i].location
-        this.agents[i].car.chassisBody.angle = agents[i].angle
-    }
+    // for (var i = 0; i < agents.length; i++) {
+    //     this.agents[i].car.chassisBody.position = agents[i].location
+    //     this.agents[i].car.chassisBody.angle = agents[i].angle
+    // }
 };
 
 module.exports = world;
