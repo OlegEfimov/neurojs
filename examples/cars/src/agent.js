@@ -71,15 +71,21 @@ agent.prototype.step = function (dt) {
         this.car.update()
 
         var vel = this.car.speed.local
-        var speed = this.car.speed.velocity
+        var speed = this.car.speed.velocity * 3.6
 
-        this.reward = Math.pow(vel[1], 2) - 0.10 * Math.pow(vel[0], 2) - this.car.contact * 10 - this.car.impact * 20
+        // this.reward = Math.pow(vel[1], 2) - 0.10 * Math.pow(vel[0], 2) - this.car.contact * 10 - this.car.impact * 20
+        this.reward = (Math.abs(speed) < 10 ? Math.abs(speed) : 10) - this.car.contact - this.car.impact * 2
 
-        if (Math.abs(speed) < 1e-2) { // punish no movement; it harms exploration
+        // if (Math.abs(speed) < 1e-2) { // punish no movement; it harms exploration
+        //     this.reward -= 1.0 
+        // }
+
+        if ((speed) <= 1) { // punish back movement
+            // console.log("-------speed * 3.6 <= -15 km/h")
             this.reward -= 1.0 
         }
 
-        if ((speed * 3.6) <= -15) { // punish back movement
+        if ((speed) < -1) { // punish back movement
             // console.log("-------speed * 3.6 <= -15 km/h")
             this.reward -= 1.0 
         }

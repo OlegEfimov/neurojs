@@ -31,7 +31,7 @@ function renderer(world, container) {
     // this.pixi.backgroundColor = 0xFFFFFF;
 
     this.stage = new PIXI.Container()
-    this.container = new PIXI.DisplayObjectContainer()
+    this.container = new PIXI.Container()
 
     this.stage.addChild(this.container)
 
@@ -54,7 +54,7 @@ function renderer(world, container) {
 
     this.pixi.view.style.width = "100%";
     this.pixi.view.style.height = "100%";
-    this.pixi.view.style.border = "5px solid #EEE";
+    this.pixi.view.style.border = "5px solid #BBB";
     this.elementContainer.appendChild(this.pixi.view);
 
     this.bodies = [];

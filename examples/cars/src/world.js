@@ -115,12 +115,14 @@ world.prototype.addWall = function (start, end, width) {
 
     // Create box
     var b = new p2.Body({
+        damping: 1,
+        angularDamping: 1,
         mass : 0.0,
         position : pos
     });
 
     var rectangleShape = new p2.Box({ width: w, height:  h });
-    rectangleShape.color = 0xFF0000
+    rectangleShape.color = 0x80A4E5
     b.hidden = false;
     b.addShape(rectangleShape);
     this.p2.addBody(b);
@@ -132,7 +134,11 @@ world.prototype.addPolygons = function (polys) {
 
     for (var i = 0; i < polys.length; i++) {
         var points = polys[i]
-        var b = new p2.Body({ mass : 0.0 });
+        var b = new p2.Body({
+            damping: 1,
+            angularDamping: 1,
+            mass : 0.0
+          });
         if (b.fromPolygon(points, {
             removeCollinearPoints: 0.1,
             skipSimpleCheck: true
@@ -146,18 +152,18 @@ world.prototype.addPolygons = function (polys) {
 world.prototype.init = function (renderer) {
     window.addEventListener('resize', this.resize.bind(this, renderer), false);
 
-    var w = renderer.viewport.width / renderer.viewport.scale
-    var h = renderer.viewport.height / renderer.viewport.scale
+    var w = (renderer.viewport.width / renderer.viewport.scale) - 1
+    var h = (renderer.viewport.height / renderer.viewport.scale) - 1
     var wx = w / 2, hx = h / 2
 
     // this.addWall( [ -wx - 0.25, -hx ], [ -wx - 0.25, hx ], 0.5 )
     // this.addWall( [ wx + 0.25, -hx ], [ wx + 0.25, hx ], 0.5 )
     // this.addWall( [ -wx, -hx - 0.25 ], [ wx, -hx - 0.25 ], 0.5 )
     // this.addWall( [ -wx, hx + 0.25 ], [ wx, hx + 0.25 ], 0.5 )
-    this.addWall( [ -wx - 0.25, -hx ], [ -wx - 0.25, hx ], 1.0 )
-    this.addWall( [ wx + 0.25, -hx ], [ wx + 0.25, hx ], 1.0 )
-    this.addWall( [ -wx, -hx - 0.25 ], [ wx, -hx - 0.25 ], 1.0 )
-    this.addWall( [ -wx, hx + 0.25 ], [ wx, hx + 0.25 ], 1.0 )
+    this.addWall( [ -wx - 0.25, -hx ], [ -wx - 0.25, hx ], 2.5 )
+    this.addWall( [ wx + 0.25, -hx ], [ wx + 0.25, hx ], 2.5 )
+    this.addWall( [ -wx, -hx - 0.25 ], [ wx, -hx - 0.25 ], 2.5 )
+    this.addWall( [ -wx, hx + 0.25 ], [ wx, hx + 0.25 ], 2.5 )
 
     this.size = { w, h }
 };

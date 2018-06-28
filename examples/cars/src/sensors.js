@@ -110,8 +110,8 @@ class SpeedSensor extends Sensor {
 
     draw(g) {
         if (g.__label === undefined) {
-            g.__label = new PIXI.Text('0 km/h', { font: '80px Helvetica Neue' });
-            g.__label.scale.x = (g.__label.scale.y = 9e-3);
+            g.__label = new PIXI.Text('0 km/h', { fontSize: '80px', fontFamily: 'Helvetica Neue' });
+            g.__label.scale.x = (g.__label.scale.y = 4.5e-3);
             g.addChild(g.__label);
         }
 

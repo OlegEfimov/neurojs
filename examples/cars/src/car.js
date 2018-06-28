@@ -9,7 +9,7 @@ class Car {
         this.maxEngineForce = 10
         this.maxBrakeForce = 5
         this.maxBackwardForce = 2
-        this.linearDamping = 0.5
+        this.linearDamping = 1
 
         this.contact = 0
         this.impact = 0
@@ -30,8 +30,8 @@ class Car {
         // Create a dynamic body for the chassis
         this.chassisBody = new p2.Body({
             mass: 1,
-            damping: 0.2,
-            angularDamping: 0.3,
+            damping: 1,
+            angularDamping: 1,
             ccdSpeedThreshold: 0,
             ccdIterations: 40
         });
