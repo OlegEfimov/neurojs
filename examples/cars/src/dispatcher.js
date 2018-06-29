@@ -1,11 +1,12 @@
 var requestAnimFrame =  window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function(callback) { window.setTimeout(callback, 1000 / 60); };
+// var requestAnimFrame = function(callback) { window.setTimeout(callback, 1000 / 60); };
 var keyboard = require('./keyboard.js');
 
 function dispatcher(renderer, world) {
     this.renderer = renderer;
     this.world = world;
-    this.running = true;
-    this.interval = false;
+    this.running = false;
+    this.isRunFast = false;
     this.step = 0;
 
     this.keyboard = new keyboard();
@@ -35,7 +36,7 @@ dispatcher.prototype.dt = function () {
 };
 
 dispatcher.prototype.loop = function () {
-    if (this.running && !this.interval) {  // start next timer
+    if (this.running && !this.isRunFast) {  // start next timer
         requestAnimFrame(this.__loop);
     }
 
@@ -46,7 +47,7 @@ dispatcher.prototype.loop = function () {
     this.step++;
 
     // draw everything
-    if (!this.interval || this.step % 5 === 0)
+    if (!this.isRunFast || this.step % 5 === 0)
         this.renderer.render();
 
 };
@@ -54,29 +55,30 @@ dispatcher.prototype.loop = function () {
 dispatcher.prototype.begin = function () {
     this.running = true;
 
-    if (this.__interval && !this.interval)
+    if (this.__interval && !this.isRunFast)
         clearInterval(this.__interval)
 
-    if (this.interval)
+    if (this.isRunFast)
         this.__interval = setInterval(this.__loop, 0)
     else
         requestAnimFrame(this.__loop)
 };
 
 dispatcher.prototype.goFast = function () {
-    if (this.interval)
+    if (this.isRunFast)
         return
 
-    this.interval = true
+    this.isRunFast = true
     this.begin()
 };
 
 dispatcher.prototype.goSlow = function () {
-    if (!this.__interval)
+    // if (!this.__interval)
+    if (!this.isRunFast)
         return 
 
     clearInterval(this.__interval)
-    this.interval = false;
+    this.isRunFast = false;
 
     this.begin()
 }
