@@ -21,7 +21,7 @@
 		}
 
 		.wrap {
-			width: 100%; max-width: 1000px; margin: 40px auto;
+			width: 100%; max-width: 1000px; margin: 5px auto;
 		}
 
 		.app-chart .ct-line {
@@ -134,7 +134,10 @@
 		<input id="brainFile" type='file' accept='*/*' onchange='readBrain(event)' style="display: none">
 		<input id="worldFile" type='file' accept='*/*' onchange='readWorld(event)' style="display: none">
 
-		<div style="margin-top: 20px"><input type="checkbox" onclick="window.updateIfLearning(this.checked);" checked>Learning</div>
+		<div style="margin-top: 20px">
+			<input type="checkbox" onclick="window.updateIfLearning(this.checked);" checked>Learning
+			<input type="checkbox" onclick="window.manualControl(this.checked);">Manual Control
+		</div>
 	</div>
 
 	<div id="container" class="wrap"></div>

@@ -48,12 +48,14 @@ function saveAs(dv, name) {
 }
 
 function downloadBrain(n) {
+    let  dateNow = new Date().toJSON();
 	var buf = window.gcd.world.agents[n].brain.export()
-	saveAs(new DataView(buf), 'brain.bin')
+	saveAs(new DataView(buf), 'brain-' + dateNow + '.bin')
 }
 
 function saveEnv() {
-    saveAs(new DataView(window.gcd.world.export()), 'world.bin')
+    let  dateNow = new Date().toJSON();
+    saveAs(new DataView(window.gcd.world.export()), 'world-' + dateNow + '.bin')
 }
 
 function readBrain(e) {
@@ -106,6 +108,11 @@ window.updateIfLearning = function (value) {
     }
 
     window.gcd.world.plotRewardOnly = !value
+};
+window.manualControl = function (value) {
+    for (var i = 0; i <  window.gcd.world.agents.length; i++) {
+        window.manualControlOn = value
+    }
 };
 
 window.readBrain = readBrain;
