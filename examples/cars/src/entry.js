@@ -147,6 +147,13 @@ window.updateIfLearning = function (value) {
 
     window.gcd.world.plotRewardOnly = !value
 };
+window.setHardware = function (value) {
+    for (var i = 0; i <  window.gcd.world.agents.length; i++) {
+        window.gcd.world.agents[i].car.hardwareOn = !value
+    }
+
+    window.gcd.world.plotRewardOnly = !value
+};
 
 window.readBrain = readBrain;
 
