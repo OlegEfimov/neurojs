@@ -91,14 +91,16 @@ agent.prototype.step = function (dt) {
         //     this.reward += Math.abs(speed) * 0.05
         // }
 
-        this.loss = this.brain.learn(this.reward)
-        this.action = this.brain.policy(this.car.sensors.data)
+        if (!this.car.manualControlOn) {
+            this.loss = this.brain.learn(this.reward)
+            this.action = this.brain.policy(this.car.sensors.data)
+        }
         
         this.car.impact = 0
         this.car.step()
     }
     
-    if (this.action) {
+    if (this.action && !this.car.manualControlOn) {
         this.car.handle(this.action[0], this.action[1])
     }
 

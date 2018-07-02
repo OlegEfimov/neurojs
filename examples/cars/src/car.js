@@ -15,6 +15,7 @@ class Car {
         this.impact = 0
 
         this.world = world
+        this.manualControlOn = true
 
         this.init()
     }
@@ -268,7 +269,9 @@ class Car {
     handleKeyInput(k) {
         // To enable control of a car through the keyboard, uncomment:
         // this.handle((k.getN(38) - k.getN(40)), (k.getN(37) - k.getN(39)))
-        this.handle((k.getN(87) - k.getN(83)), (k.getN(69) - k.getN(68)))
+        if (this.manualControlOn) {
+            this.handle((k.getN(87) - k.getN(83)), (k.getN(69) - k.getN(68)))
+        }
 
         if (k.getD(86) === 1) {
             this.overlay.visible = !this.overlay.visible;

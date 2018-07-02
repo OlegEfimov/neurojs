@@ -105,14 +105,10 @@ window.readWorld = readWorld
 window.updateIfLearning = function (value) {
     for (var i = 0; i <  window.gcd.world.agents.length; i++) {
         window.gcd.world.agents[i].brain.learning = value
+        window.gcd.world.agents[i].car.manualControlOn = !value
     }
 
     window.gcd.world.plotRewardOnly = !value
-};
-window.manualControl = function (value) {
-    for (var i = 0; i <  window.gcd.world.agents.length; i++) {
-        window.manualControlOn = value
-    }
 };
 
 window.readBrain = readBrain;
