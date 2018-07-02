@@ -17,7 +17,6 @@ var neurojs = {
 	FileLoader: require('./util/downloader.js'),
 	Binary: require('./util/file.js'),
 	Shared: require('./shared.js')
-
 }
 
 if (typeof window !== 'undefined') {
