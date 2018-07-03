@@ -7,7 +7,6 @@ function openSocket() {
 // text.html("Socket open");
 // socket.send("Hello server");
 }
-window.sensorData = null;
 function showData(result) {
 // when the server returns, show the result in the div:
 // text.html("Sensor reading:" + result.data);
@@ -24,7 +23,8 @@ for (a in temp ) {
     temp[a] = parseInt(temp[a], 10);
 }
 
-window.sensorData = temp;
+// window.sensorData = temp;
+window.gcd.world.agents[0].car.sensorData = temp;
 
 // var foundPos = result.data.indexOf('mm');
 // if (foundPos == -1) return;
@@ -149,10 +149,8 @@ window.updateIfLearning = function (value) {
 };
 window.setHardware = function (value) {
     for (var i = 0; i <  window.gcd.world.agents.length; i++) {
-        window.gcd.world.agents[i].car.hardwareOn = !value
+        window.gcd.world.agents[i].car.hardwareOn = value
     }
-
-    window.gcd.world.plotRewardOnly = !value
 };
 
 window.readBrain = readBrain;

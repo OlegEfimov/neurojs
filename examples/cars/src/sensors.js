@@ -44,7 +44,24 @@ class DistanceSensor extends Sensor {
         this.rayVector = [ this.end[0] - this.start[0], this.end[1] - this.start[1] ]
     }
 
-    update() {
+    update(isHardware, data) {
+        if (isHardware) {
+            if (data === null) {
+                this.distance = 1.0
+                this.hit = false
+            }
+            else {
+                this.distance =  data/700
+                this.hit = true
+                this.crash = this.distance < 0.1
+            }
+            this.data[0] = 1.0 - this.distance
+            this.data[1] = 0.0 // is car?
+            this.data[2] = this.hit ? 1.0 : 0.0 // hit?
+            return
+        }
+
+
         var vehicleBody = this.car.chassisBody;
         if (vehicleBody.world === null) {
             this.data.fill(0.0)
@@ -81,34 +98,48 @@ class DistanceSensor extends Sensor {
         }
     }
 
-    draw(g, sensorData) {
-        // console.log('------!!! sensor -> draw(g)');
-        var dist = 1.0;
-        var vehicleBody = this.car.chassisBody;
-        if (sensorData !== null && sensorData !== 0 && sensorData < 700) {
-            dist = sensorData/700;
-            // console.log(' dist = sensorData/700 = ' + dist);
-        } else {
-            // console.log(' dist = 1.0 = ' + dist);
-
-        }
-
-        // var dist = this.hit ? this.distance : 1.0
-        // var dist = Math.random();
-        var c = color.rgbToHex(Math.floor((1-dist) * 255), Math.floor((dist) * 128), 128)
-        // g.lineStyle(this.highlighted ? 0.04 : 0.01, c, 0.5)
-        g.lineStyle(this.highlighted ? 0.04 : 0.05, c, 1.0)
-        g.moveTo(this.start[0], this.start[1]);
-        g.lineTo(this.start[0] + this.direction[0] * this.length * dist, this.start[1] + this.direction[1] * this.length * dist);
-    }
+    // updateHardware(data) {
+    //     if (data === null) {
+    //         this.distance = 1.0
+    //         this.hit = false
+    //     }
+    //     else {
+    //         this.distance =  data/700
+    //         this.hit = this.distance < 0.1
+    //     }
+    //     this.data[0] = this.distance
+    //     this.data[1] = 0.0 // is car?
+    //     this.data[2] = this.hit ? 1.0 : 0.0 // hit?
+    // }
 
     // draw(g) {
-    //     var dist = this.hit ? this.distance : 1.0
+    //     // console.log('------!!! sensor -> draw(g)');
+    //     var dist = 1.0;
+    //     var vehicleBody = this.car.chassisBody;
+    //     if (sensorData !== null && sensorData !== 0 && sensorData < 700) {
+    //         dist = this.distance/700;
+    //         // console.log(' dist = sensorData/700 = ' + dist);
+    //     } else {
+    //         // console.log(' dist = 1.0 = ' + dist);
+
+    //     }
+
+    //     // var dist = this.hit ? this.distance : 1.0
+    //     // var dist = Math.random();
     //     var c = color.rgbToHex(Math.floor((1-dist) * 255), Math.floor((dist) * 128), 128)
-    //     g.lineStyle(this.highlighted ? 0.04 : 0.01, c, 0.5)
+    //     // g.lineStyle(this.highlighted ? 0.04 : 0.01, c, 0.5)
+    //     g.lineStyle(this.highlighted ? 0.04 : 0.05, c, 1.0)
     //     g.moveTo(this.start[0], this.start[1]);
     //     g.lineTo(this.start[0] + this.direction[0] * this.length * dist, this.start[1] + this.direction[1] * this.length * dist);
     // }
+
+    draw(g) {
+        var dist = this.hit ? this.distance : 1.0
+        var c = color.rgbToHex(Math.floor((1-dist) * 255), Math.floor((dist) * 128), 128)
+        g.lineStyle(this.highlighted ? 0.04 : 0.01, c, 0.5)
+        g.moveTo(this.start[0], this.start[1]);
+        g.lineTo(this.start[0] + this.direction[0] * this.length * dist, this.start[1] + this.direction[1] * this.length * dist);
+    }
 
 }
 
@@ -122,11 +153,23 @@ class SpeedSensor extends Sensor {
         this.data = new Float64Array(SpeedSensor.dimensions)
     }
 
-    update() {
-        this.car.chassisBody.vectorToLocalFrame(this.local, this.car.chassisBody.velocity)
-        this.data[0] = this.velocity = p2.vec2.len(this.car.chassisBody.velocity) * (this.local[1] > 0 ? 1.0 : -1.0)
-        this.data[1] = this.local[1]
-        this.data[2] = this.local[0]
+    update(isHardware, data) {
+        if (isHardware) {
+            if (data !== null) {
+                this.data[0] = this.velocity = data
+                this.data[1] = 0.0
+                this.data[2] = 0.0
+            }
+            else {
+                this.data.fill(0.0)
+            }
+        }
+        else {
+            this.car.chassisBody.vectorToLocalFrame(this.local, this.car.chassisBody.velocity)
+            this.data[0] = this.velocity = p2.vec2.len(this.car.chassisBody.velocity) * (this.local[1] > 0 ? 1.0 : -1.0)
+            this.data[1] = this.local[1]
+            this.data[2] = this.local[0]
+        }
     }
 
     draw(g) {
@@ -155,6 +198,7 @@ class SensorArray {
 
     constructor(car, blueprint) {
         this.sensors = []
+        this.car = car
         this.dimensions = blueprint.dimensions
         this.data = new Float64Array(blueprint.dimensions)
 
@@ -166,18 +210,21 @@ class SensorArray {
 
     update() {
         for (var i = 0, k = 0; i < this.sensors.length; k += this.sensors[i].data.length, i++) {
-            this.sensors[i].update()
+            this.sensors[i].update(false, null)
+            this.data.set(this.sensors[i].data, k)
+        }
+    }
+
+    updateHardware(sensorData) {
+        for (var i = 0, k = 0; i < this.sensors.length; k += this.sensors[i].data.length, i++) {
+            this.sensors[i].update(true, sensorData[i])
             this.data.set(this.sensors[i].data, k)
         }
     }
 
     draw(g) {
-        if (window.sensorData != null) {
-            for (var i = 0; i < this.sensors.length; i++) {
-                // if (window.sensorData[i]) {
-                    this.sensors[i].draw(g, window.sensorData[i])
-                // }
-            }
+        for (var i = 0; i < this.sensors.length; i++) {
+            this.sensors[i].draw(g)
         }
     }
 
