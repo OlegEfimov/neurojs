@@ -33,6 +33,7 @@ class DistanceSensor extends Sensor {
         this.hit = false
         this.distance = 0.0
         this.entity = 0
+        this.sensorContact = false
 
         this.data = new Float64Array(DistanceSensor.dimensions)
     }
@@ -83,10 +84,19 @@ class DistanceSensor extends Sensor {
 
             // vehicleBody.vectorToWorldFrame(this.globalRay, this.rayVector)
 
-            var angle = Math.atan2( this.castedResult.normal[1], this.castedResult.normal[0] ) - Math.atan2( this.globalRay[1], this.globalRay[0] ) // = Math.atan2( this.localNormal[1], this.localNormal[0] ) - Math.atan2( this.rayVector[1], this.rayVector[0] )    
-            if (angle > Math.PI / 2) angle = Math.PI - angle
-            if (angle < -Math.PI / 2) angle = Math.PI + angle
-            
+            // var angle = Math.atan2( this.castedResult.normal[1], this.castedResult.normal[0] ) - Math.atan2( this.globalRay[1], this.globalRay[0] ) // = Math.atan2( this.localNormal[1], this.localNormal[0] ) - Math.atan2( this.rayVector[1], this.rayVector[0] )    
+            // if (angle > Math.PI / 2) angle = Math.PI - angle
+            // if (angle < -Math.PI / 2) angle = Math.PI + angle
+            if (!this.sensorContact && this.distance <= 0.05) {
+                this.sensorContact = true
+                this.car.contact += 1
+            }
+            if (this.sensorContact && this.distance > 0.05) {
+                this.sensorContact = false
+                this.car.contact -= 1
+            }
+
+
             this.data[0] = 1.0 - this.distance
             // this.data[1] = angle
             this.data[1] = this.entity === car.ShapeEntity ? 1.0 : 0.0 // is car?
@@ -165,22 +175,25 @@ class SpeedSensor extends Sensor {
             }
         }
         else {
-            this.car.chassisBody.vectorToLocalFrame(this.local, this.car.chassisBody.velocity)
-            this.data[0] = this.velocity = p2.vec2.len(this.car.chassisBody.velocity) * (this.local[1] > 0 ? 1.0 : -1.0)
-            this.data[1] = this.local[1]
-            this.data[2] = this.local[0]
+            // this.car.chassisBody.vectorToLocalFrame(this.local, this.car.chassisBody.velocity)
+            // this.data[0] = this.velocity = p2.vec2.len(this.car.chassisBody.velocity) * (this.local[1] > 0 ? 1.0 : -1.0)
+            // this.data[1] = this.local[1]
+            // this.data[2] = this.local[0]
+            this.data[0] = 0
+            this.data[1] = this.car.action1
+            this.data[2] = this.car.action2
         }
     }
 
     draw(g) {
-        if (g.__label === undefined) {
-            g.__label = new PIXI.Text('0 km/h', { fontSize: '80px', fontFamily: 'Helvetica Neue' });
-            g.__label.scale.x = (g.__label.scale.y = 4.5e-3);
-            g.addChild(g.__label);
-        }
+        // if (g.__label === undefined) {
+        //     g.__label = new PIXI.Text('0 km/h', { fontSize: '80px', fontFamily: 'Helvetica Neue' });
+        //     g.__label.scale.x = (g.__label.scale.y = 4.5e-3);
+        //     g.addChild(g.__label);
+        // }
 
-        g.__label.text = Math.floor(this.velocity * 3.6) + ' km/h';
-        g.__label.rotation = -this.car.chassisBody.interpolatedAngle;
+        // g.__label.text = Math.floor(this.velocity * 3.6) + ' km/h';
+        // g.__label.rotation = -this.car.chassisBody.interpolatedAngle;
     }
 
 }

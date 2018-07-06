@@ -243,6 +243,9 @@ class Car {
     // }
 
     handle(action1, action2) {
+        this.action1 = action1;
+        this.action2 = action2;
+        
         var forceLeft = action1 * this.maxEngineForce
         var forceRight = action2 * this.maxEngineForce
 
@@ -304,23 +307,23 @@ class Car {
         this.world.p2.addBody(this.chassisBody)
         this.vehicle.addToWorld(this.world.p2)
 
-        this.world.p2.on("beginContact", (event) => {
-            if ((event.bodyA === this.chassisBody || event.bodyB === this.chassisBody)) {
-                this.contact++;
-            }
-        });
+        // this.world.p2.on("beginContact", (event) => {
+        //     if ((event.bodyA === this.chassisBody || event.bodyB === this.chassisBody)) {
+        //         this.contact++;
+        //     }
+        // });
 
-        this.world.p2.on("endContact", (event) => {
-            if ((event.bodyA === this.chassisBody || event.bodyB === this.chassisBody)) {
-               this.contact--;
-            }
-        })
+        // this.world.p2.on("endContact", (event) => {
+        //     if ((event.bodyA === this.chassisBody || event.bodyB === this.chassisBody)) {
+        //        this.contact--;
+        //     }
+        // })
 
-        this.world.p2.on("impact", (event) => {
-            if ((event.bodyA === this.chassisBody || event.bodyB === this.chassisBody)) {
-                this.impact = Math.sqrt(Math.pow(this.chassisBody.velocity[0], 2) + Math.pow(this.chassisBody.velocity[1], 2))
-            }
-        })
+        // this.world.p2.on("impact", (event) => {
+        //     if ((event.bodyA === this.chassisBody || event.bodyB === this.chassisBody)) {
+        //         this.impact = Math.sqrt(Math.pow(this.chassisBody.velocity[0], 2) + Math.pow(this.chassisBody.velocity[1], 2))
+        //     }
+        // })
     }
 
 }

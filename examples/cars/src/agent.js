@@ -12,6 +12,7 @@ function agent(opt, world) {
     this.loss = 0
     this.timer = 0
     this.timerFrequency = 60 / this.frequency
+    this.action = [0.0, 0.0]
 
     if (this.options.dynamicallyLoaded !== true) {
     	this.init(world.brains.actor.newConfiguration(), null)
@@ -75,13 +76,17 @@ agent.prototype.step = function (dt) {
 
         // this.reward = Math.pow(vel[1], 2) - 0.10 * Math.pow(vel[0], 2) - this.car.contact * 10 - this.car.impact * 20
         // this.reward = (Math.abs(speed) < 10 ? Math.abs(speed) : 10) - this.car.contact - this.car.impact * 2
-        this.reward =  speed * 0.01 - this.car.contact * 0.1 - this.car.impact * 0.2
+
+        // this.reward =  speed * 0.01 - this.car.contact * 0.1 - this.car.impact * 0.2
+
+        let forceReward = this.action[0] + this.action[1]
+        this.reward =  forceReward - this.car.contact * 0.1;// - this.car.impact * 0.2
 
         // if (Math.abs(speed) < 1e-2) { // punish no movement; it harms exploration
         //     this.reward -= 1.0 
         // }
 
-        if (Math.abs(speed) <= 1) { // punish back movement
+        if (Math.abs(forceReward) <= 0.1) { // punish back movement
             // console.log("-------speed * 3.6 <= -15 km/h")
             this.reward -= 0.05 
         }
