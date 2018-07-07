@@ -334,7 +334,9 @@ class Car {
             this.backRightWeel.engineForce = forceRight * 0.2
         }
 
-        this.socket.send(forceLeft + ',' + forceRight);
+        if (this.socket.readyState === 1) { // OPEN
+            this.socket.send(forceLeft + ',' + forceRight);
+        }
     }
 
     handleKeyInput(k) {

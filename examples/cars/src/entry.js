@@ -57,8 +57,8 @@ function boot() {
 
     this.world.chart = createLossChart();
 
-    socket.onopen = openSocket;
-    socket.onmessage = showData;
+    // socket.onopen = openSocket;
+    // socket.onmessage = showData;
 
     return this.dispatcher;
 };
