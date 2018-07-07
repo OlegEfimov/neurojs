@@ -19,7 +19,7 @@ class Car {
         this.hardwareOn = false
         this.sensorData = [];
 
-        this.socket = new WebSocket("ws://192.168.1.33:81/");
+        this.socket = new WebSocket("ws://192.168.1.37:81/");
 
         this.init()
     }
@@ -41,7 +41,7 @@ class Car {
         // this will return an array with strings "1", "2", etc.
         temp = str.split(",");
 
-        for (a in temp ) {
+        for (let a in temp ) {
             temp[a] = parseInt(temp[a], 10);
         }
 
@@ -62,11 +62,11 @@ class Car {
 
         this.sensors = Car.Sensors.build(this)
         this.speed = this.sensors.getByType("speed")[0]
-        Math.random()
-        for (let i = 0; i < 16; i++) {
-            this.sensorData[i] =  Math.random() * 100
-        }
-        this.sensorData[16] =  Math.random() * 100
+        // Math.random()
+        // for (let i = 0; i < 16; i++) {
+        //     this.sensorData[i] =  Math.random() * 100
+        // }
+        // this.sensorData[16] =  Math.random() * 100
 
         this.socket.onopen = this.openSocket;
         this.socket.onmessage = this.showData;
@@ -243,11 +243,11 @@ class Car {
     update() {
         this.hardwareOn ? this.sensors.updateHardware(this.sensorData) : this.sensors.update()
 
-        for (var i = 0; i < this.sensorData.length - 1; i++) {
-            this.sensorData[i] = (this.sensorData[i] + 10)%700
-        }
-        this.sensorData[this.sensorData.length - 1] =
-            (this.sensorData[this.sensorData.length - 1] + 0.1)%200
+        // for (var i = 0; i < this.sensorData.length - 1; i++) {
+        //     this.sensorData[i] = (this.sensorData[i] + 10)%700
+        // }
+        // this.sensorData[this.sensorData.length - 1] =
+        //     (this.sensorData[this.sensorData.length - 1] + 0.1)%200
     }
 
     step() {
