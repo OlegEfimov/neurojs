@@ -6,7 +6,7 @@ class Car {
 
     constructor(world, opt) {
         this.maxSteer = Math.PI / 7
-        this.maxEngineForce = 100
+        this.maxEngineForce = 200
         this.maxBrakeForce = 5
         this.maxBackwardForce = 2
         this.linearDamping = 1
@@ -57,6 +57,23 @@ class Car {
 
         var w = 0.1, h = 0.25
         var space = 0.15
+        var frontRightPosBox = {
+            x: -0.25,
+            y: 0.5 - space
+        }
+        var frontLeftPosBox = {
+            x: 0.25,
+            y: 0.5 - space
+        }
+        var backRightPosBox = {
+            x: -0.25,
+            y: -0.5 + space
+        }
+        var backLeftPosBox = {
+            x: 0.25,
+            y: -0.5 + space
+        }
+
         var frontRightPos = {
             x: -0.25 - w / 2,
             y: 0.5 - h - space
@@ -162,27 +179,26 @@ class Car {
 //////////////////////////////
 
         //front wells
-        this.frontLeftWeel = this.vehicle.addWheel({
-            localPosition: [frontLeftPos.x, frontLeftPos.y]
-        });
-        this.frontLeftWeel.setSideFriction(9);
-
         this.frontRightWeel = this.vehicle.addWheel({
-            localPosition: [frontRightPos.x, frontRightPos.y]
+            localPosition: [frontRightPosBox.x, frontRightPosBox.y]
         });
         this.frontRightWeel.setSideFriction(9);
 
-        //back wells
-        this.backLeftWeel = this.vehicle.addWheel({
-            localPosition: [backLeftPos.x, backLeftPos.y]
+        this.frontLeftWeel = this.vehicle.addWheel({
+            localPosition: [frontLeftPosBox.x, frontLeftPosBox.y]
         });
-        this.backLeftWeel.setSideFriction(9);
+        this.frontLeftWeel.setSideFriction(9);
 
         this.backRightWeel = this.vehicle.addWheel({
-            localPosition: [backRightPos.x, backRightPos.y]
+            localPosition: [backRightPosBox.x, backRightPosBox.y]
         });
         this.backRightWeel.setSideFriction(9);
 
+        //back wells
+        this.backLeftWeel = this.vehicle.addWheel({
+            localPosition: [backLeftPosBox.x, backLeftPosBox.y]
+        });
+        this.backLeftWeel.setSideFriction(9);
 
 /////////////////////////////
     }
@@ -249,13 +265,13 @@ class Car {
         var forceLeft = action1 * this.maxEngineForce
         var forceRight = action2 * this.maxEngineForce
 
-        if (forceLeft == 0) {
-            this.frontLeftWeel.setBrakeForce(9)
-            this.backLeftWeel.setBrakeForce(9)
-        } else {
-            this.frontLeftWeel.setBrakeForce(0)
-            this.backLeftWeel.setBrakeForce(0)
-        }
+        // if (forceLeft == 0) {
+        //     this.frontLeftWeel.setBrakeForce(9)
+        //     this.backLeftWeel.setBrakeForce(9)
+        // } else {
+        //     this.frontLeftWeel.setBrakeForce(0)
+        //     this.backLeftWeel.setBrakeForce(0)
+        // }
 
         if (forceLeft > 0) {
             this.frontLeftWeel.engineForce = forceLeft
@@ -265,13 +281,13 @@ class Car {
             this.backLeftWeel.engineForce = forceLeft * 0.2
         }
 
-        if (forceRight == 0) {
-            this.frontRightWeel.setBrakeForce(9)
-            this.backRightWeel.setBrakeForce(9)
-        } else {
-            this.frontRightWeel.setBrakeForce(0)
-            this.backRightWeel.setBrakeForce(0)
-        }
+        // if (forceRight == 0) {
+        //     this.frontRightWeel.setBrakeForce(9)
+        //     this.backRightWeel.setBrakeForce(9)
+        // } else {
+        //     this.frontRightWeel.setBrakeForce(0)
+        //     this.backRightWeel.setBrakeForce(0)
+        // }
 
         if (forceRight > 0) {
             this.frontRightWeel.engineForce = forceRight
@@ -300,8 +316,9 @@ class Car {
         // this.chassisBody.position[0] = (Math.random() - .5) * this.world.size.w
         // this.chassisBody.position[1] = (Math.random() - .5) * this.world.size.h
         // this.chassisBody.angle = (Math.random() * 2.0 - 1.0) * Math.PI
-        this.chassisBody.position[0] = 0.05 * number * this.world.size.w
-        this.chassisBody.position[1] = 0.05 * number * this.world.size.h
+        this.chassisBody.position[0] = 0.05 * number * this.world.size.w - this.world.size.w/3
+        this.chassisBody.position[1] = 0
+        // this.chassisBody.position[1] = 0.05 * number * this.world.size.h
         this.chassisBody.angle = 0 * Math.PI
 
         this.world.p2.addBody(this.chassisBody)

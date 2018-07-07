@@ -80,13 +80,13 @@ agent.prototype.step = function (dt) {
         // this.reward =  speed * 0.01 - this.car.contact * 0.1 - this.car.impact * 0.2
 
         let forceReward = this.action[0] + this.action[1]
-        this.reward =  forceReward - this.car.contact * 0.1;// - this.car.impact * 0.2
+        this.reward =  forceReward * 0.1 - this.car.contact * 0.2;// - this.car.impact * 0.2
 
         // if (Math.abs(speed) < 1e-2) { // punish no movement; it harms exploration
         //     this.reward -= 1.0 
         // }
 
-        if (Math.abs(forceReward) <= 0.1) { // punish back movement
+        if (Math.abs(forceReward) <= 0.5) { // punish back movement
             // console.log("-------speed * 3.6 <= -15 km/h")
             this.reward -= 0.05 
         }
