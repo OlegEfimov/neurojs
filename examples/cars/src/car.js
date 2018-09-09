@@ -16,10 +16,12 @@ class Car {
 
         this.world = world
         this.manualControlOn = true
-        this.hardwareOn = false
+        this.hardwareOn = true
         this.sensorData = [];
 
-        this.socket = new WebSocket("ws://192.168.1.37:81/");
+        // this.socket = new WebSocket("ws://192.168.1.37:81/");
+        this.socket = new ReconnectingWebSocket("ws://192.168.1.37:81/");
+        // this.socket.debug = true;
 
         this.init()
     }
@@ -27,6 +29,10 @@ class Car {
     openSocket() {
         // text.html("Socket open");
         // socket.send("Hello server");
+      console.log('socket onopen'); 
+    }
+    closeSocket() {
+      console.log('socket closed'); 
     }
 
     showData(result) {
@@ -69,8 +75,10 @@ class Car {
         // this.sensorData[16] =  Math.random() * 100
 
         this.socket.onopen = this.openSocket;
+        this.socket.onclose = this.closeSocket;
         this.socket.onmessage = this.showData;
-}
+
+    }
 
     createPhysicalBody() {
         // Create a dynamic body for the chassis
@@ -335,12 +343,17 @@ class Car {
         }
 
         if (this.socket.readyState === 1) { // OPEN
-            this.socket.send(forceLeft + ',' + forceRight);
+            if (forceLeft !== 0 || forceRight !== 0) {
+                this.socket.send(forceLeft + ',' + forceRight + ';');
+                console.log(forceLeft + ',' + forceRight + ';');
+            }
+        } else {
+            console.log('socket.readyState !== 1');
         }
     }
 
     handleKeyInput(k) {
-        // To enable control of a car through the keyboard, uncomment:
+        // To enable control of a car through the keyboard, uncommwent:
         // this.handle((k.getN(38) - k.getN(40)), (k.getN(37) - k.getN(39)))
         if (this.manualControlOn) {
             this.handle((k.getN(87) - k.getN(83)), (k.getN(69) - k.getN(68)))
