@@ -343,10 +343,10 @@ class Car {
         }
 
         if (this.socket.readyState === 1) { // OPEN
-            if (forceLeft !== 0 || forceRight !== 0) {
-                this.socket.send(forceLeft + ',' + forceRight + ';');
+            // if (forceLeft !== 0 || forceRight !== 0) {
+                this.socket.send(forceLeft + ',' + forceRight + ':');
                 console.log(forceLeft + ',' + forceRight + ';');
-            }
+            // }
         } else {
             console.log('socket.readyState !== 1');
         }
@@ -407,24 +407,25 @@ Car.Sensors = (() => {
 
     return sensors.SensorBlueprint.compile([
 
-        { type: 'distance', angle: -96, length: 5, start: [ r, 0 ] },
-        { type: 'distance', angle: -84, length: 5, start: [ r, 0 ] },
+        // { type: 'distance', angle: -96, length: 5, start: [ r, 0 ] },
+        // { type: 'distance', angle: -84, length: 5, start: [ r, 0 ] },
         { type: 'distance', angle: -60, length: 5, start: [ r, t ] },
         { type: 'distance', angle: -36, length: 5, start: [ 0, t ] },
         { type: 'distance', angle: -12, length: 5, start: [ 0, t ] },
         { type: 'distance', angle: +12, length: 5, start: [ 0, t ] },
         { type: 'distance', angle: +36, length: 5, start: [ 0, t ] },
         { type: 'distance', angle: +60, length: 5, start: [ l, t ]  },
-        { type: 'distance', angle: +84, length: 5, start: [ l, 0 ]  },
-        { type: 'distance', angle: +96, length: 5, start: [ l, 0 ]  },
+        // { type: 'distance', angle: +84, length: 5, start: [ l, 0 ]  },
+        // { type: 'distance', angle: +96, length: 5, start: [ l, 0 ]  },
 
-        { type: 'distance', angle: +120, length: 5, start: [ l, b ]  },
-        { type: 'distance', angle: +144, length: 5, start: [ 0, b ]  },
-        { type: 'distance', angle: +168, length: 5, start: [ 0, b ]  },
-        { type: 'distance', angle: -168, length: 5, start: [ 0, b ]  },
-        { type: 'distance', angle: -144, length: 5, start: [ 0, b ]  },
-        { type: 'distance', angle: -120, length: 5, start: [ r, b ]  },
+        // { type: 'distance', angle: +120, length: 5, start: [ l, b ]  },
+        // { type: 'distance', angle: +144, length: 5, start: [ 0, b ]  },
+        // { type: 'distance', angle: +168, length: 5, start: [ 0, b ]  },
+        // { type: 'distance', angle: -168, length: 5, start: [ 0, b ]  },
+        // { type: 'distance', angle: -144, length: 5, start: [ 0, b ]  },
+        // { type: 'distance', angle: -120, length: 5, start: [ r, b ]  },
 
+//////////////////
         // { type: 'distance', angle: -10, length: 10, start: [ 0, t ]  },
         // { type: 'distance', angle: -03, length: 10, start: [ 0, t ]  },
         // { type: 'distance', angle: +00, length: 10, start: [ 0, t ]  },
