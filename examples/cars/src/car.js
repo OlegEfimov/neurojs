@@ -322,8 +322,8 @@ class Car {
             this.frontLeftWeel.engineForce = forceLeft
             this.backLeftWeel.engineForce = forceLeft
         } else {
-            this.frontLeftWeel.engineForce = forceLeft * 0.2
-            this.backLeftWeel.engineForce = forceLeft * 0.2
+            this.frontLeftWeel.engineForce = forceLeft
+            this.backLeftWeel.engineForce = forceLeft
         }
 
         // if (forceRight == 0) {
@@ -338,8 +338,8 @@ class Car {
             this.frontRightWeel.engineForce = forceRight
             this.backRightWeel.engineForce = forceRight
         } else {
-            this.frontRightWeel.engineForce = forceRight * 0.2
-            this.backRightWeel.engineForce = forceRight * 0.2
+            this.frontRightWeel.engineForce = forceRight
+            this.backRightWeel.engineForce = forceRight
         }
 
         if (this.socket.readyState === 1) { // OPEN
