@@ -22,7 +22,8 @@ class Car {
         this.sensorData = [];
 
         // this.socket = new WebSocket("ws://192.168.1.37:81/");
-        this.socket = new ReconnectingWebSocket("ws://192.168.0.37:81/");
+//        this.socket = new ReconnectingWebSocket("ws://192.168.0.37:81/");
+        this.socket = {};
         // this.socket.debug = true;
 
         this.init()
@@ -354,7 +355,7 @@ class Car {
                 console.log(forceLeft + '=' + forceRight + '=;');
             // }
         } else {
-            console.log('socket.readyState !== 1');
+//            console.log('socket.readyState !== 1');
         }
     }
 
