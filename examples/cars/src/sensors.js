@@ -52,7 +52,7 @@ class DistanceSensor extends Sensor {
                 this.hit = false
             }
             else {
-                this.distance =  data/700
+                this.distance =  data/100
                 this.hit = true
                 this.crash = this.distance < 0.1
             }
@@ -99,8 +99,10 @@ class DistanceSensor extends Sensor {
 
             this.data[0] = 1.0 - this.distance
             // this.data[1] = angle
-            this.data[1] = this.entity === car.ShapeEntity ? 1.0 : 0.0 // is car?
-            this.data[2] = 1.0 // hit?
+//            this.data[1] = this.entity === car.ShapeEntity ? 1.0 : 0.0 // is car?
+//            this.data[2] = 1.0 // hit?
+            this.data[1] = 0.0 // is car?
+            this.data[2] = this.hit ? 1.0 : 0.0 // hit?
         } 
 
         else {
@@ -167,7 +169,8 @@ class SpeedSensor extends Sensor {
     update(isHardware, data) {
         if (isHardware) {
             if (data !== null) {
-                this.data[0] = this.velocity = data
+            this.velocity = Math.abs(this.car.action1+this.car.action2)/2 * ((this.car.action1+this.car.action2)> 0 ? 1.0 : -1.0)
+            this.data[0] = this.velocity;
                 this.data[1] = 0.0
                 this.data[2] = 0.0
             }
@@ -232,10 +235,12 @@ class SensorArray {
     }
 
     updateHardware(sensorData) {
-        for (var i = 0, k = 0; i < this.sensors.length; k += this.sensors[i].data.length, i++) {
+        for (var i = 0, k = 0; i < this.sensors.length-1; k += this.sensors[i].data.length, i++) {
             this.sensors[i].update(true, sensorData[i])
             this.data.set(this.sensors[i].data, k)
         }
+        this.sensors[this.sensors.length-1].update(true)
+        this.data.set(this.sensors[this.sensors.length-1].data, k)
     }
 
     draw(g) {

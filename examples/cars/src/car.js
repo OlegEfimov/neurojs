@@ -2,6 +2,8 @@ var color = require('./color.js'),
     sensors = require('./sensors.js'),
     tc = require('./tiny-color.js');
 
+var MAX_DISTANCE = 100; // in cm
+
 class Car {
 
     constructor(world, opt) {
@@ -20,7 +22,7 @@ class Car {
         this.sensorData = [];
 
         // this.socket = new WebSocket("ws://192.168.1.37:81/");
-        this.socket = new ReconnectingWebSocket("ws://192.168.1.37:81/");
+        this.socket = new ReconnectingWebSocket("ws://192.168.0.37:81/");
         // this.socket.debug = true;
 
         this.init()
@@ -50,6 +52,10 @@ class Car {
         for (let a in temp ) {
             temp[a] = parseInt(temp[a], 10);
         }
+        for (let a in temp ) {
+            temp[a] = temp[a] === 0 ? MAX_DISTANCE : temp[a];
+        }
+
 
         // window.sensorData = temp;
         window.gcd.world.agents[0].car.sensorData = temp;
@@ -307,8 +313,8 @@ class Car {
         this.action1 = action1;
         this.action2 = action2;
         
-        var forceLeft = action1 * this.maxEngineForce
-        var forceRight = action2 * this.maxEngineForce
+        var forceLeft = Math.round(action1 * this.maxEngineForce);
+        var forceRight = Math.round(action2 * this.maxEngineForce);
 
         // if (forceLeft == 0) {
         //     this.frontLeftWeel.setBrakeForce(9)

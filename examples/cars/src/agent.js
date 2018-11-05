@@ -97,6 +97,7 @@ agent.prototype.step = function (dt) {
         // }
 
         if (!this.car.manualControlOn) {
+//        if (true) {
             this.loss = this.brain.learn(this.reward)
             this.action = this.brain.policy(this.car.sensors.data)
         }
