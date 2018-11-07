@@ -142,11 +142,19 @@ window.readWorld = readWorld
 window.updateIfLearning = function (value) {
     for (var i = 0; i <  window.gcd.world.agents.length; i++) {
         window.gcd.world.agents[i].brain.learning = value
-        window.gcd.world.agents[i].car.manualControlOn = !value
+        // window.gcd.world.agents[i].car.manualControlOn = !value
     }
 
     window.gcd.world.plotRewardOnly = !value
 };
+window.setManualControl = function (value) {
+    for (var i = 0; i <  window.gcd.world.agents.length; i++) {
+        window.gcd.world.agents[i].car.manualControlOn = value
+    }
+
+    window.gcd.world.plotRewardOnly = !value
+};
+
 window.setHardware = function (value) {
     for (var i = 0; i <  window.gcd.world.agents.length; i++) {
         window.gcd.world.agents[i].car.hardwareOn = value
