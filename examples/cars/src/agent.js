@@ -56,6 +56,7 @@ agent.prototype.init = function (actor, critic) {
     // this.world.brains.shared.add('actor', this.brain.algorithm.actor)
     this.world.brains.shared.add('critic', this.brain.algorithm.critic)
 
+    this.brain.learning = false;
     this.actions = actions
     this.car.addToWorld(this.options.number)
 	this.loaded = true
@@ -95,10 +96,12 @@ agent.prototype.step = function (dt) {
         //     // console.log("-------speed * 3.6 <= -15 km/h")
         //     this.reward += Math.abs(speed) * 0.05
         // }
-
-        if (!this.car.manualControlOn) {
-//        if (true) {
+        if (this.brain.learning) {
             this.loss = this.brain.learn(this.reward)
+        } else {
+            this.loss = 0;
+        }
+        if (!this.car.manualControlOn) {
             this.action = this.brain.policy(this.car.sensors.data)
         }
         
@@ -106,8 +109,10 @@ agent.prototype.step = function (dt) {
         this.car.step()
     }
     
-    if (this.action && !this.car.manualControlOn) {
+    if (!isNaN(this.action[0]) && !isNaN(this.action[1])) {
+      if (!this.car.manualControlOn) {
         this.car.handle(this.action[0], this.action[1])
+      }
     }
 
     return this.timer % this.timerFrequency === 0

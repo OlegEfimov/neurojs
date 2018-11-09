@@ -12,7 +12,7 @@ var deepqlearn = deepqlearn || { REVISION: 'ALPHA' };
     this.action0 = action0;
     this.reward0 = reward0;
     this.state1 = state1;
-  }
+    }
 
   // A Brain object does all the magic.
   // over time it receives some inputs and some rewards

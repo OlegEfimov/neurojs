@@ -106,7 +106,7 @@ function readBrain(e) {
         for (var i = 0; i <  window.gcd.world.agents.length; i++) {
             window.gcd.world.agents[i].brain.algorithm.actor.set(imported.actor.clone())
             window.gcd.world.agents[i].brain.algorithm.critic.set(imported.critic)
-            // window.gcd.world.agents[i].car.brain.learning = false
+            window.gcd.world.agents[i].car.brain.learning = false
         }
     };
 
