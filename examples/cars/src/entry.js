@@ -160,6 +160,14 @@ window.setHardware = function (value) {
         window.gcd.world.agents[i].car.hardwareOn = value
     }
 };
+window.getValueLow = function (id) {
+    var element = document.getElementById(id);
+    return element.valueLow;
+};
+window.getValueHigh = function (id) {
+    var element = document.getElementById(id);
+    return element.valueHigh;
+};
 
 window.readBrain = readBrain;
 
