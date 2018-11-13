@@ -10,82 +10,63 @@
 
 </head>
 <body>
-  <div class="description wrap">
-    <div class="row">
-      <button onclick="document.getElementById('brainFile').click();">Open brain file</button>
-      <button onclick="document.getElementById('worldFile').click();">Open world file</button>
-      <button onclick="window.downloadBrain(0);">Save agent</button>
-      <button onclick="window.saveEnv();">Save world</button>
-      <button onclick="window.gcd.world.clearObstacles();">Clear world</button>
-    </div>
-
-    <input id="brainFile" type='file' accept='*/*' onchange='readBrain(event)' style="display: none">
-    <input id="worldFile" type='file' accept='*/*' onchange='readWorld(event)' style="display: none">
-
-    <div class="row">
-    <div style="margin-top: 20px">
-      <input type="checkbox" onclick="window.updateIfLearning(this.checked);">Learning
-      <input type="checkbox" checked onclick="window.setManualControl(this.checked);">Manual control
-      <input type="checkbox" checked onclick="window.setHardware(this.checked);">Hardware ON
-      <input type="range" min="1" max="100" value="50" class="slider" id="myRange">
-      <input type="range" multiple value="10,80" />
-      <input type="range" min="1" max="100" value="50" class="slider" id="myRange">
-      <div class="slidecontainer">
-        <input type="range" min="1" max="100" value="50" class="slider" id="myRange">
+  <div class="main">
+    <div id="container" class="plate"></div>
+    <div class="params">
+      <div class="row">
+        <button onclick="document.getElementById('brainFile').click();">Load brain</button>
+        <button onclick="window.downloadBrain(0);">Save brain</button>
       </div>
-    </div>
-    </div>
-    <div class="row">
-      <button onclick="window.gcd.goSlow();">Go slow</button>
-      <button onclick="window.gcd.goFast();">Go fast</button>
+      <div class="row">
+        <button onclick="document.getElementById('worldFile').click();">Load world</button>
+        <button onclick="window.saveEnv();">Save world</button>
+      </div>
+      <div class="row">
+        <button onclick="window.gcd.world.clearObstacles();">Clear world</button>
+      </div>
+      <input id="brainFile" type='file' accept='*/*' onchange='readBrain(event)' style="display: none">
+      <input id="worldFile" type='file' accept='*/*' onchange='readWorld(event)' style="display: none">
+
+      <div class="row">
+        <input type="checkbox" onclick="window.updateIfLearning(this.checked);">Learning
+        <input type="checkbox" checked onclick="window.setManualControl(this.checked);">Manual control
+        <input type="checkbox" checked onclick="window.setHardware(this.checked);">Hardware ON
+      </div>
+
+      <div class="row">
+        <button onclick="window.gcd.goSlow();">Go slow</button>
+        <button onclick="window.gcd.goFast();">Go fast</button>
+      </div>
 
       <input type="range" min="1" max="100" value="50" class="slider" id="myRange">
       <input type="range" multiple value="10,80" />
       <input type="range" multiple value="10,80" />
-    </div>
 
-<!-- <input type="range" name="weight" id="range_weight" value="5" min="1" max="100" oninput="range_weight_disp.value = range_weight.value">
-   <output  id="range_weight_disp" onload="range_weight_disp.value = range_weight.value"></output>
- -->
-    <div class="row">
       <input id="range_value1" type="range" value="5" min="0" max="100" oninput="range_value1_show.value=range_value1.value"><output id="range_value1_show"></output>
       <input id="range_value2" type="range" value="5" min="0" max="100" oninput="range_value2_show.value=range_value2.value"><output id="range_value2_show"></output>
       <input id="range_value3" type="range" value="5" min="0" max="100" oninput="range_value3_show.value=range_value3.value"><output id="range_value3_show"></output>
       <input id="range_value4" type="range" value="5" min="0" max="100" oninput="range_value4_show.value=range_value4.value"><output id="range_value4_show"></output>
+
+      <div class="row">
+        <span id="param0" value="param000">param000</span>
+        <output id="range_0_low"></output>
+        <input id="range_0" type="range" multiple value="10,80"
+         oninput="range_0_low.value=window.getValueLow('range_0');range_0_high.value=window.getValueHigh('range_0')">
+        <output id="range_0_high"></output>
+      </div>
+
+      <div class="row">
+        <span id="param1" class="multirange" value="param001">param001</span>
+        <output id="range_1_low"></output>
+        <input id="range_1" type="range" multiple value="10,80"
+         oninput="range_1_low.value=window.getValueLow('range_1');range_1_high.value=window.getValueHigh('range_1')">
+        <output id="range_1_high"></output>
+      </div>
+
     </div>
-
-    <div class="row">
-    </div>
-<!--       <input id="range_value10" type="range" multiple value="10,80"
-       oninput="range_value10_low_show.value=range_value10.valueLow; range_value10_high_show.value=range_value10.valueHigh">
- -->
-      <output id="range_value10_low_show"></output>
-      <input id="range_value10" type="range" multiple value="10,80"
-       oninput="range_value10_low_show.value=window.getValueLow('range_value10');range_value10_high_show.value=window.getValueHigh('range_value10')">
-      <output id="range_value10_high_show"></output>
-    <div class="row">
-<span id="param0" value="param000">param000</span>
-<output id="range_0_low"></output>
-<input id="range_0" type="range" multiple value="10,80"
- oninput="range_0_low.value=window.getValueLow('range_0');range_0_high.value=window.getValueHigh('range_0')">
-<output id="range_0_high"></output>
-    </div>
-    <div class="row">
-
-<span id="param1" class="multirange" value="param001">param001</span>
-<output id="range_1_low"></output>
-<input id="range_1" type="range" multiple value="10,80"
- oninput="range_1_low.value=window.getValueLow('range_1');range_1_high.value=window.getValueHigh('range_1')">
-<output id="range_1_high"></output>
-    </div>
-
-
-
   </div>
 
-  <div id="container" class="wrap"></div>
-
-  <div class="wrap">
+  <div class="diagram">
     <p>Agent's lifespan: <span id="agent-age">0</span>s</p>
     <div class="ct-chart ct-double-octave app-chart"></div>
   </div>

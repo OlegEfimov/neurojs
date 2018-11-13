@@ -11,13 +11,7 @@ html,body {
         -moz-osx-font-smoothing: grayscale;
 }
 
-.description {
-  padding: 0 20px;
-}
 
-.wrap {
-  width: 100%; max-width: 1000px; margin: 5px auto;
-}
 
 .app-chart .ct-line {
   /* Control the thikness of your lines */
@@ -102,4 +96,24 @@ label {
 }
 .multirange {
   width: 100px;
+}
+
+
+.main {
+  display: flex;
+  flex-direction: row;
+}
+
+.plate {
+  width: 80%;
+}
+
+
+.params {
+  width: 20%;
+  padding: 0 20px;
+}
+
+.diagram {
+  width: 100%; max-width: 1000px; margin: 5px auto;
 }
