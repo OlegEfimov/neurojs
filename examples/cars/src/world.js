@@ -199,6 +199,7 @@ world.prototype.step = function (dt) {
     if (this.plotting) {
         this.chartEphemeralData.push({
             loss: loss / this.agents.length, 
+            // reward: 0.01
             reward: reward / this.agents.length
         })
 

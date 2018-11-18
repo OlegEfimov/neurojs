@@ -53,8 +53,16 @@ html,body {
   font-weight: 300;
 }
 
-button, input {
+button, input:not(.tmp777) {
   display: inline-block;
+  /*display: block;*/
+  flex: 10;
+  margin: 0 10px;
+}
+label {
+  display: inline-block;
+  flex: 100;
+  margin: 0 10px;
 }
 
 button {
@@ -75,15 +83,36 @@ button:hover {
 
 .row {
   margin-top: 10px;
+  display: flex;
+}
+.row div,
+.row output {
+  flex: 10;
+  display: inline-block;
 }
 
-label {
-  display: block;
+.align-right {
+  text-align: right;
+}
+/*.column {
   margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+}
+*/
+/*.column label {
+  display: inline-block;
   font-size: 14px;
   font-style: italic;
 }
-
+*/
+/*.column button,
+.column input {
+  display: inline-block;
+  flex: 1;
+  margin: 0 10px;
+}
+*/
 .credits {
   text-align: center;
   color: #ccc;
@@ -117,3 +146,14 @@ label {
 .diagram {
   width: 100%; max-width: 1000px; margin: 5px auto;
 }
+
+/*.multiple-range {
+  height: 100px;
+}
+
+.multiple-range span {
+  height: 20px;
+}
+.multiple-range div {
+  height: 20px;
+}*/

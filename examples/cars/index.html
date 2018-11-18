@@ -8,11 +8,34 @@
 
   <link rel="stylesheet" href="vendor/multirange.css">
 
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+  <script>
+  $( function() {
+    $( "#slider-range" ).slider({
+      range: true,
+      min: 0,
+      max: 500,
+      values: [ 75, 300 ],
+      slide: function( event, ui ) {
+        $( "#amount" ).val( "$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ] );
+      }
+    });
+    $( "#amount" ).val( "$" + $( "#slider-range" ).slider( "values", 0 ) +
+      " - $" + $( "#slider-range" ).slider( "values", 1 ) );
+  } );
+  </script>
+
 </head>
 <body>
   <div class="main">
     <div id="container" class="plate"></div>
     <div class="params">
+
+      <input id="brainFile" type='file' accept='*/*' onchange='readBrain(event)' style="display: none">
+      <input id="worldFile" type='file' accept='*/*' onchange='readWorld(event)' style="display: none">
+
       <div class="row">
         <button onclick="document.getElementById('brainFile').click();">Load brain</button>
         <button onclick="window.downloadBrain(0);">Save brain</button>
@@ -24,13 +47,15 @@
       <div class="row">
         <button onclick="window.gcd.world.clearObstacles();">Clear world</button>
       </div>
-      <input id="brainFile" type='file' accept='*/*' onchange='readBrain(event)' style="display: none">
-      <input id="worldFile" type='file' accept='*/*' onchange='readWorld(event)' style="display: none">
 
       <div class="row">
-        <input type="checkbox" onclick="window.updateIfLearning(this.checked);">Learning
-        <input type="checkbox" checked onclick="window.setManualControl(this.checked);">Manual control
-        <input type="checkbox" checked onclick="window.setHardware(this.checked);">Hardware ON
+        <input type="checkbox" id="learning" name="learning" onclick="window.updateIfLearning(this.checked);"><label for="learning">Learning</label>
+      </div>
+      <div class="row">
+        <input type="checkbox" id="manual" name="manual" onclick="window.setManualControl(this.checked);" checked><label for="manual">Manual control</label>
+      </div>
+      <div class="row">
+        <input type="checkbox" id="hardware" name="hardware" onclick="window.setHardware(this.checked);" checked><label for="hardware">Hardware ON</label>
       </div>
 
       <div class="row">
@@ -38,39 +63,53 @@
         <button onclick="window.gcd.goFast();">Go fast</button>
       </div>
 
-      <input type="range" min="1" max="100" value="50" class="slider" id="myRange">
-      <input type="range" multiple value="10,80" />
-      <input type="range" multiple value="10,80" />
-
-      <input id="range_value1" type="range" value="5" min="0" max="100" oninput="range_value1_show.value=range_value1.value"><output id="range_value1_show"></output>
-      <input id="range_value2" type="range" value="5" min="0" max="100" oninput="range_value2_show.value=range_value2.value"><output id="range_value2_show"></output>
-      <input id="range_value3" type="range" value="5" min="0" max="100" oninput="range_value3_show.value=range_value3.value"><output id="range_value3_show"></output>
-      <input id="range_value4" type="range" value="5" min="0" max="100" oninput="range_value4_show.value=range_value4.value"><output id="range_value4_show"></output>
-
       <div class="row">
-        <span id="param0" value="param000">param000</span>
-        <output id="range_0_low"></output>
-        <input id="range_0" type="range" multiple value="10,80"
-         oninput="range_0_low.value=window.getValueLow('range_0');range_0_high.value=window.getValueHigh('range_0')">
-        <output id="range_0_high"></output>
+        <input id="range_value1" type="range" value="5" min="0" max="100" oninput="range_value1_show.value=range_value1.value"><output id="range_value1_show"></output>
+      </div>
+      <div class="row">
+        <input id="range_value2" type="range" value="5" min="0" max="100" oninput="range_value2_show.value=range_value2.value"><output id="range_value2_show"></output>
+      </div>
+      <div class="row">
+        <input id="range_value3" type="range" value="5" min="0" max="100" oninput="range_value3_show.value=range_value3.value"><output id="range_value3_show"></output>
+      </div>
+      <div class="row">
+        <input id="range_value4" type="range" value="5" min="0" max="100" oninput="range_value4_show.value=range_value4.value"><output id="range_value4_show"></output>
       </div>
 
+      <div id="param0" class="multirange" value="param000">param000</div>
       <div class="row">
-        <span id="param1" class="multirange" value="param001">param001</span>
+        <output id="range_0_low"></output>
+        <output class="align-right" id="range_0_high"></output>
+      </div>
+      <div class="row">
+        <input class="tmp777" id="range_0" type="range" multiple value="10,80"
+          oninput="range_0_low.value=window.getValueLow('range_0');range_0_high.value=window.getValueHigh('range_0')">
+      </div>
+
+      <div id="param1" class="multirange" value="param001">param001</div>
+      <div class="row">
         <output id="range_1_low"></output>
         <input id="range_1" type="range" multiple value="10,80"
          oninput="range_1_low.value=window.getValueLow('range_1');range_1_high.value=window.getValueHigh('range_1')">
         <output id="range_1_high"></output>
       </div>
-
     </div>
+  
   </div>
 
   <div class="diagram">
     <p>Agent's lifespan: <span id="agent-age">0</span>s</p>
     <div class="ct-chart ct-double-octave app-chart"></div>
   </div>
+  <input id="range_2" type="range" min="10" max="200" multiple value="20,70" oninput="range_2_low.value=window.getValueLow('range_2');range_2_high.value=window.getValueHigh('range_2')">
 
+<!--   <p>
+    <label for="amount">Price range:</label>
+    <input type="text" id="amount" readonly style="border:0; color:#f6931f; font-weight:bold;">
+  </p>
+   
+  <div id="slider-range" class="multiple-range"></div>
+ -->
   <script type="text/javascript" src="vendor/multirange.js"></script>
   <script type="text/javascript" src="vendor/chartist.min.js"></script>
   <script type="text/javascript" src="vendor/p2.js"></script>
