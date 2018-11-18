@@ -50,10 +50,10 @@ function boot() {
     this.renderer = new app.renderer(this.world, document.getElementById("container"));
 
     this.world.init(this.renderer)
-    this.world.populate(4)
+    this.world.populate(1)
 
     this.dispatcher = new app.dispatcher(this.renderer, this.world);
-    this.dispatcher.begin();
+    // this.dispatcher.doStart();
 
     this.world.chart = createLossChart();
 

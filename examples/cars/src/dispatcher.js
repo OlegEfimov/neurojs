@@ -4,7 +4,7 @@ var keyboard = require('./keyboard.js');
 function dispatcher(renderer, world) {
     this.renderer = renderer;
     this.world = world;
-    this.running = true;
+    this.running = false;
     this.interval = false;
     this.step = 0;
 
@@ -35,6 +35,10 @@ dispatcher.prototype.dt = function () {
 };
 
 dispatcher.prototype.loop = function () {
+    if (!this.running) {
+        return;
+    }
+
     if (this.running && !this.interval) {  // start next timer
         requestAnimFrame(this.__loop);
     }
@@ -51,7 +55,7 @@ dispatcher.prototype.loop = function () {
 
 };
 
-dispatcher.prototype.begin = function () {
+dispatcher.prototype.doStart = function () {
     this.running = true;
 
     if (this.__interval && !this.interval)
@@ -68,20 +72,18 @@ dispatcher.prototype.goFast = function () {
         return
 
     this.interval = true
-    this.begin()
+    this.doStart()
 };
 
 dispatcher.prototype.goSlow = function () {
-    if (!this.__interval)
-        return 
-
-    clearInterval(this.__interval)
-    this.interval = false;
-
-    this.begin()
+    if (this.__interval) {
+        clearInterval(this.__interval)
+        this.interval = false;
+    }
+    this.doStart()
 }
 
-dispatcher.prototype.stop = function () {
+dispatcher.prototype.doStop = function () {
     this.running = false;
 };
 

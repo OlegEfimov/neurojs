@@ -61,8 +61,13 @@
       <div class="row">
         <button onclick="window.gcd.goSlow();">Go slow</button>
         <button onclick="window.gcd.goFast();">Go fast</button>
+<!--       </div>
+      <div class="row">
+        <button onclick="window.gcd.doStart();">Start</button>
+ -->
+        <button onclick="window.gcd.doStop();">Stop</button>
       </div>
-
+<!-- 
       <div class="row">
         <input id="range_value1" type="range" value="5" min="0" max="100" oninput="range_value1_show.value=range_value1.value"><output id="range_value1_show"></output>
       </div>
@@ -93,6 +98,7 @@
          oninput="range_1_low.value=window.getValueLow('range_1');range_1_high.value=window.getValueHigh('range_1')">
         <output id="range_1_high"></output>
       </div>
+ -->
     </div>
   
   </div>
@@ -101,7 +107,6 @@
     <p>Agent's lifespan: <span id="agent-age">0</span>s</p>
     <div class="ct-chart ct-double-octave app-chart"></div>
   </div>
-  <input id="range_2" type="range" min="10" max="200" multiple value="20,70" oninput="range_2_low.value=window.getValueLow('range_2');range_2_high.value=window.getValueHigh('range_2')">
 
 <!--   <p>
     <label for="amount">Price range:</label>

@@ -49,16 +49,23 @@ class DistanceSensor extends Sensor {
         if (isHardware) {
             if (data === null) {
                 this.distance = 1.0
-                this.hit = false
+                // this.hit = false
             }
             else {
                 this.distance =  data/100
-                this.hit = true
-                this.crash = this.distance < 0.1
+                // this.hit = true
+                // this.crash = this.distance < 0.1
             }
+
+            if (this.distance <= 0.1) {
+                this.car.contact += 1
+            } else {
+                this.car.contact -= 1
+            }
+
             this.data[0] = 1.0 - this.distance
-            this.data[1] = 0.0 // is car?
-            this.data[2] = this.hit ? 1.0 : 0.0 // hit?
+            this.data[1] = this.car.contact
+            this.data[2] = 0.0 // hit?
             return
         }
 
@@ -87,12 +94,17 @@ class DistanceSensor extends Sensor {
             // var angle = Math.atan2( this.castedResult.normal[1], this.castedResult.normal[0] ) - Math.atan2( this.globalRay[1], this.globalRay[0] ) // = Math.atan2( this.localNormal[1], this.localNormal[0] ) - Math.atan2( this.rayVector[1], this.rayVector[0] )    
             // if (angle > Math.PI / 2) angle = Math.PI - angle
             // if (angle < -Math.PI / 2) angle = Math.PI + angle
-            if (!this.sensorContact && this.distance <= 0.05) {
-                this.sensorContact = true
+            // if (!this.sensorContact && this.distance <= 0.1) {
+            //     this.sensorContact = true
+            //     this.car.contact += 1
+            // }
+            // if (this.sensorContact && this.distance > 0.1) {
+            //     this.sensorContact = false
+            //     this.car.contact -= 1
+            // }
+            if (this.distance <= 0.1) {
                 this.car.contact += 1
-            }
-            if (this.sensorContact && this.distance > 0.05) {
-                this.sensorContact = false
+            } else {
                 this.car.contact -= 1
             }
 
@@ -101,8 +113,8 @@ class DistanceSensor extends Sensor {
             // this.data[1] = angle
 //            this.data[1] = this.entity === car.ShapeEntity ? 1.0 : 0.0 // is car?
 //            this.data[2] = 1.0 // hit?
-            this.data[1] = 0.0 // is car?
-            this.data[2] = this.hit ? 1.0 : 0.0 // hit?
+            this.data[1] = this.car.contact
+            this.data[2] = 0.0 // hit?
         } 
 
         else {
