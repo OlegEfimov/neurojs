@@ -80,9 +80,12 @@ agent.prototype.step = function (dt) {
 
         // this.reward =  speed * 0.01 - this.car.contact * 0.1 - this.car.impact * 0.2
 
-        let rewardOnForce_0 = (this.action[0] - 0.3)
-        let rewardOnForce_1 = (this.action[1] - 0.3)
+        let rewardOnForce_0 = (this.action[0] - 0.5)
+        let rewardOnForce_1 = (this.action[1] - 0.5)
         let rewardOnContact = this.car.contact
+        if (this.car.contact > 0) {
+            console.log('car.contact=' + this.car.contact)
+        }
         // console.log('car.contact=' + this.car.contact)
         // let forceReward = this.action[0] + this.action[1]
         this.reward =  rewardOnForce_0 * 0.001 + rewardOnForce_1 * 0.001 - rewardOnContact * 0.01;

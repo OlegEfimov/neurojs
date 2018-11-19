@@ -41,7 +41,9 @@ function createLossChart() {
     };
 
     return new Chartist.Line('.ct-chart', data, {
-        lineSmooth: Chartist.Interpolation.none()
+        lineSmooth: Chartist.Interpolation.none({
+            fillHoles: true
+        })
     });
 }
 
