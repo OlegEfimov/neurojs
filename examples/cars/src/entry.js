@@ -50,7 +50,7 @@ function boot() {
     this.renderer = new app.renderer(this.world, document.getElementById("container"));
 
     this.world.init(this.renderer)
-    this.world.populate(8)
+    this.world.populate(1)
 
     this.dispatcher = new app.dispatcher(this.renderer, this.world);
     // this.dispatcher.doStart();
@@ -145,14 +145,14 @@ window.updateIfLearning = function (value) {
         // window.gcd.world.agents[i].car.manualControlOn = !value
     }
 
-    window.gcd.world.plotRewardOnly = !value
+    // window.gcd.world.plotRewardOnly = !value
 };
 window.setManualControl = function (value) {
     for (var i = 0; i <  window.gcd.world.agents.length; i++) {
         window.gcd.world.agents[i].car.manualControlOn = value
     }
 
-    window.gcd.world.plotRewardOnly = !value
+    // window.gcd.world.plotRewardOnly = !value
 };
 
 window.setHardware = function (value) {

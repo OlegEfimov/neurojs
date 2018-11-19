@@ -183,24 +183,29 @@ world.prototype.step = function (dt) {
 
     ++this.timer
 
-    var loss = 0.0, reward = 0.0, agentUpdate = false
+    var loss = 0.0, reward = 0.0, act0 = 0.0, act1 = 0.0,  agentUpdate = false
     for (var i = 0; i < this.agents.length; i++) {
         agentUpdate = this.agents[i].step(dt);
         loss += this.agents[i].loss
         reward += this.agents[i].reward
     }
+    act0 = this.agents[0].action[0]
+    act1 = this.agents[0].action[1]
 
     this.brains.shared.step()
 
-    if (!this.plotting && (this.agents[0].brain.training || this.plotRewardOnly) && 1 === this.timer % this.chartFrequency) {
+    if (!this.plotting && (this.agents[0].brain.learning || this.plotRewardOnly) && 1 === this.timer % this.chartFrequency) {
         this.plotting = true
     }
 
     if (this.plotting) {
         this.chartEphemeralData.push({
-            loss: loss / this.agents.length, 
+            loss: loss / this.agents.length,
+            act0: act0,
+            act1: act1,
             // reward: 0.01
             reward: reward / this.agents.length
+
         })
 
         if (this.timer % this.chartFrequency == 0) {
@@ -215,7 +220,7 @@ world.prototype.step = function (dt) {
 };
 
 world.prototype.updateChart = function () {
-    var point = { loss: 0, reward: 0 }
+    var point = { loss: 0, reward: 0, act0: 0, act1: 0 }
 
     if (this.chartEphemeralData.length !== this.chartFrequency) {
         throw 'error'

@@ -12,7 +12,7 @@ function agent(opt, world) {
     this.loss = 0
     this.timer = 0
     this.timerFrequency = 60 / this.frequency
-    this.action = [0.2, 0.2]
+    this.action = [0.5, 0.5]
 
     if (this.options.dynamicallyLoaded !== true) {
     	this.init(world.brains.actor.newConfiguration(), null)
@@ -108,8 +108,8 @@ agent.prototype.step = function (dt) {
         }
         if (!this.car.manualControlOn) {
             this.action = this.brain.policy(this.car.sensors.data)
-            this.action[0] += 0.2
-            this.action[1] += 0.2
+            this.action[0] += 0.5
+            this.action[1] += 0.5
         }
         
         this.car.impact = 0
