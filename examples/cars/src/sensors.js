@@ -59,8 +59,8 @@ class DistanceSensor extends Sensor {
 
             if (this.distance <= 0.1) {
                 this.car.contact += 1
-            } else {
-                this.car.contact -= 1
+            // } else {
+            //     this.car.contact -= 1
             }
 
             this.data[0] = 1.0 - this.distance
@@ -104,8 +104,8 @@ class DistanceSensor extends Sensor {
             // }
             if (this.distance <= 0.1) {
                 this.car.contact += 1
-            } else {
-                this.car.contact -= 1
+            // } else {
+            //     this.car.contact -= 1
             }
 
 

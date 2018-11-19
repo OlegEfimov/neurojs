@@ -256,6 +256,7 @@ class Car {
     }
 
     update() {
+        this.contact = 0;
         this.hardwareOn ? this.sensors.updateHardware(this.sensorData) : this.sensors.update()
 
         // for (var i = 0; i < this.sensorData.length - 1; i++) {

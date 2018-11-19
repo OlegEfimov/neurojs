@@ -22,7 +22,7 @@ function world() {
     this.chartDataPoints = 200
     this.smoothReward = 0
 
-    this.plotRewardOnly = true
+    this.plotRewardOnly = false
 
     this.obstacles = []
 
