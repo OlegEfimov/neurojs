@@ -98,8 +98,8 @@ agent.prototype.step = function (dt) {
         // this.reward =  (rewardOnForce_0 + rewardOnForce_1) - (rewardOnContact + rewardOnSpin);
         this.reward = (rewardOnForce_0 * 0.001) +
                       (rewardOnForce_1 * 0.001) -
-                      (rewardOnContact * 0.01 ) -
-                      ((rewardOnSpin * 0.007) * (1 - rewardOnContact));
+                      (rewardOnContact * 0.06 ) -
+                      ((rewardOnSpin * 0.01) * (1 - rewardOnContact));
         // this.reward =  forceReward * 0.1 - this.car.contact * 0.2;// - this.car.impact * 0.2
 
         // if (Math.abs(speed) < 1e-2) { // punish no movement; it harms exploration
