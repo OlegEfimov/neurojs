@@ -82,12 +82,18 @@ agent.prototype.step = function (dt) {
 
         let rewardOnForce_0 = (this.action[0] - 0.5) + 0.3
         let rewardOnForce_1 = (this.action[1] - 0.5) + 0.3
+        // let rewardOnForce_0 = (this.action[0]+0.5) * (this.action[0]+0.5)
+        // let rewardOnForce_1 = (this.action[1]+0.5) * (this.action[1]+0.5)
+        // let rewardOnForce_0 = (this.action[0]) * (this.action[0])
+        // let rewardOnForce_1 = (this.action[1]) * (this.action[1])
+        // let rewardOnSpin = Math.abs(this.action[0] - this.action[1]) * 0.0003
         let rewardOnContact = this.car.contact
         if (this.car.contact > 0) {
             console.log('car.contact=' + this.car.contact)
         }
         // console.log('car.contact=' + this.car.contact)
         // let forceReward = this.action[0] + this.action[1]
+        // this.reward =  (rewardOnForce_0 + rewardOnForce_1) - (rewardOnContact + rewardOnSpin);
         this.reward =  rewardOnForce_0 * 0.001 + rewardOnForce_1 * 0.001 - rewardOnContact * 0.01;
         // this.reward =  forceReward * 0.1 - this.car.contact * 0.2;// - this.car.impact * 0.2
 
@@ -113,7 +119,7 @@ agent.prototype.step = function (dt) {
             this.action = this.brain.policy(this.car.sensors.data)
             this.action[0] += 0.5
             this.action[1] += 0.5
-        }
+       }
         
         this.car.impact = 0
         this.car.step()
