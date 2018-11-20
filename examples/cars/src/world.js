@@ -240,6 +240,7 @@ world.prototype.updateChart = function () {
     }
 
     var series = []
+    var series2 = []
     for (var key in point) {
         if (!(key in this.chartData)) {
             this.chartData[key] = []
@@ -259,15 +260,25 @@ world.prototype.updateChart = function () {
         } 
 
         else {
-           series.push({
-                name: key,
-                data: this.chartData[key]
-            })
+            if (key !== 'act0' && key !== 'act1') {
+               series.push({
+                    name: key,
+                    data: this.chartData[key]
+                })
+            } else {
+               series2.push({
+                    name: key,
+                    data: this.chartData[key]
+                })
+            }
         }
     }
 
     this.chart.update({
         series
+    })
+    this.chart2.update({
+        series: series2
     })
 };
 

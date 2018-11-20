@@ -134,12 +134,12 @@ button:hover {
 }
 
 .plate {
-  width: 80%;
+  width: 50%;
 }
 
 
 .params {
-  width: 20%;
+  width: 50%;
   padding: 0 20px;
 }
 
@@ -156,4 +156,12 @@ button:hover {
 }
 .multiple-range div {
   height: 20px;
+}*/
+
+/*
+.params .ct-double-octave {
+    display: block;
+    position: fixed;
+    width: 40%;
+    height: 25%;
 }*/

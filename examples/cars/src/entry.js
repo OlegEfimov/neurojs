@@ -40,7 +40,18 @@ function createLossChart() {
         series: [[], []]
     };
 
-    return new Chartist.Line('.ct-chart', data, {
+    return new Chartist.Line('#reward-chart', data, {
+        lineSmooth: Chartist.Interpolation.none({
+            fillHoles: true
+        })
+    });
+}
+function createLossChart2() {
+    var data = {
+        series: [[], []]
+    };
+
+    return new Chartist.Line('#action-chart', data, {
         lineSmooth: Chartist.Interpolation.none({
             fillHoles: true
         })
@@ -58,6 +69,7 @@ function boot() {
     // this.dispatcher.doStart();
 
     this.world.chart = createLossChart();
+    this.world.chart2 = createLossChart2();
 
     // socket.onopen = openSocket;
     // socket.onmessage = showData;
