@@ -448,6 +448,13 @@ Car.Sensors = (() => {
         // { type: 'distance', angle: -90, length: 5, start: [ r, 0 ]  },
         // { type: 'distance', angle: -120, length: 5, start: [ r, 0 ]  },
 
+        { type: 'distance', angle: -120, length: 5, start: [ r, b ] },
+        { type: 'distance', angle: -144, length: 5, start: [ 0, b ] },
+        { type: 'distance', angle: -168, length: 5, start: [ 0, b ] },
+        { type: 'distance', angle: +168, length: 5, start: [ 0, b ] },
+        { type: 'distance', angle: +144, length: 5, start: [ 0, b ] },
+        { type: 'distance', angle: +120, length: 5, start: [ l, b ]  },
+
         { type: 'speed' },
 
     ])
