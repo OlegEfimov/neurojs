@@ -12,7 +12,7 @@ function agent(opt, world) {
     this.loss = 0
     this.timer = 0
     this.timerFrequency = 60 / this.frequency
-    this.action = [0.05, 0.05]
+    this.action = [0.5, 0.5]
 
     if (this.options.dynamicallyLoaded !== true) {
     	this.init(world.brains.actor.newConfiguration(), null)
@@ -80,23 +80,26 @@ agent.prototype.step = function (dt) {
 
         // this.reward =  speed * 0.01 - this.car.contact * 0.1 - this.car.impact * 0.2
 
-        // let rewardOnForce_0 = (this.action[0] - 0.5) + 0.3
-        // let rewardOnForce_1 = (this.action[1] - 0.5) + 0.3
-        let rewardOnForce_0 = Math.abs(this.action[0] - 0.05)
-        let rewardOnForce_1 = Math.abs(this.action[1] - 0.05)
+        let rewardOnForce_0 = (this.action[0] - 0.5) + 0.3
+        let rewardOnForce_1 = (this.action[1] - 0.5) + 0.3
+        // let rewardOnForce_0 = Math.abs(this.action[0] - 0.5)
+        // let rewardOnForce_1 = Math.abs(this.action[1] - 0.5)
         // let rewardOnForce_0 = (this.action[0]+0.5) * (this.action[0]+0.5)
         // let rewardOnForce_1 = (this.action[1]+0.5) * (this.action[1]+0.5)
         // let rewardOnForce_0 = (this.action[0]) * (this.action[0])
         // let rewardOnForce_1 = (this.action[1]) * (this.action[1])
-        // let rewardOnSpin = Math.abs(this.action[0] - this.action[1]) * 0.0003
-        let rewardOnContact = this.car.contact
+        let rewardOnSpin = Math.abs((this.action[0] - 0.5) - (this.action[1] - 0.5))
+        let rewardOnContact = this.car.contact / (this.car.sensors.sensors.length - 1)
         if (this.car.contact > 0) {
             console.log('car.contact=' + this.car.contact)
         }
         // console.log('car.contact=' + this.car.contact)
         // let forceReward = this.action[0] + this.action[1]
         // this.reward =  (rewardOnForce_0 + rewardOnForce_1) - (rewardOnContact + rewardOnSpin);
-        this.reward =  rewardOnForce_0 * 0.001 + rewardOnForce_1 * 0.001 - rewardOnContact * 0.01;
+        this.reward = (rewardOnForce_0 * 0.001) +
+                      (rewardOnForce_1 * 0.001) -
+                      (rewardOnContact * 0.01 ) -
+                      ((rewardOnSpin * 0.007) * (1 - rewardOnContact));
         // this.reward =  forceReward * 0.1 - this.car.contact * 0.2;// - this.car.impact * 0.2
 
         // if (Math.abs(speed) < 1e-2) { // punish no movement; it harms exploration
@@ -119,8 +122,8 @@ agent.prototype.step = function (dt) {
         }
         if (!this.car.manualControlOn) {
             this.action = this.brain.policy(this.car.sensors.data)
-            this.action[0] += 0.05
-            this.action[1] += 0.05
+            this.action[0] += 0.5
+            this.action[1] += 0.5
        }
         
         this.car.impact = 0
