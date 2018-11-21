@@ -80,15 +80,17 @@ agent.prototype.step = function (dt) {
 
         // this.reward =  speed * 0.01 - this.car.contact * 0.1 - this.car.impact * 0.2
 
-        let rewardOnForce_0 = (this.action[0] - 0.5) + 0.3
-        let rewardOnForce_1 = (this.action[1] - 0.5) + 0.3
+        let action_0 = (this.action[0] - 0.5)
+        let action_1 = (this.action[1] - 0.5)
+        let rewardOnForce_0 = action_0 + 0.3
+        let rewardOnForce_1 = action_1 + 0.3
         // let rewardOnForce_0 = Math.abs(this.action[0] - 0.5)
         // let rewardOnForce_1 = Math.abs(this.action[1] - 0.5)
         // let rewardOnForce_0 = (this.action[0]+0.5) * (this.action[0]+0.5)
         // let rewardOnForce_1 = (this.action[1]+0.5) * (this.action[1]+0.5)
         // let rewardOnForce_0 = (this.action[0]) * (this.action[0])
         // let rewardOnForce_1 = (this.action[1]) * (this.action[1])
-        let rewardOnSpin = Math.abs((this.action[0] - 0.5) - (this.action[1] - 0.5))
+        let rewardOnSpin = Math.abs(action_0 - action_1)
         let rewardOnContact = this.car.contact / (this.car.sensors.sensors.length - 1)
         if (this.car.contact > 0) {
             console.log('car.contact=' + this.car.contact)
@@ -96,10 +98,10 @@ agent.prototype.step = function (dt) {
         // console.log('car.contact=' + this.car.contact)
         // let forceReward = this.action[0] + this.action[1]
         // this.reward =  (rewardOnForce_0 + rewardOnForce_1) - (rewardOnContact + rewardOnSpin);
-        this.reward = (rewardOnForce_0 * 0.001) +
-                      (rewardOnForce_1 * 0.001) -
-                      (rewardOnContact * 0.06 ) -
-                      ((rewardOnSpin * 0.01) * (1 - rewardOnContact));
+        this.reward = (rewardOnForce_0 * 0.0001) +
+                      (rewardOnForce_1 * 0.0001) -
+                      (rewardOnContact * 0.0005 ) * (Math.abs(action_0) + Math.abs(action_1)) -
+                      ((rewardOnSpin * 0.001) * (1 - rewardOnContact));
         // this.reward =  forceReward * 0.1 - this.car.contact * 0.2;// - this.car.impact * 0.2
 
         // if (Math.abs(speed) < 1e-2) { // punish no movement; it harms exploration
