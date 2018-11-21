@@ -30,7 +30,11 @@
 </head>
 <body>
   <div class="main">
-    <div id="container" class="plate"></div>
+    <div class="plate">
+      <div id="container"></div>
+      <div><span>current world: </span><span id="world-file-name"></span></div>
+      <div><span>current brain: </span><span id="brain-file-name"></span></div>
+    </div>
     <div class="params">
 
       <input id="brainFile" type='file' accept='*/*' onchange='readBrain(event)' style="display: none">

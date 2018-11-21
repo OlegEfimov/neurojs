@@ -102,11 +102,13 @@ function downloadBrain(n) {
     let  dateNow = new Date().toJSON();
 	var buf = window.gcd.world.agents[n].brain.export()
 	saveAs(new DataView(buf), 'brain-' + dateNow + '.bin')
+    document.getElementById('brain-file-name').innerText='brain-' + dateNow + '.bin';
 }
 
 function saveEnv() {
     let  dateNow = new Date().toJSON();
     saveAs(new DataView(window.gcd.world.export()), 'world-' + dateNow + '.bin')
+    document.getElementById('world-file-name').innerText='world-' + dateNow + '.bin';
 }
 
 function readBrain(e) {
@@ -125,6 +127,7 @@ function readBrain(e) {
     };
 
     reader.readAsArrayBuffer(input.files[0]);
+    document.getElementById('brain-file-name').innerText=input.files[0].name;
 }
 
 
@@ -138,6 +141,7 @@ function readWorld(e) {
     };
 
     reader.readAsArrayBuffer(input.files[0]);
+    document.getElementById('world-file-name').innerText=input.files[0].name;
 }
 
 window.infopanel = {
