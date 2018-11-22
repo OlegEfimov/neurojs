@@ -183,7 +183,8 @@ world.prototype.step = function (dt) {
 
     ++this.timer
 
-    var loss = 0.0, reward = 0.0, act0 = 0.0, act1 = 0.0,  agentUpdate = false
+    var loss = 0.0, reward = 0.0, act0 = 0.0, act1 = 0.0, koeff_reward0 = 0.0, koeff_reward1 = 0.0, rewardOnContact = 0
+      agentUpdate = false
     for (var i = 0; i < this.agents.length; i++) {
         agentUpdate = this.agents[i].step(dt);
         loss += this.agents[i].loss
@@ -191,6 +192,9 @@ world.prototype.step = function (dt) {
     }
     act0 = this.agents[0].action[0]
     act1 = this.agents[0].action[1]
+    koeff_reward0 = this.agents[0].rewardOnForce_0
+    koeff_reward1 = this.agents[0].rewardOnForce_1
+    rewardOnContact = this.agents[0].rewardOnContact
 
     this.brains.shared.step()
 
@@ -203,6 +207,8 @@ world.prototype.step = function (dt) {
             loss: loss / this.agents.length,
             act0: act0,
             act1: act1,
+            koeff_reward0: koeff_reward0,
+            koeff_reward1: koeff_reward1,
             // reward: 0.01
             reward: reward / this.agents.length
 
@@ -220,7 +226,7 @@ world.prototype.step = function (dt) {
 };
 
 world.prototype.updateChart = function () {
-    var point = { loss: 0, reward: 0, act0: 0, act1: 0 }
+    var point = { loss: 0, reward: 0, act0: 0, act1: 0, koeff_reward0: 0, koeff_reward1: 0, rewardOnContact: 0}
 
     if (this.chartEphemeralData.length !== this.chartFrequency) {
         throw 'error'
@@ -241,6 +247,7 @@ world.prototype.updateChart = function () {
 
     var series = []
     var series2 = []
+    var series3 = []
     for (var key in point) {
         if (!(key in this.chartData)) {
             this.chartData[key] = []
@@ -260,13 +267,18 @@ world.prototype.updateChart = function () {
         } 
 
         else {
-            if (key !== 'act0' && key !== 'act1') {
+            if (key === 'loss' || key === 'reward') {
                series.push({
                     name: key,
                     data: this.chartData[key]
                 })
-            } else {
+            } else if (key === 'act0' || key === 'act1') {
                series2.push({
+                    name: key,
+                    data: this.chartData[key]
+                })
+            } else if (key === 'koeff_reward0' || key === 'koeff_reward1' || key === 'rewardOnContact' ) {
+               series3.push({
                     name: key,
                     data: this.chartData[key]
                 })
@@ -279,6 +291,9 @@ world.prototype.updateChart = function () {
     })
     this.chart2.update({
         series: series2
+    })
+    this.chart3.update({
+        series: series3
     })
 };
 

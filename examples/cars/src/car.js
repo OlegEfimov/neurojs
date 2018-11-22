@@ -90,7 +90,7 @@ class Car {
     createPhysicalBody() {
         // Create a dynamic body for the chassis
         this.chassisBody = new p2.Body({
-            mass: 10,
+            mass: 5,
             damping: 1,
             angularDamping: 1,
             ccdSpeedThreshold: 0,

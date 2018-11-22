@@ -57,10 +57,10 @@ class DistanceSensor extends Sensor {
                 // this.crash = this.distance < 0.1
             }
 
-            if (this.distance <= 0.05) {
-                this.car.contact += 1
+            if (this.distance <= 0.5) {
+                this.car.contact += (1 - this.distance)
             // } else {
-            //     this.car.contact -= 1
+            //     this.car.contact = this.car.contact > 0? this.car.contact - 1 : 0;
             }
 
             this.data[0] = 1.0 - this.distance
@@ -102,10 +102,10 @@ class DistanceSensor extends Sensor {
             //     this.sensorContact = false
             //     this.car.contact -= 1
             // }
-            if (this.distance <= 0.05) {
-                this.car.contact += 1
+            if (this.distance <= 0.5) {
+                this.car.contact += (1 - this.distance)
             // } else {
-            //     this.car.contact -= 1
+            //     this.car.contact = this.car.contact > 0? this.car.contact - 1 : 0;
             }
 
 
@@ -118,6 +118,7 @@ class DistanceSensor extends Sensor {
         } 
 
         else {
+            // this.car.contact = this.car.contact > 0? this.car.contact - 1 : 0;
             this.data.fill(0.0)
         }
     }

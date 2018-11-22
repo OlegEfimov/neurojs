@@ -57,6 +57,17 @@ function createLossChart2() {
         })
     });
 }
+function createLossChart3() {
+    var data = {
+        series: [[], []]
+    };
+
+    return new Chartist.Line('#koeff-chart', data, {
+        lineSmooth: Chartist.Interpolation.none({
+            fillHoles: true
+        })
+    });
+}
 
 function boot() {
     this.world = new app.world();
@@ -70,6 +81,7 @@ function boot() {
 
     this.world.chart = createLossChart();
     this.world.chart2 = createLossChart2();
+    this.world.chart3 = createLossChart3();
 
     // socket.onopen = openSocket;
     // socket.onmessage = showData;
