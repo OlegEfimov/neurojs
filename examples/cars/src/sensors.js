@@ -10,6 +10,7 @@ class DistanceSensor extends Sensor {
         this.type = "distance"
         this.car = car
         this.angle = opt.angle / 180 * Math.PI
+        this.pos = opt.pos
         this.length = opt.length || 10
         this.absolute = opt.absolute || false
 
@@ -58,13 +59,13 @@ class DistanceSensor extends Sensor {
             }
 
             if (this.distance <= 0.5) {
-                this.car.contact += (1 - this.distance)
-            // } else {
-            //     this.car.contact = this.car.contact > 0? this.car.contact - 1 : 0;
+                this.car.contact[this.pos] += (1 - this.distance)
+            } else {
+                this.car.contact[this.pos] -= (1 - this.distance);
             }
 
             this.data[0] = 1.0 - this.distance
-            this.data[1] = this.car.contact
+            this.data[1] = this.car.contact[this.pos]
             this.data[2] = 0.0 // hit?
             return
         }
@@ -103,9 +104,9 @@ class DistanceSensor extends Sensor {
             //     this.car.contact -= 1
             // }
             if (this.distance <= 0.5) {
-                this.car.contact += (1 - this.distance)
-            // } else {
-            //     this.car.contact = this.car.contact > 0? this.car.contact - 1 : 0;
+                this.car.contact[this.pos] += (1 - this.distance)
+            } else {
+                this.car.contact[this.pos] -= (1 - this.distance);
             }
 
 
@@ -113,13 +114,14 @@ class DistanceSensor extends Sensor {
             // this.data[1] = angle
 //            this.data[1] = this.entity === car.ShapeEntity ? 1.0 : 0.0 // is car?
 //            this.data[2] = 1.0 // hit?
-            this.data[1] = this.car.contact
+            this.data[1] = this.car.contact[this.pos]
             this.data[2] = 0.0 // hit?
         } 
 
         else {
             // this.car.contact = this.car.contact > 0? this.car.contact - 1 : 0;
             this.data.fill(0.0)
+            this.car.contact[this.pos] = 0
         }
     }
 

@@ -183,7 +183,7 @@ world.prototype.step = function (dt) {
 
     ++this.timer
 
-    var loss = 0.0, reward = 0.0, act0 = 0.0, act1 = 0.0, koeff_reward0 = 0.0, koeff_reward1 = 0.0, rewardOnContact = 0
+    var loss = 0.0, reward = 0.0, act0 = 0.0, act1 = 0.0, koeff_reward0 = 0.0, koeff_reward1 = 0.0, rewardOnSpin = 0,
       agentUpdate = false
     for (var i = 0; i < this.agents.length; i++) {
         agentUpdate = this.agents[i].step(dt);
@@ -194,7 +194,7 @@ world.prototype.step = function (dt) {
     act1 = this.agents[0].action[1]
     koeff_reward0 = this.agents[0].rewardOnForce_0
     koeff_reward1 = this.agents[0].rewardOnForce_1
-    rewardOnContact = this.agents[0].rewardOnContact
+    rewardOnSpin = this.agents[0].rewardOnSpin
 
     this.brains.shared.step()
 
@@ -209,6 +209,7 @@ world.prototype.step = function (dt) {
             act1: act1,
             koeff_reward0: koeff_reward0,
             koeff_reward1: koeff_reward1,
+            rewardOnSpin: rewardOnSpin,
             // reward: 0.01
             reward: reward / this.agents.length
 
@@ -277,7 +278,7 @@ world.prototype.updateChart = function () {
                     name: key,
                     data: this.chartData[key]
                 })
-            } else if (key === 'koeff_reward0' || key === 'koeff_reward1' || key === 'rewardOnContact' ) {
+            } else if (key === 'koeff_reward0' || key === 'koeff_reward1' || key === 'rewardOnSpin' ) {
                series3.push({
                     name: key,
                     data: this.chartData[key]

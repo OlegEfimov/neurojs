@@ -13,7 +13,7 @@ class Car {
         this.maxBackwardForce = 2
         this.linearDamping = 1
 
-        this.contact = 0
+        this.contact = {topLeft: 0, topRight: 0, backLeft: 0, backRight: 0}
         this.impact = 0
 
         this.world = world
@@ -256,7 +256,7 @@ class Car {
     }
 
     update() {
-        this.contact = 0;
+        // this.contact = 0;
         this.hardwareOn ? this.sensors.updateHardware(this.sensorData) : this.sensors.update()
 
         // for (var i = 0; i < this.sensorData.length - 1; i++) {
@@ -415,45 +415,19 @@ Car.Sensors = (() => {
 
     return sensors.SensorBlueprint.compile([
 
-        // { type: 'distance', angle: -96, length: 5, start: [ r, 0 ] },
-        // { type: 'distance', angle: -84, length: 5, start: [ r, 0 ] },
-        { type: 'distance', angle: -60, length: 5, start: [ r, t ] },
-        { type: 'distance', angle: -36, length: 5, start: [ 0, t ] },
-        { type: 'distance', angle: -12, length: 5, start: [ 0, t ] },
-        { type: 'distance', angle: +12, length: 5, start: [ 0, t ] },
-        { type: 'distance', angle: +36, length: 5, start: [ 0, t ] },
-        { type: 'distance', angle: +60, length: 5, start: [ l, t ]  },
-        // { type: 'distance', angle: +84, length: 5, start: [ l, 0 ]  },
-        // { type: 'distance', angle: +96, length: 5, start: [ l, 0 ]  },
+        { type: 'distance', angle: -60, length: 5, start: [ r, t ], pos: 'topLeft'},
+        { type: 'distance', angle: -36, length: 5, start: [ 0, t ], pos: 'topLeft'},
+        { type: 'distance', angle: -12, length: 5, start: [ 0, t ], pos: 'topLeft'},
+        { type: 'distance', angle: +12, length: 5, start: [ 0, t ], pos: 'topRight'},
+        { type: 'distance', angle: +36, length: 5, start: [ 0, t ], pos: 'topRight'},
+        { type: 'distance', angle: +60, length: 5, start: [ l, t ], pos: 'topRight'},
 
-        // { type: 'distance', angle: +120, length: 5, start: [ l, b ]  },
-        // { type: 'distance', angle: +144, length: 5, start: [ 0, b ]  },
-        // { type: 'distance', angle: +168, length: 5, start: [ 0, b ]  },
-        // { type: 'distance', angle: -168, length: 5, start: [ 0, b ]  },
-        // { type: 'distance', angle: -144, length: 5, start: [ 0, b ]  },
-        // { type: 'distance', angle: -120, length: 5, start: [ r, b ]  },
-
-//////////////////
-        // { type: 'distance', angle: -10, length: 10, start: [ 0, t ]  },
-        // { type: 'distance', angle: -03, length: 10, start: [ 0, t ]  },
-        // { type: 'distance', angle: +00, length: 10, start: [ 0, t ]  },
-        // { type: 'distance', angle: +03, length: 10, start: [ 0, t ]  },
-        // { type: 'distance', angle: +10, length: 10, start: [ 0, t ]  },
-
-        // { type: 'distance', angle: +60, length: 5, start: [ l, 0 ]  },
-        // { type: 'distance', angle: +90, length: 5, start: [ l, 0 ]  },
-        // { type: 'distance', angle: +120, length: 5, start: [ l, 0 ]  },
-
-        // { type: 'distance', angle: -60, length: 5, start: [ r, 0 ]  },
-        // { type: 'distance', angle: -90, length: 5, start: [ r, 0 ]  },
-        // { type: 'distance', angle: -120, length: 5, start: [ r, 0 ]  },
-
-        { type: 'distance', angle: -120, length: 5, start: [ r, b ] },
-        { type: 'distance', angle: -144, length: 5, start: [ 0, b ] },
-        { type: 'distance', angle: -168, length: 5, start: [ 0, b ] },
-        { type: 'distance', angle: +168, length: 5, start: [ 0, b ] },
-        { type: 'distance', angle: +144, length: 5, start: [ 0, b ] },
-        { type: 'distance', angle: +120, length: 5, start: [ l, b ]  },
+        { type: 'distance', angle: -120, length: 5, start: [ r, b ], pos: 'backLeft'},
+        { type: 'distance', angle: -144, length: 5, start: [ 0, b ], pos: 'backLeft'},
+        { type: 'distance', angle: -168, length: 5, start: [ 0, b ], pos: 'backLeft'},
+        { type: 'distance', angle: +168, length: 5, start: [ 0, b ], pos: 'backRight'},
+        { type: 'distance', angle: +144, length: 5, start: [ 0, b ], pos: 'backRight'},
+        { type: 'distance', angle: +120, length: 5, start: [ l, b ], pos: 'backRight'},
 
         { type: 'speed' },
 
