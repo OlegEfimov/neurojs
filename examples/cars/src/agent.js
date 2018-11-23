@@ -86,12 +86,14 @@ agent.prototype.step = function (dt) {
 
         // let rewardOnForce_0 = (this.action[0] - 0.5) + 0.3
         // let rewardOnForce_1 = (this.action[1] - 0.5) + 0.3
-        let x = (this.action[0] - 0.5) + 0.3
-        let y = (this.action[1] - 0.5) + 0.3
+        let x = (this.action[0] - 0.5)
+        let y = (this.action[1] - 0.5)
         // this.rewardOnForce_0 =  x * (1 - this.car.contact.topRight) - x * (1 - this.car.contact.backRight)
         // this.rewardOnForce_1 =  y * (1 - this.car.contact.topLeft) - y * (1 - this.car.contact.backLeft) 
-        this.rewardOnForce_0 =  (x / this.car.contact.topRight) - (x / this.car.contact.backRight)
-        this.rewardOnForce_1 =  (y / this.car.contact.topLeft) - (y / this.car.contact.backLeft) 
+        // this.rewardOnForce_0 =  (x * (1 - 1/this.car.contact.topRight)) - (x *(1-1/this.car.contact.backRight))
+        // this.rewardOnForce_1 =  (y * (1 - 1/this.car.contact.topLeft)) - (y *(1-1/this.car.contact.backLeft))
+        this.rewardOnForce_0 =  ((x * x * this.car.contact.backLeft) - (2 * x * this.car.contact.topLeft)) + x + 0.05
+        this.rewardOnForce_1 =  ((y * y * this.car.contact.backRight) - (2 * y * this.car.contact.topRight)) + y + 0.05
         // this.rewardOnForce_0 = Math.pow((1.3*x+0.8),3) + (-1)*(Math.pow((1.3*x+0.8),2) + (1.3*x + 0.8) - 0.8)
         // this.rewardOnForce_1 = Math.pow((1.3*y+0.8),3) + (-1)*(Math.pow((1.3*y+0.8),2) + (1.3*y + 0.8) - 0.8)
 // z=((1.3*x+0.8)^3 + (-1)*((1.3*x+0.8)^2 + (1.3*x + 0.8) - 0.8)) + ((1.3*y+0.8)^3 + (-1)*((1.3*y+0.8)^2 + (1.3*y + 0.8) - 0.8))
@@ -110,7 +112,8 @@ agent.prototype.step = function (dt) {
         // let forceReward = this.action[0] + this.action[1]
         // this.reward =  (rewardOnForce_0 + rewardOnForce_1) - (rewardOnContact + rewardOnSpin);
         // this.reward =  this.rewardOnForce_0 * 0.001 + this.rewardOnForce_1 * 0.001 - this.rewardOnContact * 0.0001 - rewardOnSpin * 0.0001;
-        this.reward =  this.rewardOnForce_0 * 0.001 + this.rewardOnForce_1 * 0.001 - this.rewardOnSpin * 0.0001;
+        // this.reward =  this.rewardOnForce_0 * 0.001 + this.rewardOnForce_1 * 0.001 - this.rewardOnSpin * 0.001;
+        this.reward =  (this.rewardOnForce_0 + this.rewardOnForce_1) * 0.0001 - this.rewardOnSpin * 0.0001;
         // this.reward =  forceReward * 0.1 - this.car.contact * 0.2;// - this.car.impact * 0.2
 
         // if (Math.abs(speed) < 1e-2) { // punish no movement; it harms exploration

@@ -58,10 +58,10 @@ class DistanceSensor extends Sensor {
                 // this.crash = this.distance < 0.1
             }
 
-            if (this.distance <= 0.5) {
-                this.car.contact[this.pos] += (1 - this.distance)
+            if (this.distance <= 0.2) {
+                this.car.contact[this.pos] += 1/3
             } else {
-                this.car.contact[this.pos] -= (1 - this.distance);
+                this.car.contact[this.pos] = 0
             }
 
             this.data[0] = 1.0 - this.distance
@@ -103,10 +103,10 @@ class DistanceSensor extends Sensor {
             //     this.sensorContact = false
             //     this.car.contact -= 1
             // }
-            if (this.distance <= 0.5) {
-                this.car.contact[this.pos] += (1 - this.distance)
+            if (this.distance <= 0.2) {
+                this.car.contact[this.pos] += 1/3
             } else {
-                this.car.contact[this.pos] -= (1 - this.distance);
+                this.car.contact[this.pos] = 0
             }
 
 
@@ -243,6 +243,10 @@ class SensorArray {
     }
 
     update() {
+
+        for (var i = 0, k = 0; i < this.sensors.length; k += this.sensors[i].data.length, i++) {
+            this.sensors[i].car.contact = {topLeft: 0, topRight: 0, backLeft: 0, backRight: 0}
+        }
         for (var i = 0, k = 0; i < this.sensors.length; k += this.sensors[i].data.length, i++) {
             this.sensors[i].update(false, null)
             this.data.set(this.sensors[i].data, k)

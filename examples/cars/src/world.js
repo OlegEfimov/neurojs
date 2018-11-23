@@ -227,7 +227,7 @@ world.prototype.step = function (dt) {
 };
 
 world.prototype.updateChart = function () {
-    var point = { loss: 0, reward: 0, act0: 0, act1: 0, koeff_reward0: 0, koeff_reward1: 0, rewardOnContact: 0}
+    var point = { loss: 0, reward: 0, act0: 0, act1: 0, koeff_reward0: 0, koeff_reward1: 0, rewardOnSpin: 0}
 
     if (this.chartEphemeralData.length !== this.chartFrequency) {
         throw 'error'
