@@ -249,7 +249,7 @@ class SensorArray {
     update() {
 
         for (var i = 0, k = 0; i < this.sensors.length; k += this.sensors[i].data.length, i++) {
-            this.sensors[i].car.contact = {topLeft: 0, topRight: 0, backLeft: 0, backRight: 0}
+            this.sensors[i].car.contact.fill(0.0)
         }
         for (var i = 0, k = 0; i < this.sensors.length; k += this.sensors[i].data.length, i++) {
             this.sensors[i].update(false, null)

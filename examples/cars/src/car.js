@@ -13,7 +13,7 @@ class Car {
         this.maxBackwardForce = 2
         this.linearDamping = 1
 
-        this.contact = {topLeft: 0, topRight: 0, backLeft: 0, backRight: 0}
+        this.contact = []
         this.impact = 0
 
         this.world = world
@@ -415,19 +415,19 @@ Car.Sensors = (() => {
 
     return sensors.SensorBlueprint.compile([
 
-        { type: 'distance', angle: -60, length: 5, start: [ r, t ], index: 0, pos: 'topLeft'},
-        { type: 'distance', angle: -36, length: 5, start: [ 0, t ], index: 1, pos: 'topLeft'},
-        { type: 'distance', angle: -12, length: 5, start: [ 0, t ], index: 2, pos: 'topLeft'},
-        { type: 'distance', angle: +12, length: 5, start: [ 0, t ], index: 3, pos: 'topRight'},
-        { type: 'distance', angle: +36, length: 5, start: [ 0, t ], index: 4, pos: 'topRight'},
-        { type: 'distance', angle: +60, length: 5, start: [ l, t ], index: 5, pos: 'topRight'},
+        { type: 'distance', angle: -60, length: 5, start: [ r, t ], index: 0},
+        { type: 'distance', angle: -36, length: 5, start: [ 0, t ], index: 1},
+        { type: 'distance', angle: -12, length: 5, start: [ 0, t ], index: 2},
+        { type: 'distance', angle: +12, length: 5, start: [ 0, t ], index: 3},
+        { type: 'distance', angle: +36, length: 5, start: [ 0, t ], index: 4},
+        { type: 'distance', angle: +60, length: 5, start: [ l, t ], index: 5},
 
-        { type: 'distance', angle: -120, length: 5, start: [ r, b ], index: 6, pos: 'backLeft'},
-        { type: 'distance', angle: -144, length: 5, start: [ 0, b ], index: 7, pos: 'backLeft'},
-        { type: 'distance', angle: -168, length: 5, start: [ 0, b ], index: 8, pos: 'backLeft'},
-        { type: 'distance', angle: +168, length: 5, start: [ 0, b ], index: 9, pos: 'backRight'},
-        { type: 'distance', angle: +144, length: 5, start: [ 0, b ], index: 10, pos: 'backRight'},
-        { type: 'distance', angle: +120, length: 5, start: [ l, b ], index: 11, pos: 'backRight'},
+        { type: 'distance', angle: -120, length: 5, start: [ r, b ], index: 6},
+        { type: 'distance', angle: -144, length: 5, start: [ 0, b ], index: 7},
+        { type: 'distance', angle: -168, length: 5, start: [ 0, b ], index: 8},
+        { type: 'distance', angle: +168, length: 5, start: [ 0, b ], index: 9},
+        { type: 'distance', angle: +144, length: 5, start: [ 0, b ], index: 10},
+        { type: 'distance', angle: +120, length: 5, start: [ l, b ], index: 11},
 
         { type: 'speed' },
 
