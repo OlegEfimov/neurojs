@@ -145,10 +145,10 @@ agent.prototype.step = function (dt) {
 
 
         // this.rewardOnSpin = Math.abs(x - y)
-       // if (this.car.contact > 0) {
-            console.log('car.contact=' + this.car.contact.topLeft + '\t' + this.car.contact.topRight + '\t' + 
-                this.car.contact.backLeft+ '\t' + this.car.contact.backRight);
-        // }
+       // if ((this.rewardOnContactTop + this.rewardOnContactBack) > 0) {
+       //      console.log('car.contact=' + this.car.contact.topLeft + '\t' + this.car.contact.topRight + '\t' + 
+       //          this.car.contact.backLeft+ '\t' + this.car.contact.backRight);
+       //  }
 
         this.reward =  (this.rewardOnForce_0 + this.rewardOnForce_1) * 0.01 + this.rewardOnContactTop * -0.01 + this.rewardOnContactBack * -0.01;
 

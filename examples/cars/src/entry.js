@@ -74,7 +74,7 @@ function boot() {
     this.renderer = new app.renderer(this.world, document.getElementById("container"));
 
     this.world.init(this.renderer)
-    this.world.populate(1)
+    this.world.populate(16)
 
     this.dispatcher = new app.dispatcher(this.renderer, this.world);
     // this.dispatcher.doStart();
