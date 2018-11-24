@@ -140,18 +140,20 @@ agent.prototype.step = function (dt) {
 
         this.rewardOnForce_0 =  x > 0.1 ? x : 0;
         this.rewardOnForce_1 =  y > 0.1 ? y : 0;
-        this.rewardOnContactTop = (this.car.contact.topLeft + this.car.contact.topRight) / 2;
-        this.rewardOnContactBack = (this.car.contact.backLeft + this.car.contact.backRight) / 2;
+        // this.rewardOnContactTop = (this.car.contact.topLeft + this.car.contact.topRight) / 2;
+        // this.rewardOnContactBack = (this.car.contact.backLeft + this.car.contact.backRight) / 2;
 
 
         // this.rewardOnSpin = Math.abs(x - y)
        // if (this.car.contact > 0) {
-            console.log('car.contact=' + this.car.contact.topLeft + '\t' + this.car.contact.topRight + '\t' + 
-                this.car.contact.backLeft+ '\t' + this.car.contact.backRight);
-        // }
+        //     console.log('car.contact=' + this.car.contact.topLeft + '\t' + this.car.contact.topRight + '\t' + 
+        //         this.car.contact.backLeft+ '\t' + this.car.contact.backRight);
+        // // }
 
-        this.reward =  (this.rewardOnForce_0 + this.rewardOnForce_1) * 0.01 + this.rewardOnContactTop * -0.01 + this.rewardOnContactBack * -0.01;
-
+        // this.reward =  (this.rewardOnForce_0 + this.rewardOnForce_1) * 0.01 + this.rewardOnContactTop * -0.01 + this.rewardOnContactBack * -0.01;
+        var result = this.car.contact.reduce((all, current) => all + current + '\t');
+        console.log('car.contact=' + result);
+        this.reward =  this.car.contact.reduce((all, current) => all + current*0.1);
 //////////////////////////////////////////////////////////////////////////////////////////////////
         if (this.brain.learning) {
             this.loss = this.brain.learn(this.reward)

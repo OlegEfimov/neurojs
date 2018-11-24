@@ -10,7 +10,8 @@ class DistanceSensor extends Sensor {
         this.type = "distance"
         this.car = car
         this.angle = opt.angle / 180 * Math.PI
-        this.pos = opt.pos
+        // this.pos = opt.pos
+        this.index = opt.index
         this.length = opt.length || 10
         this.absolute = opt.absolute || false
 
@@ -58,14 +59,15 @@ class DistanceSensor extends Sensor {
                 // this.crash = this.distance < 0.1
             }
 
-            if (this.distance <= 0.2) {
-                this.car.contact[this.pos] += 1/3
-            } else {
-                this.car.contact[this.pos] = 0
-            }
+            // if (this.distance <= 0.2) {
+            //     this.car.contact[this.index] = 1.0 - this.distance
+            // } else {
+            //     this.car.contact[this.index] = 0
+            // }
+            this.car.contact[this.index] = 1.0 - this.distance
 
             this.data[0] = 1.0 - this.distance
-            this.data[1] = this.car.contact[this.pos]
+            this.data[1] = 0.0 //this.car.contact[this.index]
             this.data[2] = 0.0 // hit?
             return
         }
@@ -103,25 +105,27 @@ class DistanceSensor extends Sensor {
             //     this.sensorContact = false
             //     this.car.contact -= 1
             // }
-            if (this.distance <= 0.2) {
-                this.car.contact[this.pos] += 1/3
-            } else {
-                this.car.contact[this.pos] = 0
-            }
+            // if (this.distance <= 0.2) {
+            //     this.car.contact[this.pos] += 1/3
+            // } else {
+            //     this.car.contact[this.pos] = 0
+            // }
+            this.car.contact[this.index] = 1.0 - this.distance
 
 
             this.data[0] = 1.0 - this.distance
             // this.data[1] = angle
 //            this.data[1] = this.entity === car.ShapeEntity ? 1.0 : 0.0 // is car?
 //            this.data[2] = 1.0 // hit?
-            this.data[1] = this.car.contact[this.pos]
+            this.data[1] = 0.0 //this.car.contact[this.pos]
             this.data[2] = 0.0 // hit?
         } 
 
         else {
             // this.car.contact = this.car.contact > 0? this.car.contact - 1 : 0;
             this.data.fill(0.0)
-            this.car.contact[this.pos] = 0
+            // this.car.contact[this.pos] = 0
+            this.car.contact[this.index] = 0.0
         }
     }
 

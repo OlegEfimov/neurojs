@@ -415,19 +415,19 @@ Car.Sensors = (() => {
 
     return sensors.SensorBlueprint.compile([
 
-        { type: 'distance', angle: -60, length: 5, start: [ r, t ], pos: 'topLeft'},
-        { type: 'distance', angle: -36, length: 5, start: [ 0, t ], pos: 'topLeft'},
-        { type: 'distance', angle: -12, length: 5, start: [ 0, t ], pos: 'topLeft'},
-        { type: 'distance', angle: +12, length: 5, start: [ 0, t ], pos: 'topRight'},
-        { type: 'distance', angle: +36, length: 5, start: [ 0, t ], pos: 'topRight'},
-        { type: 'distance', angle: +60, length: 5, start: [ l, t ], pos: 'topRight'},
+        { type: 'distance', angle: -60, length: 5, start: [ r, t ], index: 0, pos: 'topLeft'},
+        { type: 'distance', angle: -36, length: 5, start: [ 0, t ], index: 1, pos: 'topLeft'},
+        { type: 'distance', angle: -12, length: 5, start: [ 0, t ], index: 2, pos: 'topLeft'},
+        { type: 'distance', angle: +12, length: 5, start: [ 0, t ], index: 3, pos: 'topRight'},
+        { type: 'distance', angle: +36, length: 5, start: [ 0, t ], index: 4, pos: 'topRight'},
+        { type: 'distance', angle: +60, length: 5, start: [ l, t ], index: 5, pos: 'topRight'},
 
-        { type: 'distance', angle: -120, length: 5, start: [ r, b ], pos: 'backLeft'},
-        { type: 'distance', angle: -144, length: 5, start: [ 0, b ], pos: 'backLeft'},
-        { type: 'distance', angle: -168, length: 5, start: [ 0, b ], pos: 'backLeft'},
-        { type: 'distance', angle: +168, length: 5, start: [ 0, b ], pos: 'backRight'},
-        { type: 'distance', angle: +144, length: 5, start: [ 0, b ], pos: 'backRight'},
-        { type: 'distance', angle: +120, length: 5, start: [ l, b ], pos: 'backRight'},
+        { type: 'distance', angle: -120, length: 5, start: [ r, b ], index: 6, pos: 'backLeft'},
+        { type: 'distance', angle: -144, length: 5, start: [ 0, b ], index: 7, pos: 'backLeft'},
+        { type: 'distance', angle: -168, length: 5, start: [ 0, b ], index: 8, pos: 'backLeft'},
+        { type: 'distance', angle: +168, length: 5, start: [ 0, b ], index: 9, pos: 'backRight'},
+        { type: 'distance', angle: +144, length: 5, start: [ 0, b ], index: 10, pos: 'backRight'},
+        { type: 'distance', angle: +120, length: 5, start: [ l, b ], index: 11, pos: 'backRight'},
 
         { type: 'speed' },
 
