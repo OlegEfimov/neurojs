@@ -183,7 +183,7 @@ world.prototype.step = function (dt) {
 
     ++this.timer
 
-    var loss = 0.0, reward = 0.0, act0 = 0.0, act1 = 0.0, koeff_reward0 = 0.0, koeff_reward1 = 0.0, rewardOnSpin = 0,
+    var loss = 0.0, reward = 0.0, act0 = 0.0, act1 = 0.0, koeff_reward0 = 0.0, koeff_reward1 = 0.0, rewardOnContactTop = 0,
       agentUpdate = false
     for (var i = 0; i < this.agents.length; i++) {
         agentUpdate = this.agents[i].step(dt);
@@ -194,7 +194,7 @@ world.prototype.step = function (dt) {
     act1 = this.agents[0].action[1]
     koeff_reward0 = this.agents[0].rewardOnForce_0
     koeff_reward1 = this.agents[0].rewardOnForce_1
-    rewardOnSpin = this.agents[0].rewardOnSpin
+    rewardOnContactTop = this.agents[0].rewardOnContactTop
 
     this.brains.shared.step()
 
@@ -209,7 +209,7 @@ world.prototype.step = function (dt) {
             act1: act1,
             koeff_reward0: koeff_reward0,
             koeff_reward1: koeff_reward1,
-            rewardOnSpin: rewardOnSpin,
+            rewardOnContactTop: rewardOnContactTop,
             // reward: 0.01
             reward: reward / this.agents.length
 
@@ -227,7 +227,7 @@ world.prototype.step = function (dt) {
 };
 
 world.prototype.updateChart = function () {
-    var point = { loss: 0, reward: 0, act0: 0, act1: 0, koeff_reward0: 0, koeff_reward1: 0, rewardOnSpin: 0}
+    var point = { loss: 0, reward: 0, act0: 0, act1: 0, koeff_reward0: 0, koeff_reward1: 0, rewardOnContactTop: 0}
 
     if (this.chartEphemeralData.length !== this.chartFrequency) {
         throw 'error'
@@ -278,7 +278,7 @@ world.prototype.updateChart = function () {
                     name: key,
                     data: this.chartData[key]
                 })
-            } else if (key === 'koeff_reward0' || key === 'koeff_reward1' || key === 'rewardOnSpin' ) {
+            } else if (key === 'koeff_reward0' || key === 'koeff_reward1' || key === 'rewardOnContactTop' ) {
                series3.push({
                     name: key,
                     data: this.chartData[key]
