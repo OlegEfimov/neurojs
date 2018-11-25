@@ -12,6 +12,7 @@ class DistanceSensor extends Sensor {
         this.angle = opt.angle / 180 * Math.PI
         // this.pos = opt.pos
         this.index = opt.index
+        this.contactKoeff = opt.contactKoeff
         this.length = opt.length || 10
         this.absolute = opt.absolute || false
 
@@ -65,6 +66,7 @@ class DistanceSensor extends Sensor {
             //     this.car.contact[this.index] = 0
             // }
             this.car.contact[this.index] = 1.0 - this.distance
+            this.car.contactKoeff[this.index] = this.contactKoeff
 
             this.data[0] = 1.0 - this.distance
             this.data[1] = 0.0 //this.car.contact[this.index]
@@ -111,6 +113,8 @@ class DistanceSensor extends Sensor {
             //     this.car.contact[this.pos] = 0
             // }
             this.car.contact[this.index] = 1.0 - this.distance
+            this.car.contactKoeff[this.index] = this.contactKoeff
+
 
 
             this.data[0] = 1.0 - this.distance
@@ -126,6 +130,7 @@ class DistanceSensor extends Sensor {
             this.data.fill(0.0)
             // this.car.contact[this.pos] = 0
             this.car.contact[this.index] = 0.0
+            this.car.contactKoeff[this.index] = this.contactKoeff
         }
     }
 

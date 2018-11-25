@@ -154,8 +154,8 @@ agent.prototype.step = function (dt) {
         var result = this.car.contact.reduce((all, current) => all + current + '\t');
         console.log('car.contact=' + result);
         this.reward = 0.0
-        this.car.contact.forEach( current => {
-            this.reward -= current*0.1
+        this.car.contact.forEach( (current, i) => {
+            this.reward -= current * 0.1 * this.car.contactKoeff[i]
         });
 //////////////////////////////////////////////////////////////////////////////////////////////////
         if (this.brain.learning) {
