@@ -185,6 +185,7 @@ class SpeedSensor extends Sensor {
     constructor(car, opt) {
         super()
         this.type = "speed"
+        this.side = opt.side
         this.car = car
         this.local = p2.vec2.create()
         this.data = new Float64Array(SpeedSensor.dimensions)
@@ -193,25 +194,29 @@ class SpeedSensor extends Sensor {
     update(isHardware, data) {
         if (isHardware) {
             if (data !== null) {
-            this.velocity = Math.abs(this.car.action1+this.car.action2)/2 * ((this.car.action1+this.car.action2)> 0 ? 1.0 : -1.0)
-            this.data[0] = this.velocity;
-                this.data[1] = 0.0
-                this.data[2] = 0.0
+                // this.velocity = Math.abs(this.car.action1+this.car.action2)/2 * ((this.car.action1+this.car.action2)> 0 ? 1.0 : -1.0)
+            this.velocity1 = data[0] * (this.car.action1 > 0 ? 1.0 : -1.0)
+            this.velocity2 = data[1] * (this.car.action2 > 0 ? 1.0 : -1.0)
+            this.data[0] = this.velocity1;
+            this.data[1] = this.velocity2;
+            this.data[2] = 0.0
             }
             else {
                 this.data.fill(0.0)
             }
         }
         else {
-            // this.car.chassisBody.vectorToLocalFrame(this.local, this.car.chassisBody.velocity)
+            this.car.chassisBody.vectorToLocalFrame(this.local, this.car.chassisBody.velocity)
             // this.data[0] = this.velocity = p2.vec2.len(this.car.chassisBody.velocity) * (this.local[1] > 0 ? 1.0 : -1.0)
             // this.data[1] = this.local[1]
             // this.data[2] = this.local[0]
 
-            this.velocity = Math.abs(this.car.action1+this.car.action2)/2 * ((this.car.action1+this.car.action2)> 0 ? 1.0 : -1.0)
-            this.data[0] = this.velocity;
-            this.data[1] = this.car.action1
-            this.data[2] = this.car.action2
+            // this.velocity = Math.abs(this.car.action1+this.car.action2)/2 * ((this.car.action1+this.car.action2)> 0 ? 1.0 : -1.0)
+            this.velocity1 = p2.vec2.len(this.car.chassisBody.velocity) * (this.car.action1 > 0 ? 1.0 : -1.0)
+            this.velocity2 = p2.vec2.len(this.car.chassisBody.velocity) * (this.car.action2 > 0 ? 1.0 : -1.0)
+            this.data[0] = this.velocity1;
+            this.data[1] = this.velocity2;
+            this.data[2] = 0.0
         }
     }
 

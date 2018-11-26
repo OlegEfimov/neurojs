@@ -78,7 +78,12 @@ agent.prototype.step = function (dt) {
         this.car.update()
 
         var vel = this.car.speed.local
-        var speed = this.car.speed.velocity * 3.6
+
+        // console.log('vel=' + vel);
+        // var speed = this.car.speed.velocity * 3.6
+        var speed1 = this.car.speed.velocity1
+        var speed2 = this.car.speed.velocity2
+        console.log('speed=' + speed1 + '\t' + speed2);
 
 //         // this.reward = Math.pow(vel[1], 2) - 0.10 * Math.pow(vel[0], 2) - this.car.contact * 10 - this.car.impact * 20
 //         // this.reward = (Math.abs(speed) < 10 ? Math.abs(speed) : 10) - this.car.contact - this.car.impact * 2
@@ -138,8 +143,8 @@ agent.prototype.step = function (dt) {
         // this.rewardOnForce_0 =  ((x * x * this.car.contact.backLeft) - (2 * x * this.car.contact.topLeft)) + x + 0.05
         // this.rewardOnForce_1 =  ((y * y * this.car.contact.backRight) - (2 * y * this.car.contact.topRight)) + y + 0.05
 
-        this.rewardOnForce_0 =  x > 0.1 ? x : 0;
-        this.rewardOnForce_1 =  y > 0.1 ? y : 0;
+        this.rewardOnForce_0 =  speed1;
+        this.rewardOnForce_1 =  speed2;
         // this.rewardOnContactTop = (this.car.contact.topLeft + this.car.contact.topRight) / 2;
         // this.rewardOnContactBack = (this.car.contact.backLeft + this.car.contact.backRight) / 2;
 
@@ -157,6 +162,7 @@ agent.prototype.step = function (dt) {
         this.car.contact.forEach( (current, i) => {
             this.reward -= current * 0.1 * this.car.contactKoeff[i]
         });
+        this.reward += (speed1 + speed2 ) * 0.01;
 //////////////////////////////////////////////////////////////////////////////////////////////////
         if (this.brain.learning) {
             this.loss = this.brain.learn(this.reward)
