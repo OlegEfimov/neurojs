@@ -83,7 +83,7 @@ agent.prototype.step = function (dt) {
         // var speed = this.car.speed.velocity * 3.6
         var speed1 = this.car.speed.velocity1
         var speed2 = this.car.speed.velocity2
-        console.log('speed=' + speed1 + '\t' + speed2);
+        // console.log('speed=' + speed1 + '\t' + speed2);
 
 //         // this.reward = Math.pow(vel[1], 2) - 0.10 * Math.pow(vel[0], 2) - this.car.contact * 10 - this.car.impact * 20
 //         // this.reward = (Math.abs(speed) < 10 ? Math.abs(speed) : 10) - this.car.contact - this.car.impact * 2
@@ -157,7 +157,7 @@ agent.prototype.step = function (dt) {
 
         // this.reward =  (this.rewardOnForce_0 + this.rewardOnForce_1) * 0.01 + this.rewardOnContactTop * -0.01 + this.rewardOnContactBack * -0.01;
         var result = this.car.contact.reduce((all, current) => all + current + '\t');
-        console.log('car.contact=' + result);
+        // console.log('car.contact=' + result);
         this.reward = 0.0
         this.car.contact.forEach( (current, i) => {
             this.reward -= current * 0.1 * this.car.contactKoeff[i]
