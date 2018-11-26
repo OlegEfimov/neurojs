@@ -156,17 +156,18 @@ agent.prototype.step = function (dt) {
         // // }
 
         // this.reward =  (this.rewardOnForce_0 + this.rewardOnForce_1) * 0.01 + this.rewardOnContactTop * -0.01 + this.rewardOnContactBack * -0.01;
-        var result = this.car.contact.reduce((all, current) => all + current + '\t');
-        console.log('car.contact=' + result);
+        var result = '';//this.car.contact.reduce((all, current) => all + current + '\t');
         this.reward = 0.0
         this.car.contact.forEach( (current, i) => {
-            this.reward -= Math.pow(current, 2) * 0.1 * this.car.contactKoeff[i]
-            // this.reward -= Math.pow(current, 2) * this.car.contactKoeff[i] * 0.1
+            this.reward -= current * 0.1 * this.car.contactKoeff[i]
+            // this.reward -= Math.pow(current, 2) * 0.1 * this.car.contactKoeff[i]
+            result += current + '\t';
         });
-        this.reward += Math.abs(speed1 + speed2 ) * 0.01;
-        if ( Math.abs(speed1) + Math.abs(speed2)  < 0.1) { // punish no movement; it harms exploration
-            this.reward -= 0.1 
-        }
+        // this.reward += (speed1 + speed2 ) * 0.01;
+        // if ( Math.abs(speed1 + speed2)  < 1.0) { // punish no movement; it harms exploration
+        //     this.reward -= 0.01 
+        // }
+        console.log('car.contact=' + result);
 //////////////////////////////////////////////////////////////////////////////////////////////////
         if (this.brain.learning) {
             this.loss = this.brain.learn(this.reward)
