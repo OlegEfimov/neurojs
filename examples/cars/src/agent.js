@@ -77,13 +77,13 @@ agent.prototype.step = function (dt) {
     if (this.timer % this.timerFrequency === 0) {
         this.car.update()
 
-        var vel = this.car.speed.local
+        // var vel = this.car.speed.local
 
         // console.log('vel=' + vel);
         // var speed = this.car.speed.velocity * 3.6
         var speed1 = this.car.speed.velocity1
         var speed2 = this.car.speed.velocity2
-        // console.log('speed=' + speed1 + '\t' + speed2);
+        console.log('speed=' + speed1 + '\t' + speed2);
 
 //         // this.reward = Math.pow(vel[1], 2) - 0.10 * Math.pow(vel[0], 2) - this.car.contact * 10 - this.car.impact * 20
 //         // this.reward = (Math.abs(speed) < 10 ? Math.abs(speed) : 10) - this.car.contact - this.car.impact * 2
@@ -137,8 +137,8 @@ agent.prototype.step = function (dt) {
 //         // }
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-        let x = (this.action[0] - 0.5)
-        let y = (this.action[1] - 0.5)
+        // let x = (this.action[0] - 0.5)
+        // let y = (this.action[1] - 0.5)
 
         // this.rewardOnForce_0 =  ((x * x * this.car.contact.backLeft) - (2 * x * this.car.contact.topLeft)) + x + 0.05
         // this.rewardOnForce_1 =  ((y * y * this.car.contact.backRight) - (2 * y * this.car.contact.topRight)) + y + 0.05
@@ -160,10 +160,13 @@ agent.prototype.step = function (dt) {
         console.log('car.contact=' + result);
         this.reward = 0.0
         this.car.contact.forEach( (current, i) => {
-            this.reward -= current * 0.1 * this.car.contactKoeff[i]
+            this.reward -= Math.pow(current, 2) * 0.1 * this.car.contactKoeff[i]
             // this.reward -= Math.pow(current, 2) * this.car.contactKoeff[i] * 0.1
         });
-        this.reward += (speed1 + speed2 ) * 0.01;
+        this.reward += Math.abs(speed1 + speed2 ) * 0.01;
+        if ( Math.abs(speed1) + Math.abs(speed2)  < 0.1) { // punish no movement; it harms exploration
+            this.reward -= 0.1 
+        }
 //////////////////////////////////////////////////////////////////////////////////////////////////
         if (this.brain.learning) {
             this.loss = this.brain.learn(this.reward)
