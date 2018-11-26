@@ -157,10 +157,11 @@ agent.prototype.step = function (dt) {
 
         // this.reward =  (this.rewardOnForce_0 + this.rewardOnForce_1) * 0.01 + this.rewardOnContactTop * -0.01 + this.rewardOnContactBack * -0.01;
         var result = this.car.contact.reduce((all, current) => all + current + '\t');
-        // console.log('car.contact=' + result);
+        console.log('car.contact=' + result);
         this.reward = 0.0
         this.car.contact.forEach( (current, i) => {
             this.reward -= current * 0.1 * this.car.contactKoeff[i]
+            // this.reward -= Math.pow(current, 2) * this.car.contactKoeff[i] * 0.1
         });
         this.reward += (speed1 + speed2 ) * 0.01;
 //////////////////////////////////////////////////////////////////////////////////////////////////
