@@ -163,6 +163,8 @@ agent.prototype.step = function (dt) {
             // this.reward -= Math.pow(current, 2) * 0.1 * this.car.contactKoeff[i]
             result += current + '\t';
         });
+        this.reward += Math.pow(Math.E, speed1) * 0.01;
+        this.reward += Math.pow(Math.E, speed2) * 0.01;
         // this.reward += (speed1 + speed2 ) * 0.01;
         // if ( Math.abs(speed1 + speed2)  < 1.0) { // punish no movement; it harms exploration
         //     this.reward -= 0.01 
