@@ -8,7 +8,7 @@ class Car {
 
     constructor(world, opt) {
         this.maxSteer = Math.PI / 7
-        this.maxEngineForce = 200
+        this.maxEngineForce = 170
         this.maxBrakeForce = 5
         this.maxBackwardForce = 2
         this.linearDamping = 1

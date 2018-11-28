@@ -197,8 +197,8 @@ class SpeedSensor extends Sensor {
         if (isHardware) {
             if (data !== null ) {
                 // this.velocity = Math.abs(this.car.action1+this.car.action2)/2 * ((this.car.action1+this.car.action2)> 0 ? 1.0 : -1.0)
-            this.velocity1 = data[0] * 0.04 * (this.car.action[0] < 0 ? -1.0 : 1.0)
-            this.velocity2 = data[1] * 0.04 * (this.car.action[1] < 0 ? -1.0 : 1.0)
+            this.velocity1 = data[0] * 0.066 * (this.car.action[0] < 0 ? -1.0 : 1.0)
+            this.velocity2 = data[1] * 0.066 * (this.car.action[1] < 0 ? -1.0 : 1.0)
             this.data[0] = this.velocity1;
             this.data[1] = this.velocity2;
             this.data[2] = 0.0
