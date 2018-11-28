@@ -19,7 +19,7 @@ class Car {
 
         this.world = world
         this.manualControlOn = true
-        this.hardwareOn = true
+        this.hardwareOn = false
         this.sensorData = [];
         this.action = [];
 
