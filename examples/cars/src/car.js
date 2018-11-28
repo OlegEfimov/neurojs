@@ -353,13 +353,13 @@ class Car {
             this.backRightWeel.engineForce = forceRight
         }
 
-        if (this.socket.readyState === 1) { // OPEN
+        if (this.hardwareOn && (this.socket.readyState === 1)) {
             // if (forceLeft !== 0 || forceRight !== 0) {
                 this.socket.send(forceLeft + '=' + forceRight + '=;');
                 console.log(forceLeft + '=' + forceRight + '=;');
             // }
-        } else {
-           console.log('socket.readyState !== 1');
+        // } else {
+           // console.log('socket.readyState !== 1');
         }
     }
 
