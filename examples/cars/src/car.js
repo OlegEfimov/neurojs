@@ -23,8 +23,8 @@ class Car {
         this.sensorData = [];
 
         // this.socket = new WebSocket("ws://192.168.1.37:81/");
-//        this.socket = new ReconnectingWebSocket("ws://192.168.0.37:81/");
-        this.socket = {};
+       this.socket = new ReconnectingWebSocket("ws://192.168.0.37:81/");
+        // this.socket = {};
         // this.socket.debug = true;
 
         this.init()
@@ -54,6 +54,9 @@ class Car {
         for (let a in temp ) {
             temp[a] = parseInt(temp[a], 10);
         }
+
+        var tempSpeedData = temp.splice(-3,3);
+
         for (let a in temp ) {
             temp[a] = temp[a] === 0 ? MAX_DISTANCE : temp[a];
         }
@@ -61,6 +64,7 @@ class Car {
 
         // window.sensorData = temp;
         window.gcd.world.agents[0].car.sensorData = temp;
+        window.gcd.world.agents[0].car.speedData = tempSpeedData;
 
         // var foundPos = result.data.indexOf('mm');
         // if (foundPos == -1) return;
@@ -357,7 +361,7 @@ class Car {
                 console.log(forceLeft + '=' + forceRight + '=;');
             // }
         } else {
-//            console.log('socket.readyState !== 1');
+           console.log('socket.readyState !== 1');
         }
     }
 

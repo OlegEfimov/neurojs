@@ -193,7 +193,7 @@ class SpeedSensor extends Sensor {
 
     update(isHardware, data) {
         if (isHardware) {
-            if (data !== null) {
+            if (data !== null ) {
                 // this.velocity = Math.abs(this.car.action1+this.car.action2)/2 * ((this.car.action1+this.car.action2)> 0 ? 1.0 : -1.0)
             this.velocity1 = data[0] * (this.car.action1 > 0 ? 1.0 : -1.0)
             this.velocity2 = data[1] * (this.car.action2 > 0 ? 1.0 : -1.0)
@@ -272,7 +272,7 @@ class SensorArray {
             this.sensors[i].update(true, sensorData[i])
             this.data.set(this.sensors[i].data, k)
         }
-        this.sensors[this.sensors.length-1].update(true)
+        this.sensors[this.sensors.length-1].update(true, [0,0])
         this.data.set(this.sensors[this.sensors.length-1].data, k)
     }
 
