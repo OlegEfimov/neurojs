@@ -15,9 +15,9 @@ function agent(opt, world) {
     this.rewardOnForce_0 = 0
     this.rewardOnForce_1 = 0
     this.rewardOnContactTop = 0
-     this.rewardOnContactBack = 0
+    this.rewardOnContactBack = 0
     this.rewardOnSpin = 0
-    this.action = [0.5, 0.5]
+    this.action = this.car.action = [0.5, 0.5]
 
     if (this.options.dynamicallyLoaded !== true) {
     	this.init(world.brains.actor.newConfiguration(), null)
@@ -83,6 +83,7 @@ agent.prototype.step = function (dt) {
         // var speed = this.car.speed.velocity * 3.6
         var speed1 = this.car.speed.velocity1
         var speed2 = this.car.speed.velocity2
+        console.log('acts =' + this.action[0] + '\t' + this.action[1]);
         console.log('speed=' + speed1 + '\t' + speed2);
 
 //         // this.reward = Math.pow(vel[1], 2) - 0.10 * Math.pow(vel[0], 2) - this.car.contact * 10 - this.car.impact * 20
@@ -169,7 +170,7 @@ agent.prototype.step = function (dt) {
         // if ( Math.abs(speed1 + speed2)  < 1.0) { // punish no movement; it harms exploration
         //     this.reward -= 0.01 
         // }
-        console.log('car.contact=' + result);
+        // console.log('car.contact=' + result);
 //////////////////////////////////////////////////////////////////////////////////////////////////
         if (this.brain.learning) {
             this.loss = this.brain.learn(this.reward)

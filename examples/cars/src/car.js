@@ -2,7 +2,7 @@ var color = require('./color.js'),
     sensors = require('./sensors.js'),
     tc = require('./tiny-color.js');
 
-var MAX_DISTANCE = 100; // in cm
+// var MAX_DISTANCE = 100; // in cm
 
 class Car {
 
@@ -21,6 +21,7 @@ class Car {
         this.manualControlOn = true
         this.hardwareOn = true
         this.sensorData = [];
+        this.action = [];
 
         // this.socket = new WebSocket("ws://192.168.1.37:81/");
        this.socket = new ReconnectingWebSocket("ws://192.168.0.37:81/");
@@ -44,7 +45,7 @@ class Car {
         // text.html("Sensor reading:" + result.data);
 
         var str = result.data;
-        console.log(str);
+        // console.log(str);
         // str = str.substring(1,str.length-3)
         // console.log('str2= ' + str);
         var temp = new Array();
@@ -55,16 +56,13 @@ class Car {
             temp[a] = parseInt(temp[a], 10);
         }
 
-        var tempSpeedData = temp.splice(-3,3);
-
-        for (let a in temp ) {
-            temp[a] = temp[a] === 0 ? MAX_DISTANCE : temp[a];
-        }
+        // for (let a in temp ) {
+        //     temp[a] = temp[a] === 0 ? MAX_DISTANCE : temp[a];
+        // }
 
 
         // window.sensorData = temp;
         window.gcd.world.agents[0].car.sensorData = temp;
-        window.gcd.world.agents[0].car.speedData = tempSpeedData;
 
         // var foundPos = result.data.indexOf('mm');
         // if (foundPos == -1) return;
@@ -317,8 +315,8 @@ class Car {
     // }
 
     handle(action1, action2) {
-        this.action1 = action1;
-        this.action2 = action2;
+        this.action[0] = action1;
+        this.action[1] = action2;
         
         var forceLeft = Math.round(action1 * this.maxEngineForce);
         var forceRight = Math.round(action2 * this.maxEngineForce);

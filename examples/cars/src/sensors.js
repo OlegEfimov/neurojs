@@ -1,6 +1,8 @@
 var color = require('./color.js');
 var car = require('./car.js')
 
+var MAX_DISTANCE = 100; // in cm
+
 class Sensor {}
 
 class DistanceSensor extends Sensor {
@@ -195,8 +197,8 @@ class SpeedSensor extends Sensor {
         if (isHardware) {
             if (data !== null ) {
                 // this.velocity = Math.abs(this.car.action1+this.car.action2)/2 * ((this.car.action1+this.car.action2)> 0 ? 1.0 : -1.0)
-            this.velocity1 = data[0] * (this.car.action1 > 0 ? 1.0 : -1.0)
-            this.velocity2 = data[1] * (this.car.action2 > 0 ? 1.0 : -1.0)
+            this.velocity1 = data[0] * (this.car.action[0] < 0 ? -1.0 : 1.0)
+            this.velocity2 = data[1] * (this.car.action[1] < 0 ? -1.0 : 1.0)
             this.data[0] = this.velocity1;
             this.data[1] = this.velocity2;
             this.data[2] = 0.0
@@ -212,8 +214,8 @@ class SpeedSensor extends Sensor {
             // this.data[2] = this.local[0]
 
             // this.velocity = Math.abs(this.car.action1+this.car.action2)/2 * ((this.car.action1+this.car.action2)> 0 ? 1.0 : -1.0)
-            this.velocity1 = p2.vec2.len(this.car.chassisBody.velocity) * (this.car.action1 > 0 ? 1.0 : -1.0)
-            this.velocity2 = p2.vec2.len(this.car.chassisBody.velocity) * (this.car.action2 > 0 ? 1.0 : -1.0)
+            this.velocity1 = p2.vec2.len(this.car.chassisBody.velocity) * (this.car.action[0] < 0 ? -1.0 : 1.0)
+            this.velocity2 = p2.vec2.len(this.car.chassisBody.velocity) * (this.car.action[1] < 0 ? -1.0 : 1.0)
             this.data[0] = this.velocity1;
             this.data[1] = this.velocity2;
             this.data[2] = 0.0
@@ -268,11 +270,18 @@ class SensorArray {
     }
 
     updateHardware(sensorData) {
+        var distanceData = sensorData;
+        var speedData = distanceData.splice(-3,3);
+
+        for (let a in distanceData ) {
+            distanceData[a] = distanceData[a] === 0 ? MAX_DISTANCE : distanceData[a];
+        }
+
         for (var i = 0, k = 0; i < this.sensors.length-1; k += this.sensors[i].data.length, i++) {
-            this.sensors[i].update(true, sensorData[i])
+            this.sensors[i].update(true, distanceData[i])
             this.data.set(this.sensors[i].data, k)
         }
-        this.sensors[this.sensors.length-1].update(true, [0,0])
+        this.sensors[this.sensors.length-1].update(true, speedData)
         this.data.set(this.sensors[this.sensors.length-1].data, k)
     }
 
