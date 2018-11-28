@@ -54,11 +54,11 @@ class DistanceSensor extends Sensor {
         if (isHardware) {
             if (data === null) {
                 this.distance = 1.0
-                // this.hit = false
+                this.hit = false
             }
             else {
                 this.distance =  data/100
-                // this.hit = true
+                this.hit = true
                 // this.crash = this.distance < 0.1
             }
 
