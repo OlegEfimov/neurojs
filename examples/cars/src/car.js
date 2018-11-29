@@ -356,7 +356,7 @@ class Car {
         if (this.hardwareOn && (this.socket.readyState === 1)) {
             // if (forceLeft !== 0 || forceRight !== 0) {
                 this.socket.send(forceLeft + '=' + forceRight + '=;');
-                console.log(forceLeft + '=' + forceRight + '=;');
+                // console.log(forceLeft + '=' + forceRight + '=;');
             // }
         // } else {
            // console.log('socket.readyState !== 1');
