@@ -380,8 +380,10 @@ class Car {
         // this.chassisBody.position[0] = (Math.random() - .5) * this.world.size.w
         // this.chassisBody.position[1] = (Math.random() - .5) * this.world.size.h
         // this.chassisBody.angle = (Math.random() * 2.0 - 1.0) * Math.PI
-        this.chassisBody.position[0] = 0.05 * number * this.world.size.w - this.world.size.w/3
-        this.chassisBody.position[1] = 0
+
+        this.chassisBody.position[0] = 0.0
+        // this.chassisBody.position[0] = 0.05 * number * this.world.size.w - this.world.size.w/3
+        this.chassisBody.position[1] = 0.0
         // this.chassisBody.position[1] = 0.05 * number * this.world.size.h
         this.chassisBody.angle = 0 * Math.PI
 
@@ -414,23 +416,23 @@ Car.ShapeEntity = 2
 Car.Sensors = (() => {
     var d = 0.05
     var r = -0.25 + d, l = +0.25 - d
-    var b = -0.50 + d, t = +0.50 - d
+    var b = -0.45 + d, t = +0.45 - d
 
     return sensors.SensorBlueprint.compile([
 
-        { type: 'distance', angle: -60, length: 5, start: [ r, t ], index: 0, contactKoeff: 0.2},
-        { type: 'distance', angle: -36, length: 5, start: [ 0, t ], index: 1, contactKoeff: 0.5},
-        { type: 'distance', angle: -12, length: 5, start: [ 0, t ], index: 2, contactKoeff: 1.0},
-        { type: 'distance', angle: +12, length: 5, start: [ 0, t ], index: 3, contactKoeff: 1.0},
-        { type: 'distance', angle: +36, length: 5, start: [ 0, t ], index: 4, contactKoeff: 0.5},
-        { type: 'distance', angle: +60, length: 5, start: [ l, t ], index: 5, contactKoeff: 0.2},
+        { type: 'distance', angle: -75, length: 5, start: [ r, t ], index: 0, contactKoeff: 0.2},
+        { type: 'distance', angle: -45, length: 5, start: [ 0-0.14, t+0.08 ], index: 1, contactKoeff: 0.5},
+        { type: 'distance', angle: -15, length: 5, start: [ 0-0.05, t+0.12 ], index: 2, contactKoeff: 1.0},
+        { type: 'distance', angle: +15, length: 5, start: [ 0+0.05, t+0.12 ], index: 3, contactKoeff: 1.0},
+        { type: 'distance', angle: +45, length: 5, start: [ 0+0.14, t+0.08 ], index: 4, contactKoeff: 0.5},
+        { type: 'distance', angle: +75, length: 5, start: [ l, t ], index: 5, contactKoeff: 0.2},
 
-        { type: 'distance', angle: -120, length: 5, start: [ r, b ], index: 6, contactKoeff: 0.2},
-        { type: 'distance', angle: -144, length: 5, start: [ 0, b ], index: 7, contactKoeff: 0.5},
-        { type: 'distance', angle: -168, length: 5, start: [ 0, b ], index: 8, contactKoeff: 1.0},
-        { type: 'distance', angle: +168, length: 5, start: [ 0, b ], index: 9, contactKoeff: 1.0},
-        { type: 'distance', angle: +144, length: 5, start: [ 0, b ], index: 10, contactKoeff: 0.5},
-        { type: 'distance', angle: +120, length: 5, start: [ l, b ], index: 11, contactKoeff: 0.2},
+        { type: 'distance', angle: -105, length: 5, start: [ r, b ], index: 6, contactKoeff: 0.2},
+        { type: 'distance', angle: -135, length: 5, start: [ 0-0.14, b-0.08 ], index: 7, contactKoeff: 0.5},
+        { type: 'distance', angle: -165, length: 5, start: [ 0-0.05, b-0.12 ], index: 8, contactKoeff: 1.0},
+        { type: 'distance', angle: +165, length: 5, start: [ 0+0.05, b-0.12 ], index: 9, contactKoeff: 1.0},
+        { type: 'distance', angle: +135, length: 5, start: [ 0+0.14, b-0.08 ], index: 10, contactKoeff: 0.5},
+        { type: 'distance', angle: +105, length: 5, start: [ l, b ], index: 11, contactKoeff: 0.2},
 
         { type: 'speed' }
 
