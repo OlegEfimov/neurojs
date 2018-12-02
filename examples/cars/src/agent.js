@@ -138,40 +138,59 @@ agent.prototype.step = function (dt) {
 //         // }
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-        // let x = (this.action[0] - 0.5)
-        // let y = (this.action[1] - 0.5)
+       //  // let x = (this.action[0] - 0.5)
+       //  // let y = (this.action[1] - 0.5)
 
-        // this.rewardOnForce_0 =  ((x * x * this.car.contact.backLeft) - (2 * x * this.car.contact.topLeft)) + x + 0.05
-        // this.rewardOnForce_1 =  ((y * y * this.car.contact.backRight) - (2 * y * this.car.contact.topRight)) + y + 0.05
+       //  // this.rewardOnForce_0 =  ((x * x * this.car.contact.backLeft) - (2 * x * this.car.contact.topLeft)) + x + 0.05
+       //  // this.rewardOnForce_1 =  ((y * y * this.car.contact.backRight) - (2 * y * this.car.contact.topRight)) + y + 0.05
 
-        this.rewardOnForce_0 =  speed1;
-        this.rewardOnForce_1 =  speed2;
-        // this.rewardOnContactTop = (this.car.contact.topLeft + this.car.contact.topRight) / 2;
-        // this.rewardOnContactBack = (this.car.contact.backLeft + this.car.contact.backRight) / 2;
+       //  this.rewardOnForce_0 =  speed1;
+       //  this.rewardOnForce_1 =  speed2;
+       //  // this.rewardOnContactTop = (this.car.contact.topLeft + this.car.contact.topRight) / 2;
+       //  // this.rewardOnContactBack = (this.car.contact.backLeft + this.car.contact.backRight) / 2;
 
 
-        // this.rewardOnSpin = Math.abs(x - y)
-       // if (this.car.contact > 0) {
-        //     console.log('car.contact=' + this.car.contact.topLeft + '\t' + this.car.contact.topRight + '\t' + 
-        //         this.car.contact.backLeft+ '\t' + this.car.contact.backRight);
-        // // }
+       //  // this.rewardOnSpin = Math.abs(x - y)
+       // // if (this.car.contact > 0) {
+       //  //     console.log('car.contact=' + this.car.contact.topLeft + '\t' + this.car.contact.topRight + '\t' + 
+       //  //         this.car.contact.backLeft+ '\t' + this.car.contact.backRight);
+       //  // // }
 
-        // this.reward =  (this.rewardOnForce_0 + this.rewardOnForce_1) * 0.01 + this.rewardOnContactTop * -0.01 + this.rewardOnContactBack * -0.01;
-        var result = '';//this.car.contact.reduce((all, current) => all + current + '\t');
-        this.reward = 0.0
-        this.car.contact.forEach( (current, i) => {
-            this.reward -= current * 0.1
-            // this.reward -= current * 0.1 * this.car.contactKoeff[i]
-            // this.reward -= Math.pow(current, 2) * 0.1 * this.car.contactKoeff[i]
-            result += current.toFixed(3) + '\t';
-        });
-        this.reward += Math.pow(Math.E, speed1) * 0.01;
-        this.reward += Math.pow(Math.E, speed2) * 0.01;
-        // this.reward += (speed1 + speed2 ) * 0.01;
-        // if ( Math.abs(speed1 + speed2)  < 1.0) { // punish no movement; it harms exploration
-        //     this.reward -= 0.01 
-        // }
-        console.log('\tcar.contact=' + result);
+       //  // this.reward =  (this.rewardOnForce_0 + this.rewardOnForce_1) * 0.01 + this.rewardOnContactTop * -0.01 + this.rewardOnContactBack * -0.01;
+       //  var result = '';//this.car.contact.reduce((all, current) => all + current + '\t');
+       //  this.reward = 0.0
+       //  this.car.contact.forEach( (current, i) => {
+       //      this.reward -= current * 0.1
+       //      // this.reward -= current * 0.1 * this.car.contactKoeff[i]
+       //      // this.reward -= Math.pow(current, 2) * 0.1 * this.car.contactKoeff[i]
+       //      result += current.toFixed(3) + '\t';
+       //  });
+       //  this.reward += Math.pow(Math.E, speed1) * 0.01;
+       //  this.reward += Math.pow(Math.E, speed2) * 0.01;
+       //  // this.reward += (speed1 + speed2 ) * 0.01;
+       //  // if ( Math.abs(speed1 + speed2)  < 1.0) { // punish no movement; it harms exploration
+       //  //     this.reward -= 0.01 
+       //  // }
+       //  console.log('\tcar.contact=' + result);
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+        this.reward = Math.pow(speed1, 2)
+        this.reward += Math.pow(speed2, 2)
+        this.reward -= 0.10 * Math.pow((this.action[0] - this.action[1]), 2)
+        this.reward -= this.car.contact[2] * 3
+        this.reward -= this.car.contact[3] * 3
+        this.reward -= this.car.contact[8] * 3
+        this.reward -= this.car.contact[9] * 3
+
+        if (Math.abs(speed1) < 1e-2) { // punish no movement; it harms exploration
+            this.reward -= 1.0 
+        }
+        if (Math.abs(speed2) < 1e-2) { // punish no movement; it harms exploration
+            this.reward -= 1.0 
+        }
+
+
+
 //////////////////////////////////////////////////////////////////////////////////////////////////
         if (this.brain.learning) {
             this.loss = this.brain.learn(this.reward)
