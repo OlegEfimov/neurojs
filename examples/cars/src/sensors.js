@@ -57,7 +57,7 @@ class DistanceSensor extends Sensor {
                 this.hit = false
             }
             else {
-                this.distance =  data/35
+                this.distance =  data/(this.length * 10)
                 this.hit = true
                 // this.crash = this.distance < 0.1
             }

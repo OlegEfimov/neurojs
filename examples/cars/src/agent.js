@@ -160,7 +160,8 @@ agent.prototype.step = function (dt) {
         var result = '';//this.car.contact.reduce((all, current) => all + current + '\t');
         this.reward = 0.0
         this.car.contact.forEach( (current, i) => {
-            this.reward -= current * 0.1 * this.car.contactKoeff[i]
+            this.reward -= current * 0.1
+            // this.reward -= current * 0.1 * this.car.contactKoeff[i]
             // this.reward -= Math.pow(current, 2) * 0.1 * this.car.contactKoeff[i]
             result += current.toFixed(3) + '\t';
         });

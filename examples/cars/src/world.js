@@ -77,7 +77,7 @@ world.prototype.addBodyFromCompressedPoints = function (outline) {
 
 world.prototype.addBodyFromPoints = function (points) {
     var body = new p2.Body({ mass : 0.0 });
-    body.color = color.randomPastelHex()
+    body.color = 0x3054E5; // color.randomPastelHex()
 
     if(!body.fromPolygon(points.slice(0), { removeCollinearPoints: 0.1 })) {
         return 
