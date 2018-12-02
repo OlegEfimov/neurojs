@@ -321,36 +321,38 @@ class Car {
         var forceLeft = Math.round(action1 * this.maxEngineForce);
         var forceRight = Math.round(action2 * this.maxEngineForce);
 
-        // if (forceLeft == 0) {
-        //     this.frontLeftWeel.setBrakeForce(9)
-        //     this.backLeftWeel.setBrakeForce(9)
-        // } else {
-        //     this.frontLeftWeel.setBrakeForce(0)
-        //     this.backLeftWeel.setBrakeForce(0)
-        // }
+        if (!this.hardwareOn || this.manualControlOn ) {
+            // if (forceLeft == 0) {
+            //     this.frontLeftWeel.setBrakeForce(9)
+            //     this.backLeftWeel.setBrakeForce(9)
+            // } else {
+            //     this.frontLeftWeel.setBrakeForce(0)
+            //     this.backLeftWeel.setBrakeForce(0)
+            // }
 
-        if (forceLeft > 0) {
-            this.frontLeftWeel.engineForce = forceLeft
-            this.backLeftWeel.engineForce = forceLeft
-        } else {
-            this.frontLeftWeel.engineForce = forceLeft
-            this.backLeftWeel.engineForce = forceLeft
-        }
+            if (forceLeft > 0) {
+                this.frontLeftWeel.engineForce = forceLeft
+                this.backLeftWeel.engineForce = forceLeft
+            } else {
+                this.frontLeftWeel.engineForce = forceLeft
+                this.backLeftWeel.engineForce = forceLeft
+            }
 
-        // if (forceRight == 0) {
-        //     this.frontRightWeel.setBrakeForce(9)
-        //     this.backRightWeel.setBrakeForce(9)
-        // } else {
-        //     this.frontRightWeel.setBrakeForce(0)
-        //     this.backRightWeel.setBrakeForce(0)
-        // }
+            // if (forceRight == 0) {
+            //     this.frontRightWeel.setBrakeForce(9)
+            //     this.backRightWeel.setBrakeForce(9)
+            // } else {
+            //     this.frontRightWeel.setBrakeForce(0)
+            //     this.backRightWeel.setBrakeForce(0)
+            // }
 
-        if (forceRight > 0) {
-            this.frontRightWeel.engineForce = forceRight
-            this.backRightWeel.engineForce = forceRight
-        } else {
-            this.frontRightWeel.engineForce = forceRight
-            this.backRightWeel.engineForce = forceRight
+            if (forceRight > 0) {
+                this.frontRightWeel.engineForce = forceRight
+                this.backRightWeel.engineForce = forceRight
+            } else {
+                this.frontRightWeel.engineForce = forceRight
+                this.backRightWeel.engineForce = forceRight
+            }
         }
 
         if (this.hardwareOn && (this.socket.readyState === 1)) {
