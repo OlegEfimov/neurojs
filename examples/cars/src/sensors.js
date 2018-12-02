@@ -56,7 +56,11 @@ class DistanceSensor extends Sensor {
                 this.distance = 1.0
                 this.hit = false
             }
-            else {
+             else if (data === 0) {
+                this.distance = 1.0
+                this.hit = true
+            }
+             else {
                 this.distance =  data/(this.length * 10)
                 this.hit = true
                 // this.crash = this.distance < 0.1
@@ -273,9 +277,9 @@ class SensorArray {
         var distanceData = sensorData.slice(0,-3);
         var speedData = sensorData.slice(-3);
 
-        for (let a in distanceData ) {
-            distanceData[a] = distanceData[a] === 0 ? MAX_DISTANCE : distanceData[a];
-        }
+        // for (let a in distanceData ) {
+        //     distanceData[a] = distanceData[a] === 0 ? MAX_DISTANCE : distanceData[a];
+        // }
 
         for (var i = 0, k = 0; i < this.sensors.length-1; k += this.sensors[i].data.length, i++) {
             this.sensors[i].update(true, distanceData[i])

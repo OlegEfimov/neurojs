@@ -354,8 +354,10 @@ class Car {
         }
 
         if (this.hardwareOn && (this.socket.readyState === 1)) {
+            let left = (forceLeft * 0.4).toFixed(0);
+            let right = (forceRight * 0.4).toFixed(0);
             // if (forceLeft !== 0 || forceRight !== 0) {
-                this.socket.send(forceLeft + '=' + forceRight + '=;');
+                this.socket.send(left + '=' + right + '=;');
                 // console.log(forceLeft + '=' + forceRight + '=;');
             // }
         // } else {
