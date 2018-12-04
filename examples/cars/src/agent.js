@@ -17,7 +17,7 @@ function agent(opt, world) {
     this.rewardOnContactTop = 0
     this.rewardOnContactBack = 0
     this.rewardOnSpin = 0
-    this.action = this.car.action = [0.5, 0.5]
+    this.action = this.car.action = [0.1, 0.1]
 
     if (this.options.dynamicallyLoaded !== true) {
     	this.init(world.brains.actor.newConfiguration(), null)
@@ -160,7 +160,12 @@ agent.prototype.step = function (dt) {
         var result = '';//this.car.contact.reduce((all, current) => all + current + '\t');
         this.reward = 0.0
         this.car.contact.forEach( (current, i) => {
-            this.reward -= current * 0.1
+            if (current > 0.3) {
+                // this.reward -= current * 0.1 * this.car.contactKoeff[i]
+                this.reward -= 0.2
+            // } else {
+            }
+            // this.reward -= current * 0.1
             // this.reward -= current * 0.1 * this.car.contactKoeff[i]
             // this.reward -= Math.pow(current, 2) * 0.1 * this.car.contactKoeff[i]
             result += current.toFixed(3) + '\t';
@@ -172,7 +177,14 @@ agent.prototype.step = function (dt) {
         //     this.reward -= 0.01 
         // }
         console.log('\tcar.contact=' + result);
-//////////////////////////////////////////////////////////////////////////////////////////////////
+//         this.rewardOnForce_0 =  this.reward;
+        if (this.reward > -0.9) { //max -1.2
+            this.reward -= Math.pow((this.action[0] - this.action[1]),2)*0.5
+            this.reward -=  (Math.abs(this.action[0]) < 0.6)?  0.1 : 0.0
+            this.reward -=  (Math.abs(this.action[1]) < 0.6)?  0.1 : 0.0
+        }
+//         this.reward += this.rewardOnForce_1;
+// //////////////////////////////////////////////////////////////////////////////////////////////////
 
         // this.reward = Math.pow(speed1, 2)
         // this.reward += Math.pow(speed2, 2)
