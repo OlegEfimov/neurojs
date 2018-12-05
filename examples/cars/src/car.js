@@ -320,6 +320,8 @@ class Car {
         
         var forceLeft = Math.round(action1 * this.maxEngineForce);
         var forceRight = Math.round(action2 * this.maxEngineForce);
+        var forceLeftHW = Math.round(action1 * this.maxEngineForce);
+        var forceRightHW = Math.round(action2 * this.maxEngineForce);
 
         if (!this.hardwareOn || this.manualControlOn ) {
             // if (forceLeft == 0) {
@@ -356,8 +358,8 @@ class Car {
         }
 
         if (this.hardwareOn && (this.socket.readyState === 1)) {
-            let left = (forceLeft * 0.5).toFixed(0);
-            let right = (forceRight * 0.5).toFixed(0);
+            let left = (forceLeftHW * 0.5).toFixed(0);
+            let right = (forceRightHW * 0.5).toFixed(0);
             // if (forceLeft !== 0 || forceRight !== 0) {
                 this.socket.send(left + '=' + right + '=;');
                 // console.log(forceLeft + '=' + forceRight + '=;');
