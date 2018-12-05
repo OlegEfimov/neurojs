@@ -162,7 +162,7 @@ agent.prototype.step = function (dt) {
         this.car.contact.forEach( (current, i) => {
             if (current > 0.3) {
                 // this.reward -= current * 0.1 * this.car.contactKoeff[i]
-                this.reward += -1.0
+                this.reward += -current
             // } else {
             }
             // this.reward -= current * 0.1
@@ -184,15 +184,15 @@ agent.prototype.step = function (dt) {
         //   '\t' + speed2.toFixed(3));
 
 //         this.rewardOnForce_0 =  this.reward;
-        if (this.reward >= -1.0) { //max -1.2
-            this.reward += Math.abs(this.action[0] - this.action[1]) > 0.1 ?   -0.5 : 0.5
+        if (this.reward >= -0.3) { //max -1.2
+            this.reward += Math.abs(this.action[0] - this.action[1]) > 0.1 ?   -0.1 : 0.1
             // this.reward +=  (Math.abs(this.action[0]) < 1.0)?  -0.5 : 0.5
             // this.reward +=  (Math.abs(this.action[1]) < 1.0)?  -0.5 : 0.5
-            this.reward += ((Math.abs(speed1) > 1.5) || (Math.abs(speed2)  > 1.5)) ?  0.5 : -0.5;
+            this.reward += ((Math.abs(speed1) > 1.5) || (Math.abs(speed2)  > 1.5)) ?  0.1 : -0.1;
             // console.log('\t=' + this.reward.toFixed(3));
         } else {
-            if (this.reward < -1.0) {
-                this.reward += ((Math.abs(speed1) > 1.5) || (Math.abs(speed2)  > 1.5)) ?  0.5 : -0.5;
+            if (this.reward < -0.37) {
+                this.reward += ((Math.abs(speed1) > 1.5) || (Math.abs(speed2)  > 1.5)) ?  0.1 : -0.1;
                 // console.log('\t\t========' + this.reward.toFixed(3));
             }
         }
