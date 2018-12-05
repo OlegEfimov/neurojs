@@ -17,7 +17,7 @@ function agent(opt, world) {
     this.rewardOnContactTop = 0
     this.rewardOnContactBack = 0
     this.rewardOnSpin = 0
-    this.action = this.car.action = [0.1, 0.1]
+    this.action = this.car.action = [0.0, 0.0]
 
     if (this.options.dynamicallyLoaded !== true) {
     	this.init(world.brains.actor.newConfiguration(), null)
@@ -58,7 +58,7 @@ agent.prototype.init = function (actor, critic) {
 
     })
 
-    // this.world.brains.shared.add('actor', this.brain.algorithm.actor)
+    this.world.brains.shared.add('actor', this.brain.algorithm.actor)
     this.world.brains.shared.add('critic', this.brain.algorithm.critic)
 
     this.brain.learning = false;
@@ -162,7 +162,7 @@ agent.prototype.step = function (dt) {
         this.car.contact.forEach( (current, i) => {
             if (current > 0.3) {
                 // this.reward -= current * 0.1 * this.car.contactKoeff[i]
-                this.reward -= 0.2
+                this.reward += -1.0
             // } else {
             }
             // this.reward -= current * 0.1
@@ -176,12 +176,25 @@ agent.prototype.step = function (dt) {
         // if ( Math.abs(speed1 + speed2)  < 1.0) { // punish no movement; it harms exploration
         //     this.reward -= 0.01 
         // }
-        console.log('\tcar.contact=' + result);
+        // console.log('\tcontact=' + result +
+        //  'rew=' + this.reward.toFixed(3) +
+        //   '\t' + this.action[0].toFixed(3) +
+        //   '\t' + this.action[1].toFixed(3) +
+        //   '\t' + speed1.toFixed(3) +
+        //   '\t' + speed2.toFixed(3));
+
 //         this.rewardOnForce_0 =  this.reward;
-        if (this.reward > -0.9) { //max -1.2
-            this.reward -= Math.pow((this.action[0] - this.action[1]),2)*0.5
-            this.reward -=  (Math.abs(this.action[0]) < 0.6)?  0.1 : 0.0
-            this.reward -=  (Math.abs(this.action[1]) < 0.6)?  0.1 : 0.0
+        if (this.reward >= -1.0) { //max -1.2
+            this.reward += Math.abs(this.action[0] - this.action[1]) > 0.1 ?   -0.5 : 0.5
+            // this.reward +=  (Math.abs(this.action[0]) < 1.0)?  -0.5 : 0.5
+            // this.reward +=  (Math.abs(this.action[1]) < 1.0)?  -0.5 : 0.5
+            this.reward += ((Math.abs(speed1) > 1.5) || (Math.abs(speed2)  > 1.5)) ?  0.5 : -0.5;
+            // console.log('\t=' + this.reward.toFixed(3));
+        } else {
+            if (this.reward < -1.0) {
+                this.reward += ((Math.abs(speed1) > 1.5) || (Math.abs(speed2)  > 1.5)) ?  0.5 : -0.5;
+                // console.log('\t\t========' + this.reward.toFixed(3));
+            }
         }
 //         this.reward += this.rewardOnForce_1;
 // //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -211,8 +224,8 @@ agent.prototype.step = function (dt) {
         }
         if (!this.car.manualControlOn) {
             this.action = this.brain.policy(this.car.sensors.data)
-            this.action[0] += 0.5
-            this.action[1] += 0.5
+            // this.action[0] += 0.5
+            // this.action[1] += 0.5
        }
         
         this.car.impact = 0
