@@ -180,10 +180,29 @@ agent.prototype.step = function (dt) {
 //         this.rewardOnForce_0 =  this.reward;
         if (this.reward > -0.9) { //max -1.2
             this.reward -= Math.pow((this.action[0] - this.action[1]),2)*0.5
-            this.reward -=  (Math.abs(this.action[0]) < 0.6)?  0.1 : 0.0
-            this.reward -=  (Math.abs(this.action[1]) < 0.6)?  0.1 : 0.0
+            this.reward -=  (Math.abs(this.action[0]) < 1.0)?  0.1 : 0.0
+            this.reward -=  (Math.abs(this.action[1]) < 1.0)?  0.1 : 0.0
         }
 //         this.reward += this.rewardOnForce_1;
+// //////////////////////////////////////////////////////////////////////////////////////////////////
+// var rewardOnContact = 0.0
+// rewardOnContact -= this.car.contact[0] * 0.
+// rewardOnContact -= this.car.contact[1] * 0.
+// rewardOnContact -= this.car.contact[2] * 0.
+// rewardOnContact -= this.car.contact[3] * 0.
+// rewardOnContact -= this.car.contact[4] * 0.
+// rewardOnContact -= this.car.contact[5] * 0.
+// rewardOnContact -= this.car.contact[6] * 0.
+// rewardOnContact -= this.car.contact[7] * 0.
+// rewardOnContact -= this.car.contact[8] * 0.
+// rewardOnContact -= this.car.contact[9] * 0.
+
+        if (this.car.contact[2] > 0.7 || this.car.contact[2] > 0.7) {
+            if (this.action[0] > 0 || this.action[1] >0) {
+                this.reward -=  0.9
+            }
+        }
+
 // //////////////////////////////////////////////////////////////////////////////////////////////////
 
         // this.reward = Math.pow(speed1, 2)

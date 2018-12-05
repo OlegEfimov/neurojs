@@ -356,8 +356,8 @@ class Car {
         }
 
         if (this.hardwareOn && (this.socket.readyState === 1)) {
-            let left = (forceLeft * 0.9).toFixed(0);
-            let right = (forceRight * 0.9).toFixed(0);
+            let left = (forceLeft * 0.7).toFixed(0);
+            let right = (forceRight * 0.7).toFixed(0);
             // if (forceLeft !== 0 || forceRight !== 0) {
                 this.socket.send(left + '=' + right + '=;');
                 // console.log(forceLeft + '=' + forceRight + '=;');
