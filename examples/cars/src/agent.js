@@ -184,11 +184,11 @@ agent.prototype.step = function (dt) {
           '\t' + speed2.toFixed(3));
 
 //         this.rewardOnForce_0 =  this.reward;
-        if (this.reward >= -1.0) { //max -1.2
+        if (this.reward >= -3.0) { //max -1.2
             this.reward += Math.abs(this.action[0] - this.action[1]) > 0.1 ?   -0.5 : 0.5
-            // this.reward +=  (Math.abs(this.action[0]) < 1.0)?  -0.5 : 0.5
-            // this.reward +=  (Math.abs(this.action[1]) < 1.0)?  -0.5 : 0.5
-            this.reward += ((Math.abs(speed1) > 1.5) || (Math.abs(speed2)  > 1.5)) ?  0.5 : -0.5;
+            this.reward +=  (Math.abs(this.action[0]) < 1.0)?  -0.5 : 0.5
+            this.reward +=  (Math.abs(this.action[1]) < 1.0)?  -0.5 : 0.5
+            // this.reward += ((Math.abs(speed1) > 1.5) || (Math.abs(speed2)  > 1.5)) ?  0.5 : -0.5;
             console.log('\t=' + this.reward.toFixed(3));
         } else {
             if (this.reward < -1.0) {

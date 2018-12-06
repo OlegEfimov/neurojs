@@ -8,7 +8,8 @@ class Car {
 
     constructor(world, opt) {
         this.maxSteer = Math.PI / 7
-        this.maxEngineForce = 170
+        this.maxEngineForce = 400
+        this.maxEngineForceHW = 170
         this.maxBrakeForce = 5
         this.maxBackwardForce = 2
         this.linearDamping = 1
@@ -93,7 +94,7 @@ class Car {
     createPhysicalBody() {
         // Create a dynamic body for the chassis
         this.chassisBody = new p2.Body({
-            mass: 2,
+            mass: 10,
             damping: 1,
             angularDamping: 1,
             ccdSpeedThreshold: 0,
@@ -320,8 +321,8 @@ class Car {
         
         var forceLeft = Math.round(action1 * this.maxEngineForce);
         var forceRight = Math.round(action2 * this.maxEngineForce);
-        var forceLeftHW = Math.round(action1 * this.maxEngineForce);
-        var forceRightHW = Math.round(action2 * this.maxEngineForce);
+        var forceLeftHW = Math.round(action1 * this.maxEngineForceHW);
+        var forceRightHW = Math.round(action2 * this.maxEngineForceHW);
 
         if (!this.hardwareOn || this.manualControlOn ) {
             // if (forceLeft == 0) {
