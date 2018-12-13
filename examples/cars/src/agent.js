@@ -1,7 +1,11 @@
 var car = require('./car.js');
 
+var INITIAL_ACTION = 0.0;
+var ACTIONS_DELAY = 10;
+
+
 function agent(opt, world) {
-    this.car = new car(world, {})
+    this.car = new car(world, opt)
     this.options = opt
 
     this.world = world
@@ -17,7 +21,14 @@ function agent(opt, world) {
     this.rewardOnContactTop = 0
     this.rewardOnContactBack = 0
     this.rewardOnSpin = 0
-    this.action = this.car.action = [0.0, 0.0]
+
+    this.actionArray = [];
+
+    for (i = 0; i < ACTIONS_DELAY; i++) {
+      this.actionArray.push([INITIAL_ACTION, INITIAL_ACTION]);
+    }
+
+    this.action = this.car.action = [INITIAL_ACTION, INITIAL_ACTION];
 
     if (this.options.dynamicallyLoaded !== true) {
     	this.init(world.brains.actor.newConfiguration(), null)
@@ -223,7 +234,10 @@ agent.prototype.step = function (dt) {
             this.loss = 0;
         }
         if (!this.car.manualControlOn) {
-            this.action = this.brain.policy(this.car.sensors.data)
+            this.action = this.actionArray.shift();
+
+            this.actionArray.push(this.brain.policy(this.car.sensors.data));
+
             this.action[0] += 0.5
             this.action[1] += 0.5
        }

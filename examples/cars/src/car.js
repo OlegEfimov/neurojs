@@ -7,6 +7,7 @@ var color = require('./color.js'),
 class Car {
 
     constructor(world, opt) {
+        this.options = opt
         this.maxSteer = Math.PI / 7
         this.maxEngineForce = 400
         this.maxEngineForceHW = 170
@@ -102,7 +103,7 @@ class Car {
         });
 
         this.wheels = {}
-        this.chassisBody.color = color.randomPastelHex();
+        this.chassisBody.color = this.options.number === 0 ? color.rgbToHex(20, 100, 0) : color.randomPastelHex();
         this.chassisBody.car = true;
         this.chassisBody.damping = this.linearDamping;
 
