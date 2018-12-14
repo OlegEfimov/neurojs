@@ -1,7 +1,7 @@
 var car = require('./car.js');
 
 var INITIAL_ACTION = 0.0;
-var ACTIONS_DELAY = 10;
+var ACTIONS_DELAY = 15;
 
 
 function agent(opt, world) {
@@ -234,9 +234,13 @@ agent.prototype.step = function (dt) {
             this.loss = 0;
         }
         if (!this.car.manualControlOn) {
-            this.action = this.actionArray.shift();
+            if (!this.car.hardwareOn) {
+                this.action = this.actionArray.shift();
 
-            this.actionArray.push(this.brain.policy(this.car.sensors.data));
+                this.actionArray.push(this.brain.policy(this.car.sensors.data));
+            } else {
+                this.action = this.brain.policy(this.car.sensors.data);
+            }
 
             this.action[0] += 0.5
             this.action[1] += 0.5
