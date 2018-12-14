@@ -171,7 +171,7 @@ agent.prototype.step = function (dt) {
         var result = '';//this.car.contact.reduce((all, current) => all + current + '\t');
         this.reward = 0.0
         this.car.contact.forEach( (current, i) => {
-            if (current > 0.3) {
+            if (current > 0.5) {
                 // this.reward -= current * 0.1 * this.car.contactKoeff[i]
                 this.reward += -1.0
             // } else {
@@ -203,7 +203,7 @@ agent.prototype.step = function (dt) {
             console.log('\t=' + this.reward.toFixed(3));
         } else {
             if (this.reward < -1.0) {
-                this.reward += ((Math.abs(speed1) > 1.5) || (Math.abs(speed2)  > 1.5)) ?  0.5 : -0.5;
+                this.reward += ((Math.abs(speed1) > 1.0) || (Math.abs(speed2)  > 1.0)) ?  0.5 : -0.5;
                 console.log('\t\t========' + this.reward.toFixed(3));
             }
         }
