@@ -252,7 +252,8 @@ agent.prototype.step = function (dt) {
     
     if (!isNaN(this.action[0]) && !isNaN(this.action[1])) {
       if (!this.car.manualControlOn) {
-        this.car.handle(this.action[0], this.action[1])
+        // this.car.handle(this.action[0], this.action[1])
+        this.car.handle(this.car.speedData[0], this..car.speedData[1])
       }
     }
 

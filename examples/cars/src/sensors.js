@@ -276,6 +276,7 @@ class SensorArray {
     updateHardware(sensorData) {
         var distanceData = sensorData.slice(0,-3);
         var speedData = sensorData.slice(-3);
+        this.speedData = speedData;
 
         // for (let a in distanceData ) {
         //     distanceData[a] = distanceData[a] === 0 ? MAX_DISTANCE : distanceData[a];

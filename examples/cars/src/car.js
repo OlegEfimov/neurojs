@@ -363,7 +363,8 @@ class Car {
             let left = (forceLeftHW * 0.5).toFixed(0);
             let right = (forceRightHW * 0.5).toFixed(0);
             // if (forceLeft !== 0 || forceRight !== 0) {
-                this.socket.send(left + '=' + right + '=;');
+                // this.socket.send(left + '=' + right + '=;');
+                this.socket.send(this.action[0] + '=' + this.action[1] + '=;');
                 // console.log(forceLeft + '=' + forceRight + '=;');
             // }
         // } else {
