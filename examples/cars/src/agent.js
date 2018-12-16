@@ -187,12 +187,12 @@ agent.prototype.step = function (dt) {
         // if ( Math.abs(speed1 + speed2)  < 1.0) { // punish no movement; it harms exploration
         //     this.reward -= 0.01 
         // }
-        console.log('\tcontact=' + result +
-         'rew=' + this.reward.toFixed(3) +
-          '\t' + this.action[0].toFixed(3) +
-          '\t' + this.action[1].toFixed(3) +
-          '\t' + speed1.toFixed(3) +
-          '\t' + speed2.toFixed(3));
+        // console.log('\tcontact=' + result +
+        //  'rew=' + this.reward.toFixed(3) +
+        //   '\t' + this.action[0].toFixed(3) +
+        //   '\t' + this.action[1].toFixed(3) +
+        //   '\t' + speed1.toFixed(3) +
+        //   '\t' + speed2.toFixed(3));
 
 //         this.rewardOnForce_0 =  this.reward;
         if (this.reward >= -3.0) { //max -1.2
@@ -200,11 +200,11 @@ agent.prototype.step = function (dt) {
             this.reward +=  (Math.abs(this.action[0]) < 1.0)?  -0.5 : 0.5
             this.reward +=  (Math.abs(this.action[1]) < 1.0)?  -0.5 : 0.5
             // this.reward += ((Math.abs(speed1) > 1.5) || (Math.abs(speed2)  > 1.5)) ?  0.5 : -0.5;
-            console.log('\t=' + this.reward.toFixed(3));
+            // console.log('\t=' + this.reward.toFixed(3));
         } else {
             if (this.reward < -1.0) {
                 this.reward += ((Math.abs(speed1) > 1.0) || (Math.abs(speed2)  > 1.0)) ?  0.5 : -0.5;
-                console.log('\t\t========' + this.reward.toFixed(3));
+                // console.log('\t\t========' + this.reward.toFixed(3));
             }
         }
 //         this.reward += this.rewardOnForce_1;
@@ -250,12 +250,12 @@ agent.prototype.step = function (dt) {
         this.car.step()
     }
     
-    if (!isNaN(this.action[0]) && !isNaN(this.action[1])) {
+    // if (!isNaN(this.action[0]) && !isNaN(this.action[1])) {
       if (!this.car.manualControlOn) {
         // this.car.handle(this.action[0], this.action[1])
-        this.car.handle(this.car.speedData[0], this..car.speedData[1])
+        this.car.handle(this.car.sensors.speedData[0], this.car.sensors.speedData[0])
       }
-    }
+    // }
 
     return this.timer % this.timerFrequency === 0
 };

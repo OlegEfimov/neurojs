@@ -47,7 +47,7 @@ class Car {
         // text.html("Sensor reading:" + result.data);
 
         var str = result.data;
-        // console.log(str);
+        console.log(str);
         // str = str.substring(1,str.length-3)
         // console.log('str2= ' + str);
         var temp = new Array();
