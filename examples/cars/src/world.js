@@ -181,8 +181,6 @@ world.prototype.resize = function (renderer) {
 world.prototype.step = function (dt) {
     if (dt >= 0.02)  dt = 0.02;
 
-    ++this.timer
-
     var loss = 0.0, reward = 0.0, act0 = 0.0, act1 = 0.0, koeff_reward0 = 0.0, koeff_reward1 = 0.0, rewardOnContactTop = 0,
       agentUpdate = false
     for (var i = 0; i < this.agents.length; i++) {
@@ -198,29 +196,33 @@ world.prototype.step = function (dt) {
 
     this.brains.shared.step()
 
-    if (!this.plotting && (this.agents[0].brain.learning || this.plotRewardOnly) && 1 === this.timer % this.chartFrequency) {
-        this.plotting = true
-    }
+    if (!this.agents[0].car.manualControlOn) {
 
-    if (this.plotting) {
-        this.chartEphemeralData.push({
-            loss: loss / this.agents.length,
-            act0: act0,
-            act1: act1,
-            koeff_reward0: koeff_reward0,
-            koeff_reward1: koeff_reward1,
-            rewardOnContactTop: rewardOnContactTop,
-            // reward: 0.01
-            reward: reward / this.agents.length
+        ++this.timer
 
-        })
+        if (!this.plotting && (this.agents[0].brain.learning || this.plotRewardOnly) && 1 === this.timer % this.chartFrequency) {
+            this.plotting = true
+        }
 
-        if (this.timer % this.chartFrequency == 0) {
-            this.updateChart()
-            this.chartEphemeralData = []
+        if (this.plotting) {
+            this.chartEphemeralData.push({
+                loss: loss / this.agents.length,
+                act0: act0,
+                act1: act1,
+                koeff_reward0: koeff_reward0,
+                koeff_reward1: koeff_reward1,
+                rewardOnContactTop: rewardOnContactTop,
+                // reward: 0.01
+                reward: reward / this.agents.length
+
+            })
+
+            if (this.timer % this.chartFrequency == 0) {
+                this.updateChart()
+                this.chartEphemeralData = []
+            }
         }
     }
-    
 
     this.p2.step(1 / 60, dt, 10);
     this.age += dt

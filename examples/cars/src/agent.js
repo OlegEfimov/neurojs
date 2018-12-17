@@ -1,7 +1,7 @@
 var car = require('./car.js');
 
 var INITIAL_ACTION = 0.0;
-var ACTIONS_DELAY = 15;
+var ACTIONS_DELAY = 2;
 
 
 function agent(opt, world) {
@@ -114,12 +114,13 @@ agent.prototype.step = function (dt) {
             }
         }
 
-        if (this.brain.learning) {
-            this.loss = this.brain.learn(this.reward)
-        } else {
-            this.loss = 0;
-        }
         if (!this.car.manualControlOn) {
+            if (this.brain.learning) {
+                this.loss = this.brain.learn(this.reward)
+            } else {
+                this.loss = 0;
+            }
+
             if (!this.car.hardwareOn) {
                 this.action = this.actionArray.shift();
                 this.actionArray.push(this.brain.policy(this.car.sensors.data));
@@ -129,16 +130,13 @@ agent.prototype.step = function (dt) {
 
             this.action[0] += 0.5
             this.action[1] += 0.5
-       }
         
 
-        if (!this.car.manualControlOn) {
             this.car.sensorDataUpdated = false;
-            // this.car.handle(this.action[0], this.action[1])
-            // this.car.handle(this.car.sensors.speedData[0], this.car.sensors.speedData[0])
-            let tmp1 = this.car.sensors.speedData? this.car.sensors.speedData[0] : 0;
-            let tmp2 = this.car.sensors.speedData? this.car.sensors.speedData[1] : 0;
-            this.car.handle(tmp1, tmp1)
+            this.car.handle(this.action[0], this.action[1])
+            // let tmp1 = this.car.sensors.speedData? this.car.sensors.speedData[0] : 0;
+            // let tmp2 = this.car.sensors.speedData? this.car.sensors.speedData[1] : 0;
+            // this.car.handle(tmp1, tmp1)
         }
 
 

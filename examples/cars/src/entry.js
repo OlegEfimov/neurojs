@@ -180,6 +180,9 @@ window.updateIfLearning = function (value) {
 window.setManualControl = function (value) {
     for (var i = 0; i <  window.gcd.world.agents.length; i++) {
         window.gcd.world.agents[i].car.manualControlOn = value
+        if (value) {
+            window.gcd.world.agents[i].car.handle(0, 0)
+        }
     }
 
     // window.gcd.world.plotRewardOnly = !value

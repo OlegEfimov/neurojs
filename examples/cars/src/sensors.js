@@ -251,6 +251,7 @@ SpeedSensor.dimensions = 3
 class SensorArray {
 
     constructor(car, blueprint) {
+        this.speedData = [0.0, 0.0]
         this.sensors = []
         this.car = car
         this.dimensions = blueprint.dimensions
