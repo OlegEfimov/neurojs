@@ -85,7 +85,12 @@ agent.prototype.step = function (dt) {
 
     this.timer++
 
-    if (this.timer % this.timerFrequency === 0) {
+
+    // if (!this.car.manualControlOn) {
+    //     if (!this.car.hardwareOn) {
+    if ((!this.car.hardwareOn && this.timer % this.timerFrequency === 0) ||
+        ( this.car.hardwareOn && this.car.sensorDataUpdated)) {
+        // this.car.sensorDataUpdated = false;
         this.car.update()
 
         // var vel = this.car.speed.local
@@ -246,16 +251,33 @@ agent.prototype.step = function (dt) {
             this.action[1] += 0.5
        }
         
+
+        if (!this.car.manualControlOn) {
+            this.car.sensorDataUpdated = false;
+            // this.car.handle(this.action[0], this.action[1])
+            // this.car.handle(this.car.sensors.speedData[0], this.car.sensors.speedData[0])
+            let tmp1 = this.car.sensors.speedData? this.car.sensors.speedData[0] : 0;
+            let tmp2 = this.car.sensors.speedData? this.car.sensors.speedData[1] : 0;
+            this.car.handle(tmp1, tmp1)
+        }
+
+
         this.car.impact = 0
         this.car.step()
     }
     
-    // if (!isNaN(this.action[0]) && !isNaN(this.action[1])) {
-      if (!this.car.manualControlOn) {
-        // this.car.handle(this.action[0], this.action[1])
-        this.car.handle(this.car.sensors.speedData[0], this.car.sensors.speedData[0])
-      }
-    // }
+    // // if (!isNaN(this.speed1) && !isNaN(this.speed2)) {
+    // // if (!isNaN(this.action[0]) && !isNaN(this.action[1])) {
+    //   if (!this.car.manualControlOn) {
+    //     this.car.sensorDataUpdated = false;
+    //     // this.car.handle(this.action[0], this.action[1])
+    //     // this.car.handle(this.car.sensors.speedData[0], this.car.sensors.speedData[0])
+    //     let tmp1 = this.car.sensors.speedData? this.car.sensors.speedData[0] : 0;
+    //     let tmp2 = this.car.sensors.speedData? this.car.sensors.speedData[1] : 0;
+    //     this.car.handle(tmp1, tmp1)
+    //   }
+    // // }
+    // // }
 
     return this.timer % this.timerFrequency === 0
 };

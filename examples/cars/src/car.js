@@ -7,6 +7,7 @@ var color = require('./color.js'),
 class Car {
 
     constructor(world, opt) {
+        this.sensorDataUpdated = false
         this.options = opt
         this.maxSteer = Math.PI / 7
         this.maxEngineForce = 400
@@ -65,6 +66,7 @@ class Car {
 
         // window.sensorData = temp;
         window.gcd.world.agents[0].car.sensorData = temp;
+        window.gcd.world.agents[0].car.sensorDataUpdated = true;
 
         // var foundPos = result.data.indexOf('mm');
         // if (foundPos == -1) return;
