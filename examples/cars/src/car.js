@@ -364,9 +364,27 @@ class Car {
         if (this.hardwareOn && (this.socket.readyState === 1)) {
             let left = (forceLeftHW * 0.5).toFixed(0);
             let right = (forceRightHW * 0.5).toFixed(0);
+
+            if (left > 5) {
+                left = left + 50;
+            } else if (left < -5) {
+                left = left - 50;
+            } else {
+                left = 0;
+            }
+
+            if (right > 5) {
+                right = right + 50;
+            } else if (right < -5) {
+                right = right - 50;
+            } else {
+                right = 0;
+            }
+
+
             // if (forceLeft !== 0 || forceRight !== 0) {
-                // this.socket.send(left + '=' + right + '=;');
-                this.socket.send(this.action[0] + '=' + this.action[1] + '=;');
+                this.socket.send(left + '=' + right + '=;');
+                // this.socket.send(this.action[0] + '=' + this.action[1] + '=;');
                 // console.log(forceLeft + '=' + forceRight + '=;');
             // }
         // } else {
