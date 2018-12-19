@@ -193,6 +193,13 @@ window.setHardware = function (value) {
         window.gcd.world.agents[i].car.hardwareOn = value
     }
 };
+
+window.setEngineZeroShift = function (value) {
+    for (var i = 0; i <  window.gcd.world.agents.length; i++) {
+        window.ZERO_ENGINE_SHIFT = value
+    }
+};
+
 window.getValueLow = function (id) {
     var element = document.getElementById(id);
     return element.valueLow;

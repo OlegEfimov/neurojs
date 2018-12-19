@@ -52,10 +52,20 @@
  -->
         <button onclick="window.gcd.doStop();">Stop</button>
       </div>
-<!-- 
+
       <div class="row">
-        <input id="range_value1" type="range" value="5" min="0" max="100" oninput="range_value1_show.value=range_value1.value"><output id="range_value1_show"></output>
+        <input id="range_value1" type="range" value="70" min="5" max="230" oninput="range_value1_show.value=range_value1.value; window.setEngineZeroShift(range_value1.value)"><output id="range_value1_show"></output>
       </div>
+
+      <div id="param1" class="multirange" value="param001">param001</div>
+      <div class="row">
+        <output id="range_1_low"></output>
+        <input id="range_1" type="range" multiple value="10,80"
+         oninput="range_1_low.value=window.getValueLow('range_1');range_1_high.value=window.getValueHigh('range_1')">
+        <output id="range_1_high"></output>
+      </div>
+
+<!-- 
       <div class="row">
         <input id="range_value2" type="range" value="5" min="0" max="100" oninput="range_value2_show.value=range_value2.value"><output id="range_value2_show"></output>
       </div>
