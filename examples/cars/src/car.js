@@ -3,6 +3,12 @@ var color = require('./color.js'),
     tc = require('./tiny-color.js');
 
 // var MAX_DISTANCE = 100; // in cm
+var ZERO_ENGINE = 10;
+var ZERO_ENGINE_SHIFT = 70;
+var MAX_ENGINE_FORCE = 400;
+var MAX_ENGINE_FORCE_HW = 230 - ZERO_ENGINE_SHIFT;
+
+
 
 class Car {
 
@@ -10,8 +16,8 @@ class Car {
         this.sensorDataUpdated = false
         this.options = opt
         this.maxSteer = Math.PI / 7
-        this.maxEngineForce = 400
-        this.maxEngineForceHW = 170
+        this.maxEngineForce = MAX_ENGINE_FORCE
+        this.maxEngineForceHW = MAX_ENGINE_FORCE_HW
         this.maxBrakeForce = 5
         this.maxBackwardForce = 2
         this.linearDamping = 1
@@ -362,21 +368,21 @@ class Car {
         }
 
         if (this.hardwareOn && (this.socket.readyState === 1)) {
-            let left = (forceLeftHW * 0.5).toFixed(0);
-            let right = (forceRightHW * 0.5).toFixed(0);
+            let left = (forceLeftHW * 0.7).toFixed(0);
+            let right = (forceRightHW * 0.7).toFixed(0);
 
-            if (left > 5) {
-                left = left + 50;
-            } else if (left < -5) {
-                left = left - 50;
+            if (left > ZERO_ENGINE) {
+                left = left + ZERO_ENGINE_SHIFT;
+            } else if (left < (-1 * ZERO_ENGINE)) {
+                left = left - ZERO_ENGINE_SHIFT;
             } else {
                 left = 0;
             }
 
-            if (right > 5) {
-                right = right + 50;
-            } else if (right < -5) {
-                right = right - 50;
+            if (right > ZERO_ENGINE) {
+                right = right + ZERO_ENGINE_SHIFT;
+            } else if (right < (-1 * ZERO_ENGINE)) {
+                right = right - ZERO_ENGINE_SHIFT;
             } else {
                 right = 0;
             }
