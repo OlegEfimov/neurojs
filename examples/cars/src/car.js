@@ -5,7 +5,7 @@ var color = require('./color.js'),
 // var MAX_DISTANCE = 100; // in cm
 var ZERO_ENGINE = 10;
 var ZERO_ENGINE_SHIFT = 70;
-var MAX_ENGINE_FORCE = 400;
+var MAX_ENGINE_FORCE = 800;
 var MAX_ENGINE_FORCE_HW = 230 - ZERO_ENGINE_SHIFT;
 
 
@@ -103,7 +103,7 @@ class Car {
     createPhysicalBody() {
         // Create a dynamic body for the chassis
         this.chassisBody = new p2.Body({
-            mass: 10,
+            mass: 20,
             damping: 1,
             angularDamping: 1,
             ccdSpeedThreshold: 0,
@@ -247,23 +247,23 @@ class Car {
         this.frontRightWeel = this.vehicle.addWheel({
             localPosition: [frontRightPosBox.x, frontRightPosBox.y]
         });
-        this.frontRightWeel.setSideFriction(9);
+        this.frontRightWeel.setSideFriction(20);
 
         this.frontLeftWeel = this.vehicle.addWheel({
             localPosition: [frontLeftPosBox.x, frontLeftPosBox.y]
         });
-        this.frontLeftWeel.setSideFriction(9);
+        this.frontLeftWeel.setSideFriction(20);
 
         this.backRightWeel = this.vehicle.addWheel({
             localPosition: [backRightPosBox.x, backRightPosBox.y]
         });
-        this.backRightWeel.setSideFriction(9);
+        this.backRightWeel.setSideFriction(20);
 
         //back wells
         this.backLeftWeel = this.vehicle.addWheel({
             localPosition: [backLeftPosBox.x, backLeftPosBox.y]
         });
-        this.backLeftWeel.setSideFriction(9);
+        this.backLeftWeel.setSideFriction(20);
 
 /////////////////////////////
     }
@@ -472,20 +472,37 @@ Car.Sensors = (() => {
         // { type: 'distance', angle: +165, length: 3.5, start: [ 0+0.05, b ], index: 9, contactKoeff: 1.0},
         // { type: 'distance', angle: +135, length: 3.5, start: [ 0+0.13, b+0.04 ], index: 10, contactKoeff: 0.5},
         // { type: 'distance', angle: +105, length: 3.5, start: [ 0+0.18, b+0.08 ], index: 11, contactKoeff: 0.2},
-        { type: 'distance', angle: -75, length: 1.5, start: [ 0-0.18, t-0.08 ],  index: 0, contactKoeff: 1.0},
-        { type: 'distance', angle: -45, length: 2.5, start: [ 0-0.13, t-0.04 ], index: 1, contactKoeff: 1.0},
-        { type: 'distance', angle: -15, length: 5.5, start: [ 0-0.05, t ], index: 2, contactKoeff: 1.0},
-        { type: 'distance', angle: +15, length: 5.5, start: [ 0+0.05, t ], index: 3, contactKoeff: 1.0},
-        { type: 'distance', angle: +45, length: 2.5, start: [ 0+0.13, t-0.04 ], index: 4, contactKoeff: 1.0},
-        { type: 'distance', angle: +75, length: 1.5, start: [ 0+0.18, t-0.08 ], index: 5, contactKoeff: 1.0},
+
+//====================================
+        // { type: 'distance', angle: -75, length: 1.5, start: [ 0-0.18, t-0.08 ],  index: 0, contactKoeff: 1.0},
+        // { type: 'distance', angle: -45, length: 2.5, start: [ 0-0.13, t-0.04 ], index: 1, contactKoeff: 1.0},
+        // { type: 'distance', angle: -15, length: 5.5, start: [ 0-0.05, t ], index: 2, contactKoeff: 1.0},
+        // { type: 'distance', angle: +15, length: 5.5, start: [ 0+0.05, t ], index: 3, contactKoeff: 1.0},
+        // { type: 'distance', angle: +45, length: 2.5, start: [ 0+0.13, t-0.04 ], index: 4, contactKoeff: 1.0},
+        // { type: 'distance', angle: +75, length: 1.5, start: [ 0+0.18, t-0.08 ], index: 5, contactKoeff: 1.0},
+
+        // // { type: 'distance', angle: -105, length: 1.5, start: [ 0-0.18, b+0.08 ], index: 6, contactKoeff: 0.5},
+        // { type: 'distance', angle: -135, length: 2.0, start: [ 0-0.13, b+0.04 ], index: 7, contactKoeff: 0.5},
+        // { type: 'distance', angle: -165, length: 2.5, start: [ 0-0.05, b ], index: 8, contactKoeff: 0.5},
+        // { type: 'distance', angle: +165, length: 2.5, start: [ 0+0.05, b ], index: 9, contactKoeff: 0.5},
+        // { type: 'distance', angle: +135, length: 2.0, start: [ 0+0.13, b+0.04 ], index: 10, contactKoeff: 0.5},
+        // // { type: 'distance', angle: +105, length: 1.5, start: [ 0+0.18, b+0.08 ], index: 11, contactKoeff: 0.5},
+//=====================================
+        { type: 'distance', angle: -75, length: 1.0, start: [ 0-0.18, t-0.08 ],  index: 0, contactKoeff: 1.0},
+        { type: 'distance', angle: -45, length: 1.25, start: [ 0-0.13, t-0.04 ], index: 1, contactKoeff: 1.0},
+        { type: 'distance', angle: -15, length: 3.0, start: [ 0-0.05, t ], index: 2, contactKoeff: 1.0},
+        { type: 'distance', angle: +15, length: 3.0, start: [ 0+0.05, t ], index: 3, contactKoeff: 1.0},
+        { type: 'distance', angle: +45, length: 1.25, start: [ 0+0.13, t-0.04 ], index: 4, contactKoeff: 1.0},
+        { type: 'distance', angle: +75, length: 1.0, start: [ 0+0.18, t-0.08 ], index: 5, contactKoeff: 1.0},
 
         // { type: 'distance', angle: -105, length: 1.5, start: [ 0-0.18, b+0.08 ], index: 6, contactKoeff: 0.5},
-        { type: 'distance', angle: -135, length: 2.0, start: [ 0-0.13, b+0.04 ], index: 7, contactKoeff: 0.5},
-        { type: 'distance', angle: -165, length: 2.5, start: [ 0-0.05, b ], index: 8, contactKoeff: 0.5},
-        { type: 'distance', angle: +165, length: 2.5, start: [ 0+0.05, b ], index: 9, contactKoeff: 0.5},
-        { type: 'distance', angle: +135, length: 2.0, start: [ 0+0.13, b+0.04 ], index: 10, contactKoeff: 0.5},
+        { type: 'distance', angle: -135, length: 1.0, start: [ 0-0.13, b+0.04 ], index: 7, contactKoeff: 0.5},
+        { type: 'distance', angle: -165, length: 1.25, start: [ 0-0.05, b ], index: 8, contactKoeff: 0.5},
+        { type: 'distance', angle: +165, length: 1.25, start: [ 0+0.05, b ], index: 9, contactKoeff: 0.5},
+        { type: 'distance', angle: +135, length: 1.0, start: [ 0+0.13, b+0.04 ], index: 10, contactKoeff: 0.5},
         // { type: 'distance', angle: +105, length: 1.5, start: [ 0+0.18, b+0.08 ], index: 11, contactKoeff: 0.5},
 
+//=====================================
         { type: 'speed' }
 
     ])
