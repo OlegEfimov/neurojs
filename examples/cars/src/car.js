@@ -367,13 +367,13 @@ class Car {
             }
         }
 
-        if (this.hardwareOn && (this.socket.readyState === 1)) {
-            let left = (forceLeftHW * 0.7).toFixed(0);
-            let right = (forceRightHW * 0.7).toFixed(0);
+       if (this.hardwareOn && (this.socket.readyState === 1)) {
+            let left = (forceLeftHW * 0.3);
+            let right = (forceRightHW * 0.3);
 
             if (left > ZERO_ENGINE) {
                 left = left + ZERO_ENGINE_SHIFT;
-            } else if (left < (-1 * ZERO_ENGINE)) {
+            } else if ((left + ZERO_ENGINE) < 0) {
                 left = left - ZERO_ENGINE_SHIFT;
             } else {
                 left = 0;
@@ -381,21 +381,25 @@ class Car {
 
             if (right > ZERO_ENGINE) {
                 right = right + ZERO_ENGINE_SHIFT;
-            } else if (right < (-1 * ZERO_ENGINE)) {
+            } else if ((right + ZERO_ENGINE) < 0) {
                 right = right - ZERO_ENGINE_SHIFT;
             } else {
                 right = 0;
             }
 
+            let forceLeftHW_str = left.toFixed(0);
+            let forceRightHW_str = right.toFixed(0);
+
 
             // if (forceLeft !== 0 || forceRight !== 0) {
-                this.socket.send(left + '=' + right + '=;');
+               this.socket.send(forceLeftHW_str + '=' + forceRightHW_str + '=;');
                 // this.socket.send(this.action[0] + '=' + this.action[1] + '=;');
                 // console.log(forceLeft + '=' + forceRight + '=;');
+                console.log(forceLeftHW_str + '=' + forceRightHW_str + '=;');
             // }
         // } else {
            // console.log('socket.readyState !== 1');
-        }
+       }
     }
 
     handleKeyInput(k) {
