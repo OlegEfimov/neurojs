@@ -420,10 +420,10 @@ class Car {
         // this.chassisBody.position[1] = (Math.random() - .5) * this.world.size.h
         // this.chassisBody.angle = (Math.random() * 2.0 - 1.0) * Math.PI
 
-        // this.chassisBody.position[0] = 0.0
-        this.chassisBody.position[0] = 0.05 * number * this.world.size.w - this.world.size.w/3
-        // this.chassisBody.position[1] = 0.0
-        this.chassisBody.position[1] = 0.05 * number * this.world.size.h
+        this.chassisBody.position[0] = 0.0
+        // this.chassisBody.position[0] = 0.05 * number * this.world.size.w - this.world.size.w/3
+        this.chassisBody.position[1] = 0.0
+        // this.chassisBody.position[1] = 0.05 * number * this.world.size.h
         this.chassisBody.angle = 0 * Math.PI
 
         this.world.p2.addBody(this.chassisBody)

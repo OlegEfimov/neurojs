@@ -111,8 +111,11 @@ renderer.prototype.render = function () {
 renderer.prototype.update_stage = function (stage) {
     stage.scale.x = this.viewport.scale;
     stage.scale.y = this.viewport.scale;
-    stage.position.x = this.viewport.center[0] + this.viewport.width / 2;
-    stage.position.y = this.viewport.center[1] + this.viewport.height / 2;
+    // stage.position.x = this.viewport.center[0] + this.viewport.width / 2;
+    // stage.position.y = this.viewport.center[1] + this.viewport.height / 2;
+    console.log("X=" + this.bodies[3].position[0] + "\tY=" + this.bodies[3].position[1]);
+    stage.position.x = this.viewport.center[0] + this.viewport.width / 2 - this.bodies[3].position[0] * this.viewport.scale;
+    stage.position.y = this.viewport.center[1] + this.viewport.height / 2 - this.bodies[3].position[1] * this.viewport.scale;
 };
 
 renderer.prototype.update_body = function (body) {
