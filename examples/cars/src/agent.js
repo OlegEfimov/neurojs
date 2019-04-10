@@ -104,13 +104,21 @@ agent.prototype.step = function (dt) {
             result += current.toFixed(3) + '\t';
         });
 
-        if (this.reward >= -3.0) {
-            this.reward += Math.abs(this.action[0] - this.action[1]) > 0.1 ?   -0.5 : 0.5
-            this.reward +=  (Math.abs(this.action[0]) < 1.0)?  -0.5 : 0.5
-            this.reward +=  (Math.abs(this.action[1]) < 1.0)?  -0.5 : 0.5
+        if (false) { //step1 - training forward moving
+            this.reward += Math.abs(this.action[0] - this.action[1]) > 0.01 ? -1.0 : 1.0
+            this.reward +=  this.action[0] > 0.5? 1.0:0.0
+            this.reward +=  this.action[1] > 0.5? 1.0:0.0
+            // this.reward += ((Math.abs(speed1) > 1.0) || (Math.abs(speed2)  > 1.0)) ?  0.5 : -1.5;
         } else {
-            if (this.reward < -1.0) {
-                this.reward += ((Math.abs(speed1) > 1.0) || (Math.abs(speed2)  > 1.0)) ?  0.5 : -0.5;
+
+            if (this.reward >= -3.0) {
+                this.reward += Math.abs(this.action[0] - this.action[1]) > 0.1 ?   -0.5 : 0.5
+                this.reward +=  (Math.abs(this.action[0]) < 1.0)?  -0.5 : 0.5
+                this.reward +=  (Math.abs(this.action[1]) < 1.0)?  -0.5 : 0.5
+            } else {
+                if (this.reward < -1.0) {
+                    this.reward += ((Math.abs(speed1) > 1.0) || (Math.abs(speed2)  > 1.0)) ?  0.5 : -0.5;
+                }
             }
         }
 
@@ -128,8 +136,8 @@ agent.prototype.step = function (dt) {
                 this.action = this.brain.policy(this.car.sensors.data);
             }
 
-            this.action[0] += 0.5
-            this.action[1] += 0.5
+            // this.action[0] += 0.1
+            // this.action[1] += 0.1
         
 
             this.car.sensorDataUpdated = false;

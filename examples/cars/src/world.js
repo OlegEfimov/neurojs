@@ -163,7 +163,7 @@ world.prototype.init = function (renderer) {
     this.addWall( [ -wx - 0.25, -hx ], [ -wx - 0.25, hx ], 2.5 )
     this.addWall( [ wx + 0.25, -hx ], [ wx + 0.25, hx ], 2.5 )
     this.addWall( [ -wx, -hx - 0.25 ], [ wx, -hx - 0.25 ], 2.5 )
-    // this.addWall( [ -wx, hx + 0.25 ], [ wx, hx + 0.25 ], 2.5 )
+    this.addWall( [ -wx, hx + 0.25 ], [ wx, hx + 0.25 ], 2.5 )
 
     this.size = { w, h }
 };
