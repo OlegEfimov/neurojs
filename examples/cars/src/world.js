@@ -1,3 +1,20 @@
+//////////////////////////////////////////
+
+// const tf = require('@tensorflow/tfjs');
+// Optional Load the binding:
+// Use '@tensorflow/tfjs-node-gpu' if running with GPU.
+// require('@tensorflow/tfjs-node');
+
+
+    // posenet.load().then(function(net){
+    //   return net.estimateMultiplePoses(imageElement, 0.5, flipHorizontal, outputStride, maxPoseDetections)
+    // }).then(function(poses){
+    //   console.log(poses);
+    // })
+
+
+/////////////////////////////////////////
+
 var agent = require('./agent.js')
 var color = require('./color.js')
 var car = require('./car.js')
@@ -58,7 +75,35 @@ function world() {
 
     this.brains.shared.set('actor', this.brains.actor.newConfiguration())
     this.brains.shared.set('critic', this.brains.critic.newConfiguration())
+
+
+// const modelQ = tfjs.sequential();
+// modelQ.add(tf.layers.dense({units: 1, inputShape: [1]}));
+
+    // // Train a simple model:
+    // const model = tf.sequential();
+    // model.add(tf.layers.dense({units: 100, activation: 'relu', inputShape: [10]}));
+    // model.add(tf.layers.dense({units: 1, activation: 'linear'}));
+    // model.compile({optimizer: 'sgd', loss: 'meanSquaredError'});
+
+    // const xs = tf.randomNormal([100, 10]);
+    // const ys = tf.randomNormal([100, 1]);
+
+    // model.fit(xs, ys, {
+    //   epochs: 100,
+    //   callbacks: {
+    //     // onEpochEnd: (epoch, log) => console.log(`------------------`);
+    //   }
+    // });
+
+
 };
+
+world.prototype.initModel = function (outline) {
+    this.model_tf = tf.sequential();
+    this.model_tf.add(tf.layers.dense({units: 1, inputShape: [1]}));
+};
+
 
 world.prototype.addBodyFromCompressedPoints = function (outline) {
     if (outline.length % 2 !== 0) {

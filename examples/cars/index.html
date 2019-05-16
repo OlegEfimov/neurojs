@@ -130,5 +130,19 @@
   <script type="text/javascript" src="vendor/pixi.min.js"></script>
   <script type="text/javascript" src="../../build/neurojs-v2.js"></script>
   <script type="text/javascript" src="build/bundle.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@0.11.2"> </script>
+  <!-- <script type="text/javascript" src="vendor/tf.min.js"></script> -->
+<script>
+  window.onload = function() {
+    alert( 'Документ и все ресурсы загружены' );
+
+    window.gcd.world.initModel();
+
+    // window.model_tf = tf.sequential();
+    // window.model_tf.add(tf.layers.dense({units: 1, inputShape: [1]}));
+
+  };
+</script>
+
 </body>
 </html>
