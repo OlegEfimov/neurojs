@@ -1,4 +1,5 @@
 var car = require('./car.js');
+var tf_agent = require('./a2c.js');
 
 var INITIAL_ACTION = 0.0;
 var ACTIONS_DELAY = 2;
@@ -6,6 +7,7 @@ var ACTIONS_DELAY = 2;
 
 function agent(opt, world) {
     this.car = new car(world, opt)
+    this.tf_agent = new tf_agent(5, 5)
     this.options = opt
 
     this.world = world
@@ -43,6 +45,7 @@ agent.prototype.init = function (actor, critic) {
 
     var input = window.neurojs.Agent.getInputDimension(states, actions, temporal)
 
+    // this.brain_tf = new A2CAgent(4,4);
     this.brain = new window.neurojs.Agent({
 
         actor: actor,

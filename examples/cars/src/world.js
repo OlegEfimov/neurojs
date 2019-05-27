@@ -100,8 +100,49 @@ function world() {
 };
 
 world.prototype.initModel = function (outline) {
-    this.model_tf = tf.sequential();
-    this.model_tf.add(tf.layers.dense({units: 1, inputShape: [1]}));
+    var h=10, w=10, numActions=20;
+    // this.model_tf = tf.sequential();
+    // this.model_tf.add(tf.layers.dense({units: 1, inputShape: [1]}));
+  if (!(Number.isInteger(h) && h > 0)) {
+    throw new Error(`Expected height to be a positive integer, but got ${h}`);
+  }
+  if (!(Number.isInteger(w) && w > 0)) {
+    throw new Error(`Expected width to be a positive integer, but got ${w}`);
+  }
+  if (!(Number.isInteger(numActions) && numActions > 1)) {
+    throw new Error(
+        `Expected numActions to be a integer greater than 1, ` +
+        `but got ${numActions}`);
+  }
+
+  const model = tf.sequential();
+  model.add(tf.layers.conv2d({
+    filters: 128,
+    kernelSize: 3,
+    strides: 1,
+    activation: 'relu',
+    inputShape: [h, w, 2]
+  }));
+  model.add(tf.layers.batchNormalization({}));
+  model.add(tf.layers.conv2d({
+    filters: 256,
+    kernelSize: 3,
+    strides: 1,
+    activation: 'relu'
+  }));
+  model.add(tf.layers.batchNormalization({}));
+  model.add(tf.layers.conv2d({
+    filters: 256,
+    kernelSize: 3,
+    strides: 1,
+    activation: 'relu'
+  }));
+  model.add(tf.layers.flatten());
+  model.add(tf.layers.dense({units: 100, activation: 'relu'}));
+  model.add(tf.layers.dropout({rate: 0.25}));
+  model.add(tf.layers.dense({units: numActions}));
+
+  return model;
 };
 
 

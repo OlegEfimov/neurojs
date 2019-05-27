@@ -4,5 +4,6 @@ module.exports = {
 	dispatcher: require('./dispatcher.js'),
 	keyboard: require('./keyboard.js'),
 	renderer: require('./renderer.js'),
-	world: require('./world.js')
+	world: require('./world.js'),
+	// math_utils: require('./math_utils.js')
 };
