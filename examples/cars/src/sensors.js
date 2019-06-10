@@ -255,7 +255,7 @@ class SensorArray {
         this.sensors = []
         this.car = car
         this.dimensions = blueprint.dimensions
-        this.data = new Float64Array(blueprint.dimensions)
+        this.data = new Float32Array(blueprint.dimensions)
 
         for (var i = 0; i < blueprint.list.length; i++) {
             var opt = blueprint.list[i]

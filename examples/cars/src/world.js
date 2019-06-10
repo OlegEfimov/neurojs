@@ -15,6 +15,8 @@
 
 /////////////////////////////////////////
 
+var tf = require('@tensorflow/tfjs')
+
 var agent = require('./agent.js')
 var color = require('./color.js')
 var car = require('./car.js')

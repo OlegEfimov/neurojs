@@ -1,13 +1,18 @@
+var tf = require('@tensorflow/tfjs')
 var car = require('./car.js');
 var tf_agent = require('./a2c.js');
+// const environment = require('./environment')().EnvironmentController(1500);
+// const serialiser = require('./utils/serialisation');
 
-var INITIAL_ACTION = 0.0;
+var INITIAL_ACTION = 0.9;
 var ACTIONS_DELAY = 2;
 
+var tf_state, tf_action, tf_reward, tf_next_state, tf_done;
 
 function agent(opt, world) {
     this.car = new car(world, opt)
-    this.tf_agent = new tf_agent(5, 5)
+    // this.tf_agent = new tf_agent(5, 5)
+    this.tf_agent = null
     this.options = opt
 
     this.world = world
@@ -44,6 +49,7 @@ agent.prototype.init = function (actor, critic) {
     var states = this.car.sensors.dimensions
 
     var input = window.neurojs.Agent.getInputDimension(states, actions, temporal)
+    this.tf_agent = new tf_agent(states, actions)
 
     // this.brain_tf = new A2CAgent(4,4);
     this.brain = new window.neurojs.Agent({
@@ -90,6 +96,7 @@ agent.prototype.step = function (dt) {
     if ((!this.car.hardwareOn && this.timer % this.timerFrequency === 0) ||
         ( this.car.hardwareOn && this.car.sensorDataUpdated)) {
 
+        let state = this.car.sensors.data;
         this.car.update()
 
         var speed1 = this.car.speed.velocity1
@@ -123,16 +130,28 @@ agent.prototype.step = function (dt) {
             } else {
                 this.loss = 0;
             }
+            // let state = this.car.sensors.data;
+            let next_state = this.car.sensors.data;
+            let done;
+            let stateTmp = tf.tensor(state,[1, state.length]);
+            let next_stateTmp = tf.tensor(next_state,[1, next_state.length]);
+            this.tf_agent.train_model(stateTmp, this.action, this.reward, next_stateTmp, done);
+            if(done) {
+                console.log('--done = ' + done);
+            }
+            state = next_state;
+
 
             if (!this.car.hardwareOn) {
+                this.actionArray.push(this.action);
                 this.action = this.actionArray.shift();
-                this.actionArray.push(this.brain.policy(this.car.sensors.data));
+                // this.actionArray.push(this.brain.policy(this.car.sensors.data));
             } else {
                 this.action = this.brain.policy(this.car.sensors.data);
             }
 
-            this.action[0] += 0.5
-            this.action[1] += 0.5
+            // this.action[0] += 0.5
+            // this.action[1] += 0.5
         
 
             this.car.sensorDataUpdated = false;

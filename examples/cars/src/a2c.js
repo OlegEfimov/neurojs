@@ -1,10 +1,12 @@
-        
+var tf = require('@tensorflow/tfjs')
+let zeros = (w, h, v=0) => Array.from(new Array(h), _ => Array(w).fill(v));
+
 class A2CAgent {
     constructor(state_size, action_size) {
         this.render = false;
         this.state_size = state_size;
         this.action_size = action_size;
-        this.value_size = 1;
+        this.value_size = 2;
 
         this.discount_factor = 0.99;
         this.actor_learningr = 0.001;
@@ -22,10 +24,10 @@ class A2CAgent {
             units: 24,
             activation: 'relu',
             kernelInitializer:'glorotUniform',
-            inputShape:[9, 12], //oneHotShape
+            inputShape:[this.state_size], //oneHotShape
         }));
         
-        model.add(tf.layers.flatten());
+        // model.add(tf.layers.flatten());
 
         model.add(tf.layers.dense({
             units: this.action_size,
@@ -51,10 +53,10 @@ class A2CAgent {
             units: 24,
             activation: 'relu',
             kernelInitializer:'glorotUniform',
-            inputShape: [9, 12], //oneHot shape
+            inputShape: [this.state_size], //oneHot shape
         }));
 
-        model.add(tf.layers.flatten());
+        // model.add(tf.layers.flatten());
 
         model.add(tf.layers.dense({
             units: this.value_size,
@@ -88,7 +90,7 @@ class A2CAgent {
         const math_utils = new app.math_utils();
         // const math_utils = require('../utils/math_utils');
         
-        let oneHotState = tf.oneHot(this.format_state(state), 12);
+        let oneHotState = tf.oneHot(tf.tensor1d(this.format_state(state)), 12);
         
         let policy = this.actor.predict(oneHotState.reshape([1,9,12]), {
             batchSize:1,
@@ -103,27 +105,35 @@ class A2CAgent {
         let target = zeros(1, this.value_size);
         let advantages = zeros(1, this.action_size);
 
-        let oneHotState = tf.oneHot(this.format_state(state), 12);
-        let oneHotNextState = tf.oneHot(this.format_state(next_state), 12);
-        oneHotState = oneHotState.reshape([1, 9, 12])
-        oneHotNextState = oneHotNextState.reshape([1, 9, 12])
-        let value = this.critic.predict(oneHotState).flatten().get(0);
-        let next_value = this.critic.predict(oneHotNextState).flatten().get(0);
+        // let stateArray = Array.prototype.slice.call(state);
+        // let stateTf = tf.tensor(stateArray);
+        // let nextStateArray = Array.prototype.slice.call(next_state);
+        // let nextStateTf = tf.tensor(nextStateArray);
+
+        // let oneHotState = tf.oneHot(this.format_state(stateTf), 12);
+        // let oneHotNextState = tf.oneHot(this.format_state(nextStateTf), 12);
+        // oneHotState = oneHotState.reshape([1, 9, 12])
+        // oneHotNextState = oneHotNextState.reshape([1, 9, 12])
+        // let value = this.critic.predict(state).flatten().get(0);
+        let value = this.critic.predict(state).flatten().dataSync();
+        let next_value = this.critic.predict(next_state).flatten().dataSync();
         console.log(action) //Pb nbr d'actions dans advantages
         if(done) {
             advantages[action] = [reward - value];
             target[0] = reward;
         } else {
-            advantages[action] = [reward +this.discount_factor * (next_value) - value];
-            target[0] = reward + this.discount_factor * next_value;
+            advantages[0] = [reward +this.discount_factor * (next_value[0]) - value[0]];
+            advantages[1] = [reward +this.discount_factor * (next_value[0]) - value[1]];
+            target[0] = reward + this.discount_factor * next_value[0];
+            target[1] = reward + this.discount_factor * next_value[1];
         }
 
         
-        this.actor.fit(oneHotState, tf.tensor(advantages).reshape([1,2047]), {
+        this.actor.fit(state, tf.tensor(advantages).reshape([1,2]), {
             epochs:1,
         });
 
-        this.critic.fit(oneHotState, tf.tensor(target), {
+        this.critic.fit(state, tf.tensor(target), {
             epochs:1,
         });
         
