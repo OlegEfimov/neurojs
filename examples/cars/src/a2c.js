@@ -7,6 +7,7 @@ class A2CAgent {
         this.state_size = state_size;
         this.action_size = action_size;
         this.value_size = 2;
+        this.input_size = this.state_size + this.action_size;
 
         this.discount_factor = 0.99;
         this.actor_learningr = 0.001;
@@ -19,23 +20,12 @@ class A2CAgent {
 
     build_actor() {
         const model = tf.sequential();
-        
-        model.add(tf.layers.dense({
-            units: 24,
-            activation: 'relu',
-            kernelInitializer:'glorotUniform',
-            inputShape:[this.state_size], //oneHotShape
-        }));
-        
-        // model.add(tf.layers.flatten());
+        model.add(tf.layers.dense({units: 60,activation: 'relu',inputShape:[this.state_size]}));
+        model.add(tf.layers.dense({units: 40,activation: 'relu'}));
+        model.add(tf.layers.dropout({rate: 0.30}));
+        model.add(tf.layers.dense({units: this.action_size,activation: 'tanh'}));
 
-        model.add(tf.layers.dense({
-            units: this.action_size,
-            activation:'softmax',
-            kernelInitializer:'glorotUniform',
-        }));
-
-        // model.summary();
+        model.summary();
 
         model.compile({
             optimizer: tf.train.adam(this.actor_learningr),
@@ -47,24 +37,13 @@ class A2CAgent {
 
     build_critic() {
         const model = tf.sequential();
+        model.add(tf.layers.dense({units: 80,activation: 'relu',inputShape:[this.input_size]}));
+        model.add(tf.layers.dense({units: 70,activation: 'relu'}));
+        model.add(tf.layers.dense({units: 60,activation: 'relu'}));
+        model.add(tf.layers.dense({units: 50,activation: 'relu'}));
+        model.add(tf.layers.dense({units: 1}));
         
-        
-        model.add(tf.layers.dense({
-            units: 24,
-            activation: 'relu',
-            kernelInitializer:'glorotUniform',
-            inputShape: [this.state_size], //oneHot shape
-        }));
-
-        // model.add(tf.layers.flatten());
-
-        model.add(tf.layers.dense({
-            units: this.value_size,
-            activation:'linear',
-            kernelInitializer:'glorotUniform',
-        }));
-
-        // model.summary();
+        model.summary();
 
         model.compile({
             optimizer: tf.train.adam(this.critic_learningr),

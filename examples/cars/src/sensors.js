@@ -245,8 +245,8 @@ const sensorTypes = {
     "speed": SpeedSensor
 }
 
-DistanceSensor.dimensions = 3
-SpeedSensor.dimensions = 3
+DistanceSensor.dimensions = 1
+SpeedSensor.dimensions = 1
 
 class SensorArray {
 
