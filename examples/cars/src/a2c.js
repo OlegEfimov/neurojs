@@ -84,39 +84,68 @@ class A2CAgent {
         let target = zeros(1, this.value_size);
         let advantages = zeros(1, this.action_size);
 
-        // let stateArray = Array.prototype.slice.call(state);
-        // let stateTf = tf.tensor(stateArray);
-        // let nextStateArray = Array.prototype.slice.call(next_state);
-        // let nextStateTf = tf.tensor(nextStateArray);
-
-        // let oneHotState = tf.oneHot(this.format_state(stateTf), 12);
-        // let oneHotNextState = tf.oneHot(this.format_state(nextStateTf), 12);
-        // oneHotState = oneHotState.reshape([1, 9, 12])
-        // oneHotNextState = oneHotNextState.reshape([1, 9, 12])
-        // let value = this.critic.predict(state).flatten().get(0);
-        let value = this.critic.predict(state).flatten().dataSync();
-        let next_value = this.critic.predict(next_state).flatten().dataSync();
+        let oneHotState = tf.oneHot(this.format_state(state), this.input_size);
+        let oneHotNextState = tf.oneHot(this.format_state(next_state), this.input_size);
+        oneHotState = oneHotState.reshape([1, this.input_size])
+        oneHotNextState = oneHotNextState.reshape([1, this.input_size])
+        let value = this.critic.predict(oneHotState).flatten().get(0);
+        let next_value = this.critic.predict(oneHotNextState).flatten().get(0);
         console.log(action) //Pb nbr d'actions dans advantages
         if(done) {
             advantages[action] = [reward - value];
             target[0] = reward;
         } else {
-            advantages[0] = [reward +this.discount_factor * (next_value[0]) - value[0]];
-            advantages[1] = [reward +this.discount_factor * (next_value[0]) - value[1]];
-            target[0] = reward + this.discount_factor * next_value[0];
-            target[1] = reward + this.discount_factor * next_value[1];
+            advantages[action] = [reward +this.discount_factor * (next_value) - value];
+            target[0] = reward + this.discount_factor * next_value;
         }
 
         
-        this.actor.fit(state, tf.tensor(advantages).reshape([1,2]), {
+        this.actor.fit(oneHotState, tf.tensor(advantages).reshape([1,2047]), {
             epochs:1,
         });
 
-        this.critic.fit(state, tf.tensor(target), {
+        this.critic.fit(oneHotState, tf.tensor(target), {
             epochs:1,
         });
         
     }
+    // train_model(state, action, reward, next_state, done) {
+    //     let target = zeros(1, this.value_size);
+    //     let advantages = zeros(1, this.action_size);
+
+    //     // let stateArray = Array.prototype.slice.call(state);
+    //     // let stateTf = tf.tensor(stateArray);
+    //     // let nextStateArray = Array.prototype.slice.call(next_state);
+    //     // let nextStateTf = tf.tensor(nextStateArray);
+
+    //     let oneHotState = tf.oneHot(this.format_state(stateTf), 12);
+    //     let oneHotNextState = tf.oneHot(this.format_state(nextStateTf), 12);
+    //     oneHotState = oneHotState.reshape([1, 9, 12])
+    //     oneHotNextState = oneHotNextState.reshape([1, 9, 12])
+    //     let value = this.critic.predict(state).flatten().get(0);
+    //     let value = this.critic.predict(state).flatten().dataSync();
+    //     let next_value = this.critic.predict(next_state).flatten().dataSync();
+    //     console.log(action) //Pb nbr d'actions dans advantages
+    //     if(done) {
+    //         advantages[action] = [reward - value];
+    //         target[0] = reward;
+    //     } else {
+    //         advantages[0] = [reward +this.discount_factor * (next_value[0]) - value[0]];
+    //         advantages[1] = [reward +this.discount_factor * (next_value[0]) - value[1]];
+    //         target[0] = reward + this.discount_factor * next_value[0];
+    //         target[1] = reward + this.discount_factor * next_value[1];
+    //     }
+
+        
+    //     this.actor.fit(state, tf.tensor(advantages).reshape([1,2]), {
+    //         epochs:1,
+    //     });
+
+    //     this.critic.fit(state, tf.tensor(target), {
+    //         epochs:1,
+    //     });
+        
+    // }
 }
 
 module.exports = A2CAgent;

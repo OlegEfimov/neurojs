@@ -133,9 +133,10 @@ agent.prototype.step = function (dt) {
             // let state = this.car.sensors.data;
             let next_state = this.car.sensors.data;
             let done = false;
-            let stateTmp = tf.tensor(state,[1, state.length]);
-            let next_stateTmp = tf.tensor(next_state,[1, next_state.length]);
+            // let stateTmp = tf.tensor(state,[1, state.length]);
+            // let next_stateTmp = tf.tensor(next_state,[1, next_state.length]);
             // this.tf_agent.train_model(stateTmp, this.action, this.reward, next_stateTmp, done);
+            this.tf_agent.train_model(state, this.action, this.reward, next_state, done);
             if(done) {
                 console.log('--done = ' + done);
             }
