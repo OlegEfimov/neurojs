@@ -87,7 +87,8 @@ agent.prototype.step = function (dt) {
     if ((!this.car.hardwareOn && this.timer % this.timerFrequency === 0) ||
         ( this.car.hardwareOn && this.car.sensorDataUpdated)) {
 
-        this.car.update()
+        // get sensors data
+        this.car.update();
 
         var speed1 = this.car.speed.velocity1
         var speed2 = this.car.speed.velocity2
@@ -96,32 +97,37 @@ agent.prototype.step = function (dt) {
         this.rewardOnForce_1 =  speed2;
 
         var result = '';
-        this.reward = 0.0
-        this.car.contact.forEach( (current, i) => {
-            if (current > 0.5) {
-                this.reward += -1.0
-            }
-            result += current.toFixed(3) + '\t';
-        });
+///////////////////////////
+        (calcReward = () => {
+            this.reward = 0.0
+            this.car.contact.forEach( (current, i) => {
+                if (current > 0.5) {
+                    this.reward += -1.0
+                }
+                result += current.toFixed(3) + '\t';
+            });
 
-        if (this.reward >= -3.0) {
-            this.reward += Math.abs(this.action[0] - this.action[1]) > 0.1 ?   -0.5 : 0.5
-            this.reward +=  (Math.abs(this.action[0]) < 1.0)?  -0.5 : 0.5
-            this.reward +=  (Math.abs(this.action[1]) < 1.0)?  -0.5 : 0.5
-        } else {
-            if (this.reward < -1.0) {
-                this.reward += ((Math.abs(speed1) > 1.0) || (Math.abs(speed2)  > 1.0)) ?  0.5 : -0.5;
+            if (this.reward >= -3.0) {
+                this.reward += Math.abs(this.action[0] - this.action[1]) > 0.1 ?   -0.5 : 0.5
+                this.reward +=  (Math.abs(this.action[0]) < 1.0)?  -0.5 : 0.5
+                this.reward +=  (Math.abs(this.action[1]) < 1.0)?  -0.5 : 0.5
+            } else {
+                if (this.reward < -1.0) {
+                    this.reward += ((Math.abs(speed1) > 1.0) || (Math.abs(speed2)  > 1.0)) ?  0.5 : -0.5;
+                }
             }
-        }
-
+        })();
+////////////////////////////
         if (!this.car.manualControlOn) {
             if (this.brain.learning) {
+                // apply train
                 this.loss = this.brain.learn(this.reward)
             } else {
                 this.loss = 0;
             }
 
             if (!this.car.hardwareOn) {
+                // actionArray for delay action when SW emulation
                 this.action = this.actionArray.shift();
                 this.actionArray.push(this.brain.policy(this.car.sensors.data));
             } else {
@@ -133,6 +139,7 @@ agent.prototype.step = function (dt) {
         
 
             this.car.sensorDataUpdated = false;
+            // apply action
             this.car.handle(this.action[0], this.action[1])
             // let tmp1 = this.car.sensors.speedData? this.car.sensors.speedData[0] : 0;
             // let tmp2 = this.car.sensors.speedData? this.car.sensors.speedData[1] : 0;
@@ -141,7 +148,7 @@ agent.prototype.step = function (dt) {
 
 
         this.car.impact = 0
-        this.car.step()
+        this.car.step(); // car draw only
     }
 
     return this.timer % this.timerFrequency === 0
