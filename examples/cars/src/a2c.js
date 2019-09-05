@@ -41,7 +41,7 @@ class A2CAgent {
         this.render = false;
         this.state_size = state_size;
         this.action_size = action_size;
-        this.value_size = 2;
+        this.value_size = 1;
         this.input_size = this.state_size + this.action_size;
 
         this.discount_factor = 0.99;
@@ -76,7 +76,7 @@ class A2CAgent {
         model.add(tf.layers.dense({units: 70,activation: 'relu'}));
         model.add(tf.layers.dense({units: 60,activation: 'relu'}));
         model.add(tf.layers.dense({units: 50,activation: 'relu'}));
-        model.add(tf.layers.dense({units: 1}));
+        model.add(tf.layers.dense({units: this.value_size}));
         
         model.summary();
 
@@ -100,19 +100,15 @@ class A2CAgent {
 
     }
 
-    get_action(state, actions) {
-        const math_utils = new app.math_utils();
-        // const math_utils = require('../utils/math_utils');
+    get_action(state) {
         
-        let oneHotState = tf.oneHot(tf.tensor1d(this.format_state(state)), 12);
+        let stateTmp = tf.tensor(state,[1, state.length]);
+
+        let actions = this.actor.predict(stateTmp);
         
-        let policy = this.actor.predict(oneHotState.reshape([1,9,12]), {
-            batchSize:1,
-        });
+        let actions_flat = actions.dataSync();
         
-        let policy_flat = policy.dataSync();
-        
-        return math_utils.weightedRandomItem(actions, policy_flat);
+        return actions_flat;
     }
 
     train_model(state, action, reward, next_state, done) {

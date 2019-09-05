@@ -89,16 +89,102 @@ agent.prototype.init = function (actor, critic) {
 	this.loaded = true
 };
 
+// agent.prototype.step = function (dt) {
+// 	if (!this.loaded) {
+// 		return 
+// 	}
+//     this.timer++
+
+//     if ((!this.car.hardwareOn && this.timer % this.timerFrequency === 0) ||
+//         ( this.car.hardwareOn && this.car.sensorDataUpdated)) {
+
+//         let state = this.car.sensors.data;
+//         this.car.update()
+
+//         var speed1 = this.car.speed.velocity1
+//         var speed2 = this.car.speed.velocity2
+
+//         this.rewardOnForce_0 =  speed1;
+//         this.rewardOnForce_1 =  speed2;
+
+//         var result = '';
+//         this.reward = 0.0
+//         this.car.contact.forEach( (current, i) => {
+//             if (current > 0.5) {
+//                 this.reward += -1.0
+//             }
+//             result += current.toFixed(3) + '\t';
+//         });
+
+//         if (this.reward >= -3.0) {
+//             this.reward += Math.abs(this.action[0] - this.action[1]) > 0.1 ?   -0.5 : 0.5
+//             this.reward +=  (Math.abs(this.action[0]) < 1.0)?  -0.5 : 0.5
+//             this.reward +=  (Math.abs(this.action[1]) < 1.0)?  -0.5 : 0.5
+//         } else {
+//             if (this.reward < -1.0) {
+//                 this.reward += ((Math.abs(speed1) > 1.0) || (Math.abs(speed2)  > 1.0)) ?  0.5 : -0.5;
+//             }
+//         }
+
+//         if (!this.car.manualControlOn) {
+//             if (this.brain.learning) {
+//                 this.loss = this.brain.learn(this.reward)
+//             } else {
+//                 this.loss = 0;
+//             }
+//             // let state = this.car.sensors.data;
+//             let next_state = this.car.sensors.data;
+//             let done = false;
+//             // let stateTmp = tf.tensor(state,[1, state.length]);
+//             // let next_stateTmp = tf.tensor(next_state,[1, next_state.length]);
+//             // this.tf_agent.train_model(stateTmp, this.action, this.reward, next_stateTmp, done);
+//             this.tf_agent.train_model(state, this.action, this.reward, next_state, done);
+//             if(done) {
+//                 console.log('--done = ' + done);
+//             }
+//             state = next_state;
+
+
+//             if (!this.car.hardwareOn) {
+//                 this.actionArray.push(this.action);
+//                 this.action = this.actionArray.shift();
+//                 // this.actionArray.push(this.brain.policy(this.car.sensors.data));
+//             } else {
+//                 this.action = this.brain.policy(this.car.sensors.data);
+//             }
+
+//             // this.action[0] += 0.5
+//             // this.action[1] += 0.5
+        
+
+//             this.car.sensorDataUpdated = false;
+//             this.car.handle(this.action[0], this.action[1])
+//             // let tmp1 = this.car.sensors.speedData? this.car.sensors.speedData[0] : 0;
+//             // let tmp2 = this.car.sensors.speedData? this.car.sensors.speedData[1] : 0;
+//             // this.car.handle(tmp1, tmp1)
+//         }
+
+
+//         this.car.impact = 0
+//         this.car.step()
+//     }
+
+//     return this.timer % this.timerFrequency === 0
+// };
+
 agent.prototype.step = function (dt) {
-	if (!this.loaded) {
-		return 
-	}
+    if (!this.loaded) {
+        return 
+    }
     this.timer++
 
     if ((!this.car.hardwareOn && this.timer % this.timerFrequency === 0) ||
         ( this.car.hardwareOn && this.car.sensorDataUpdated)) {
 
-        let state = this.car.sensors.data;
+        let state = this.state;
+        // get sensors data
+        let next_state = this.car.sensors.data;
+        // update sensors data by new values
         this.car.update()
 
         var speed1 = this.car.speed.velocity1
@@ -127,30 +213,26 @@ agent.prototype.step = function (dt) {
         }
 
         if (!this.car.manualControlOn) {
+            let done = false;
             if (this.brain.learning) {
-                this.loss = this.brain.learn(this.reward)
+                // apply train
+                // this.loss = this.brain.learn(this.reward)
+                this.loss = this.tf_agent.train_model(state, this.action, this.reward, next_state, done);
             } else {
                 this.loss = 0;
             }
-            // let state = this.car.sensors.data;
-            let next_state = this.car.sensors.data;
-            let done = false;
-            // let stateTmp = tf.tensor(state,[1, state.length]);
-            // let next_stateTmp = tf.tensor(next_state,[1, next_state.length]);
-            // this.tf_agent.train_model(stateTmp, this.action, this.reward, next_stateTmp, done);
-            this.tf_agent.train_model(state, this.action, this.reward, next_state, done);
-            if(done) {
-                console.log('--done = ' + done);
-            }
-            state = next_state;
+            this.state = next_state;
 
 
             if (!this.car.hardwareOn) {
+                // actionArray for delay action when SW emulation
                 this.actionArray.push(this.action);
                 this.action = this.actionArray.shift();
                 // this.actionArray.push(this.brain.policy(this.car.sensors.data));
+                this.actionArray.push(this.tf_agent.get_action(this.state));
             } else {
-                this.action = this.brain.policy(this.car.sensors.data);
+                // this.action = this.brain.policy(this.car.sensors.data);
+                this.action = this.tf_agent.get_action(this.state);
             }
 
             // this.action[0] += 0.5
@@ -158,6 +240,7 @@ agent.prototype.step = function (dt) {
         
 
             this.car.sensorDataUpdated = false;
+            // apply action
             this.car.handle(this.action[0], this.action[1])
             // let tmp1 = this.car.sensors.speedData? this.car.sensors.speedData[0] : 0;
             // let tmp2 = this.car.sensors.speedData? this.car.sensors.speedData[1] : 0;
@@ -166,7 +249,7 @@ agent.prototype.step = function (dt) {
 
 
         this.car.impact = 0
-        this.car.step()
+        this.car.step() // car draw only
     }
 
     return this.timer % this.timerFrequency === 0
