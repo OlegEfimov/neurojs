@@ -1,6 +1,8 @@
 var tf = require('@tensorflow/tfjs')
 var car = require('./car.js');
-var tf_agent = require('./a2c.js');
+// var tf_agent = require('./a2c.js');
+var tf_agent = require('./policy-network.js');
+
 // const environment = require('./environment')().EnvironmentController(1500);
 // const serialiser = require('./utils/serialisation');
 
@@ -49,7 +51,7 @@ agent.prototype.init = function (actor, critic) {
     var states = this.car.sensors.dimensions
 
     var input = window.neurojs.Agent.getInputDimension(states, actions, temporal)
-    this.tf_agent = new tf_agent(states, actions)
+    this.tf_agent = new tf_agent(3)
 
     // this.brain_tf = new A2CAgent(4,4);
     this.brain = new window.neurojs.Agent({
