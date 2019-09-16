@@ -5,6 +5,9 @@ var ACTIONS_DELAY = 2;
 
 
 function agent(opt, world) {
+    this.socket = new WebSocket("ws://localhost:9001/");
+    // this.socket = new ReconnectingWebSocket("ws://localhost:9001/");
+
     this.car = new car(world, opt)
     this.options = opt
 
@@ -35,6 +38,21 @@ function agent(opt, world) {
     }
     
 };
+
+agent.prototype.openSocket = function () {
+        // text.html("Socket open");
+        // socket.send("Hello server");
+      console.log('world-socket onopen'); 
+};
+
+agent.prototype.closeSocket = function () {
+      console.log('world-socket closed'); 
+};
+
+agent.prototype.showData = function (result) {
+      console.log('world-showData data=' + result.data); 
+};
+
 
 agent.prototype.init = function (actor, critic) {
     var actions = 2
@@ -76,6 +94,12 @@ agent.prototype.init = function (actor, critic) {
     this.actions = actions
     this.car.addToWorld(this.options.number)
 	this.loaded = true
+
+
+    this.socket.onopen = this.openSocket;
+    this.socket.onclose = this.closeSocket;
+    this.socket.onmessage = this.showData;
+
 };
 
 agent.prototype.step = function (dt) {
@@ -84,10 +108,14 @@ agent.prototype.step = function (dt) {
 	}
     this.timer++
 
+    //  !!!!!!!debug only
+    this.car.sensorDataUpdated = true;  //debug only
+    //  !!!!!!!debug only
+
     if ((!this.car.hardwareOn && this.timer % this.timerFrequency === 0) ||
         ( this.car.hardwareOn && this.car.sensorDataUpdated)) {
 
-        this.car.update()
+        this.car.update(); // update sensor data
 
         var speed1 = this.car.speed.velocity1
         var speed2 = this.car.speed.velocity2
@@ -117,15 +145,19 @@ agent.prototype.step = function (dt) {
         if (!this.car.manualControlOn) {
             if (this.brain.learning) {
                 this.loss = this.brain.learn(this.reward)
+                this.socket.send('learn with reward: ' + this.reward);
             } else {
                 this.loss = 0;
             }
 
+            this.socket.send('send sensors: ' + this.car.sensors.data);
             if (!this.car.hardwareOn) {
                 this.action = this.actionArray.shift();
                 this.actionArray.push(this.brain.policy(this.car.sensors.data));
+                this.socket.send('need action \n\n');
             } else {
                 this.action = this.brain.policy(this.car.sensors.data);
+                this.socket.send('hw:need action \n\n');
             }
 
             this.action[0] += 0.5
