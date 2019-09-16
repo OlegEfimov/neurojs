@@ -26,6 +26,8 @@ function agent(opt, world) {
     this.rewardOnSpin = 0
 
     this.actionArray = [];
+    this.currentSensorsData = [];
+    this.prevSensorsData = [];
 
     for (i = 0; i < ACTIONS_DELAY; i++) {
       this.actionArray.push([INITIAL_ACTION, INITIAL_ACTION]);
@@ -109,7 +111,7 @@ agent.prototype.step = function (dt) {
     this.timer++
 
     //  !!!!!!!debug only
-    this.car.sensorDataUpdated = true;  //debug only
+    // this.car.sensorDataUpdated = true;  //debug only
     //  !!!!!!!debug only
 
     if ((!this.car.hardwareOn && this.timer % this.timerFrequency === 0) ||
@@ -173,7 +175,7 @@ agent.prototype.step = function (dt) {
 
 
         this.car.impact = 0
-        this.car.step()
+        this.car.step() //only draw
     }
 
     return this.timer % this.timerFrequency === 0
