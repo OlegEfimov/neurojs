@@ -71,8 +71,8 @@ class Car {
 
 
         // window.sensorData = temp;
-        window.gcd.world.agents[0].prevSensorsData = window.gcd.world.agents[0].currentSensorsData;
-        window.gcd.world.agents[0].currentSensorsData = temp;
+        // window.gcd.world.agents[0].prevSensorsData = window.gcd.world.agents[0].currentSensorsData;
+        // window.gcd.world.agents[0].currentSensorsData = temp;
 
         window.gcd.world.agents[0].car.sensorData = temp;
         window.gcd.world.agents[0].car.sensorDataUpdated = true;
