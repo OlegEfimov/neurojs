@@ -128,11 +128,6 @@ agent.prototype.step = function (dt) {
 
         this.car.update(); // update sensor data
 
-        this.currentSensorsData = this.nextSensorsData;
-        this.nextSensorsData = this.car.sensors.data;
-        //this.action
-        //this.reward
-
         var speed1 = this.car.speed.velocity1
         var speed2 = this.car.speed.velocity2
 
@@ -158,14 +153,27 @@ agent.prototype.step = function (dt) {
             }
         }
 
+        this.currentSensorsData = this.nextSensorsData;
+        this.nextSensorsData = this.car.sensors.data;
+        //this.action
+        //this.reward
+        const param = {
+            state: this.currentSensorsData,
+            action: this.action,
+            reward: this.reward,
+            nextState: this.nextSensorsData
+        }
+
         if (!this.car.manualControlOn) {
             if (this.brain.learning) {
                 this.loss = this.brain.learn(this.reward)
-                this.sendSocketData('oneStepLearn', this.reward);
+                this.sendSocketData('oneStepLearn', param);
             } else {
                 this.loss = 0;
             }
+            // !!! End of cycle !!!
 
+            // !!! Start of cycle !!!
             this.sendSocketData('getAction', this.car.sensors.data);
             // if (!this.car.hardwareOn) {
             //     this.action = this.actionArray.shift();
