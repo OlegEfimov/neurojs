@@ -28,7 +28,7 @@ function agent(opt, world) {
     this.actionArray = [];
     this.currentSensorsData = [];
     this.nextSensorsData = [];
-    this.sendSocketData = false;
+    this.statemachine = 'start';
 
     for (i = 0; i < ACTIONS_DELAY; i++) {
       this.actionArray.push([INITIAL_ACTION, INITIAL_ACTION]);
@@ -43,24 +43,53 @@ function agent(opt, world) {
 };
 
 agent.prototype.openSocket = function () {
-    // text.html("Socket open");
-    // socket.send("Hello server");
-    this.sendSocketData = false;
     console.log('world-socket onopen'); 
 };
 
 agent.prototype.closeSocket = function () {
-    this.sendSocketData = false;
     console.log('world-socket closed'); 
 };
 
 agent.prototype.getSocketData = function (result) {
-    this.sendSocketData = false;
+    if (this.statemachine === 'request_action') {
+        const act = new Array();
+        act = result.split(",");
+        for (let a in act ) {
+            act[a] = parseInt(act[a], 10);
+        }
+        this.action = act;
+        this.statemachine = 'action_received';
+        if (!this.car.hardwareOn) {
+            this.action = this.actionArray.shift();
+            this.actionArray.push(act);
+        } else {
+            this.action = act;
+        }
+
+        this.action[0] += 0.5
+        this.action[1] += 0.5
+
+
+        this.car.sensorDataUpdated = false;
+        this.nextStateReady = false;
+        this.car.handle(this.action[0], this.action[1])
+
+    } else {
+        console.log('---!!! getSocketData this.statemachine !== "request_action"')
+    }
     console.log('world-getSocketData=' + result.data); 
 };
-agent.prototype.sendSocketData = function (data) {
-    this.sendSocketData = true;
-    this.socket.send(data);
+agent.prototype.sendSocketData = function (op, param) {
+    if (op === 'sendState') {
+        const data = 'state:' + param.join(',');
+        this.socket.send(data);
+        this.statemachine = 'request_action';
+    }
+    if (op === 'sendReward') {
+        const data = 'reward:' + param;
+        this.socket.send(data);
+        this.statemachine = 'start_learn';
+    }
     console.log('world-sendSocketData=' + data); 
 };
 
@@ -127,6 +156,8 @@ agent.prototype.step = function (dt) {
         ( this.car.hardwareOn && this.car.sensorDataUpdated)) {
 
         this.car.update(); // update sensor data
+        // this.nextStateReady = true;
+        this.statemachine = 'end_env_step';
 
         var speed1 = this.car.speed.velocity1
         var speed2 = this.car.speed.velocity2
@@ -157,24 +188,26 @@ agent.prototype.step = function (dt) {
         this.nextSensorsData = this.car.sensors.data;
         //this.action
         //this.reward
-        const param = {
-            state: this.currentSensorsData,
-            action: this.action,
-            reward: this.reward,
-            nextState: this.nextSensorsData
-        }
+        // const param = {
+        //     state: this.currentSensorsData,
+        //     action: this.action,
+        //     reward: this.reward,
+        //     nextState: this.nextSensorsData
+        // }
 
         if (!this.car.manualControlOn) {
             if (this.brain.learning) {
                 this.loss = this.brain.learn(this.reward)
-                this.sendSocketData('oneStepLearn', param);
+                this.sendSocketData('sendReward', this.reward);
+                //state = start_learn
             } else {
                 this.loss = 0;
             }
             // !!! End of cycle !!!
 
             // !!! Start of cycle !!!
-            this.sendSocketData('getAction', this.car.sensors.data);
+            this.sendSocketData('sendState', this.car.sensors.data);
+            //state = request_action
             // if (!this.car.hardwareOn) {
             //     this.action = this.actionArray.shift();
             //     this.actionArray.push(this.brain.policy(this.car.sensors.data));
@@ -189,12 +222,13 @@ agent.prototype.step = function (dt) {
         
 
             // this.car.sensorDataUpdated = false;
-            // this.car.handle(this.action[0], this.action[1])
+        //     this.nextStateReady = false;
+        //     this.car.handle(this.action[0], this.action[1])
         }
 
 
-        this.car.impact = 0
-        this.car.step() //only draw
+        // this.car.impact = 0
+        // this.car.step() //only draw
     }
 
     return this.timer % this.timerFrequency === 0
