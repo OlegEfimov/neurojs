@@ -1,4 +1,6 @@
 var car = require('./car.js');
+var StateMachine = require('./state.js');
+
 
 var INITIAL_ACTION = 0.0;
 var ACTIONS_DELAY = 2;
@@ -9,6 +11,7 @@ function agent(opt, world) {
     // this.socket = new ReconnectingWebSocket("ws://localhost:9001/");
 
     this.car = new car(world, opt)
+    this.statemachine = new StateMachine('request_action');
     this.options = opt
 
     this.world = world
@@ -28,7 +31,6 @@ function agent(opt, world) {
     this.actionArray = [];
     this.currentSensorsData = [];
     this.nextSensorsData = [];
-    this.statemachine = 'start';
 
     for (i = 0; i < ACTIONS_DELAY; i++) {
       this.actionArray.push([INITIAL_ACTION, INITIAL_ACTION]);
@@ -40,6 +42,21 @@ function agent(opt, world) {
     	this.init(world.brains.actor.newConfiguration(), null)
     }
     
+    this.sendSocketData = (op, param) => {
+        let data = ''
+        if (op === 'sendState') {
+            data = 'state:' + param.join(',');
+            this.socket.send(data);
+            this.statemachine.setState('request_action');
+        }
+        if (op === 'sendReward') {
+            data = 'reward:' + param;
+            this.socket.send(data);
+            this.statemachine.setState('start_learn');
+        }
+        console.log('agent-sendSocketData=' + data); 
+    };
+
 };
 
 agent.prototype.openSocket = function () {
@@ -50,7 +67,9 @@ agent.prototype.closeSocket = function () {
     console.log('world-socket closed'); 
 };
 
-agent.prototype.getSocketData = function (result) {
+agent.prototype.getSocketData = function(result) {
+    console.log('agent-getSocketData result.data=' + result.data); 
+    console.log('agent-getSocketData state=' + this.statemachine);
     if (this.statemachine === 'request_action') {
         const act = new Array();
         act = result.split(",");
@@ -58,7 +77,7 @@ agent.prototype.getSocketData = function (result) {
             act[a] = parseInt(act[a], 10);
         }
         this.action = act;
-        this.statemachine = 'action_received';
+        this.statemachine.setState('action_received');
         if (!this.car.hardwareOn) {
             this.action = this.actionArray.shift();
             this.actionArray.push(act);
@@ -74,23 +93,11 @@ agent.prototype.getSocketData = function (result) {
         this.nextStateReady = false;
         this.car.handle(this.action[0], this.action[1])
 
+    } else if (this.statemachine === 'start_learn') {
+        this.statemachine.setState('end_learn');
     } else {
-        console.log('---!!! getSocketData this.statemachine !== "request_action"')
+        console.log('---!!! getSocketData unknown statemachine')
     }
-    console.log('world-getSocketData=' + result.data); 
-};
-agent.prototype.sendSocketData = function (op, param) {
-    if (op === 'sendState') {
-        const data = 'state:' + param.join(',');
-        this.socket.send(data);
-        this.statemachine = 'request_action';
-    }
-    if (op === 'sendReward') {
-        const data = 'reward:' + param;
-        this.socket.send(data);
-        this.statemachine = 'start_learn';
-    }
-    console.log('world-sendSocketData=' + data); 
 };
 
 
@@ -151,13 +158,13 @@ agent.prototype.step = function (dt) {
     //  !!!!!!!debug only
     // this.car.sensorDataUpdated = true;  //debug only
     //  !!!!!!!debug only
-
+    if (this.statemachine.getState() === 'action_received') {
     if ((!this.car.hardwareOn && this.timer % this.timerFrequency === 0) ||
         ( this.car.hardwareOn && this.car.sensorDataUpdated)) {
 
         this.car.update(); // update sensor data
         // this.nextStateReady = true;
-        this.statemachine = 'end_env_step';
+        this.statemachine.setState('end_env_step');
 
         var speed1 = this.car.speed.velocity1
         var speed2 = this.car.speed.velocity2
@@ -232,6 +239,7 @@ agent.prototype.step = function (dt) {
     }
 
     return this.timer % this.timerFrequency === 0
+    }
 };
 
 agent.prototype.draw = function (context) {
