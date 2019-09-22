@@ -45,12 +45,14 @@ function agent(opt, world) {
     this.sendSocketData = (op, param) => {
         let data = ''
         if (op === 'sendState') {
-            data = 'state:' + param.join(',');
+            // data = 'state:' + param.join(',');
+            data = '' + param.join(',');
             this.socket.send(data);
             this.statemachine.setState('request_action');
         }
         if (op === 'sendReward') {
-            data = 'reward:' + param;
+            // data = 'reward:' + param;
+            data = '' + param;
             this.socket.send(data);
             this.statemachine.setState('start_learn');
         }
@@ -68,33 +70,34 @@ agent.prototype.closeSocket = function () {
 };
 
 agent.prototype.getSocketData = function(result) {
+    let self = window.gcd.world.agents[0];
     console.log('agent-getSocketData result.data=' + result.data); 
-    console.log('agent-getSocketData state=' + this.statemachine);
-    if (this.statemachine === 'request_action') {
-        const act = new Array();
-        act = result.split(",");
+    console.log('agent-getSocketData state=' + self.statemachine.currentState);
+    if (self.statemachine.currentState === 'request_action') {
+        let act = new Array();
+        act = result.data.split(",");
         for (let a in act ) {
             act[a] = parseInt(act[a], 10);
         }
-        this.action = act;
-        this.statemachine.setState('action_received');
-        if (!this.car.hardwareOn) {
-            this.action = this.actionArray.shift();
-            this.actionArray.push(act);
+        self.action = act;
+        self.statemachine.setState('action_received');
+        if (!self.car.hardwareOn) {
+            self.action = self.actionArray.shift();
+            self.actionArray.push(act);
         } else {
-            this.action = act;
+            self.action = act;
         }
 
-        this.action[0] += 0.5
-        this.action[1] += 0.5
+        self.action[0] += 0.5
+        self.action[1] += 0.5
 
 
-        this.car.sensorDataUpdated = false;
-        this.nextStateReady = false;
-        this.car.handle(this.action[0], this.action[1])
+        self.car.sensorDataUpdated = false;
+        self.nextStateReady = false;
+        self.car.handle(self.action[0], self.action[1])
 
-    } else if (this.statemachine === 'start_learn') {
-        this.statemachine.setState('end_learn');
+    } else if (self.statemachine.currentState === 'start_learn') {
+        self.statemachine.setState('end_learn');
     } else {
         console.log('---!!! getSocketData unknown statemachine')
     }
