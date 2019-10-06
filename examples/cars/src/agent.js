@@ -77,7 +77,7 @@ agent.prototype.getSocketData = function(result) {
         let act = new Array();
         act = result.data.split(",");
         for (let a in act ) {
-            act[a] = parseInt(act[a], 10);
+            act[a] = parseFloat(act[a], 10);
         }
         self.action = act;
         self.statemachine.setState('action_received');
@@ -161,7 +161,8 @@ agent.prototype.step = function (dt) {
     //  !!!!!!!debug only
     // this.car.sensorDataUpdated = true;  //debug only
     //  !!!!!!!debug only
-    if (this.statemachine.getState() === 'action_received') {
+    if (true) {
+    // if (this.statemachine.getState() === 'action_received') {
     if ((!this.car.hardwareOn && this.timer % this.timerFrequency === 0) ||
         ( this.car.hardwareOn && this.car.sensorDataUpdated)) {
 
@@ -227,8 +228,8 @@ agent.prototype.step = function (dt) {
             //     this.sendSocketData('hw:need action \n\n');
             // }
 
-            // this.action[0] += 0.5
-            // this.action[1] += 0.5
+            // this.action[0] += 0.4
+            // this.action[1] += -0.4
         
 
             // this.car.sensorDataUpdated = false;
