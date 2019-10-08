@@ -208,7 +208,7 @@ agent.prototype.step = function (dt) {
 
         if (!this.car.manualControlOn) {
             if (this.brain.learning) {
-                this.loss = this.brain.learn(this.reward)
+                // this.loss = this.brain.learn(this.reward)
                 this.sendSocketData('sendReward', this.reward);
                 //state = start_learn
             } else {
@@ -239,7 +239,7 @@ agent.prototype.step = function (dt) {
 
 
         // this.car.impact = 0
-        // this.car.step() //only draw
+        this.car.step() //only draw
     }
 
     return this.timer % this.timerFrequency === 0
