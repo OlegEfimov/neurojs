@@ -57,7 +57,7 @@ function agent(opt, world) {
             this.socket.send(data);
             this.statemachine.setState('start_learn');
         }
-        console.log('agent-sendSocketData=' + data); 
+        // console.log('agent-sendSocketData=' + data); 
     };
 
 };
@@ -77,8 +77,8 @@ agent.prototype.closeSocket = function () {
 
 agent.prototype.getSocketData = function(result) {
     let self = window.gcd.world.agents[0];
-    console.log('agent-getSocketData result.data=' + result.data); 
-    console.log('agent-getSocketData state=' + self.statemachine.currentState);
+    // console.log('agent-getSocketData result.data=' + result.data); 
+    // console.log('agent-getSocketData state=' + self.statemachine.currentState);
     if (self.statemachine.currentState === 'request_action') {
         let act = new Array();
         act = result.data.split(",");
@@ -103,11 +103,11 @@ agent.prototype.getSocketData = function(result) {
         self.car.handle(self.action[0], self.action[1])
 
     } else if (self.statemachine.currentState === 'start_learn') {
-        console.log('---!!! getSocketData currentState === start_learn');
-        console.log('---!!! getSocketData result.data =' + result.data);
+        // console.log('---!!! getSocketData currentState === start_learn');
+        // console.log('---!!! getSocketData result.data =' + result.data);
         self.statemachine.setState('end_learn');
     } else {
-        console.log('---!!! getSocketData unknown statemachine')
+        // console.log('---!!! getSocketData unknown statemachine')
     }
 };
 
@@ -177,7 +177,7 @@ agent.prototype.step = function (dt) {
 
 
 agent.prototype.handleState = function (state) {
-    console.log('handleState -- ' + state); 
+    // console.log('handleState -- ' + state); 
     switch (state) {
         case 'action_received':
             this.car.update(); // update sensor data

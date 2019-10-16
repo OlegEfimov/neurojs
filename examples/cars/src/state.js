@@ -7,7 +7,7 @@ function StateMachine(state) {
 StateMachine.prototype.setState = function (state) {
     this.prevState = this.currentState;
     this.currentState = state;
-    console.log('prevState = ' + this.prevState + ' newState = ' + this.currentState);
+    // console.log('prevState = ' + this.prevState + ' newState = ' + this.currentState);
 };
 
 StateMachine.prototype.getState = function () {
