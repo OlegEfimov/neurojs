@@ -229,7 +229,7 @@ agent.prototype.handleState = function (state) {
 
 
         // this.car.impact = 0
-        this.car.step() //only draw
+        // this.car.step() //only draw
 }
 
 
