@@ -79,6 +79,15 @@ agent.prototype.getSocketData = function(result) {
     let self = window.gcd.world.agents[0];
     // console.log('agent-getSocketData result.data=' + result.data); 
     // console.log('agent-getSocketData state=' + self.statemachine.currentState);
+    if (result.data === 'reset') {
+        console.log('agent-getSocketData reset');
+        self.car.setInitialPosition(0);
+    }
+    if (result.data === 'stop') {
+        console.log('agent-getSocketData stop');
+        self.car.setInitialPosition(0);
+        window.gcd.doStop();
+    }
     if (self.statemachine.currentState === 'request_action') {
         let act = new Array();
         act = result.data.split(",");
