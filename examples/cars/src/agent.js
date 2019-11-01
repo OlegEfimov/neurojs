@@ -13,6 +13,7 @@ function agent(opt, world) {
     this.car = new car(world, opt)
     this.statemachine = new StateMachine('initial');
     this.options = opt
+    this.done = 0
 
     this.world = world
     this.frequency = 20
@@ -53,7 +54,7 @@ function agent(opt, world) {
         }
         if (op === 'sendReward') {
             // data = 'reward:' + param;
-            data = '' + param;
+            data = '' + param.join(',');
             this.socket.send(data);
             this.statemachine.setState('start_learn');
         }
@@ -189,6 +190,7 @@ agent.prototype.handleState = function (state) {
     // console.log('handleState -- ' + state); 
     switch (state) {
         case 'action_received':
+            this.done = 0
             this.car.update(); // update sensor data
             this.statemachine.setState('end_env_step');
 
@@ -203,6 +205,9 @@ agent.prototype.handleState = function (state) {
             this.car.contact.forEach( (current, i) => {
                 if (current > 0.5) {
                     this.reward += -1.0
+                }
+                if (current > 0.9) {
+                    this.done = 1
                 }
                 result += current.toFixed(3) + '\t';
             });
@@ -220,11 +225,16 @@ agent.prototype.handleState = function (state) {
                     this.statemachine.setState('reward_ready');
                 }
             }
+            if (this.done === 0) {
+                this.reward = 0
+            } else {
+                this.reward = -1
+            }
             break;
         case 'reward_ready':
             if (!this.car.manualControlOn) {
                 if (this.brain.learning) {
-                    this.sendSocketData('sendReward', this.reward);
+                    this.sendSocketData('sendReward', [this.reward, this.done]);
                 }
             }
             break;
