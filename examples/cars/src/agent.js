@@ -222,7 +222,7 @@ agent.prototype.handleState = function (state) {
                 if (current > 0.5) {
                     this.reward += -1.0
                 }
-                if (current > 0.9) {
+                if (current > 0.95) {
                     this.done = 1
                 }
                 result += current.toFixed(3) + '\t';
@@ -235,6 +235,11 @@ agent.prototype.handleState = function (state) {
                 if (this.reward < -1.0) {
                     this.reward += ((Math.abs(speed1) > 1.0) || (Math.abs(speed2)  > 1.0)) ?  0.5 : -0.5;
                 }
+            }
+            if (this.done === 0) {
+                this.reward = 0
+            } else {
+                this.reward = -1
             }
             if (!this.car.manualControlOn) {
                 if (this.brain.learning) {
