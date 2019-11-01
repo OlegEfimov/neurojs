@@ -35,7 +35,8 @@ function agent(opt, world) {
     this.socketOpened = false;
 
     for (i = 0; i < ACTIONS_DELAY; i++) {
-      this.actionArray.push([INITIAL_ACTION, INITIAL_ACTION]);
+      // this.actionArray.push([INITIAL_ACTION, INITIAL_ACTION]);
+      this.actionArray.push(INITIAL_ACTION);
     }
 
     this.action = this.car.action = [INITIAL_ACTION, INITIAL_ACTION];
@@ -93,17 +94,27 @@ agent.prototype.getSocketData = function(result) {
         for (let a in act ) {
             act[a] = parseFloat(act[a], 10);
         }
-        self.action = act;
+        // self.action = act;
+        console.log('agent-getSocketData act[0]=' + act[0]);
+
         self.statemachine.setState('action_received');
         if (!self.car.hardwareOn) {
-            self.action = self.actionArray.shift();
-            self.actionArray.push(act);
+            let tmpAct = self.actionArray.shift();
+            console.log('agent-getSocketData tmpAct=' + tmpAct);
+            // self.actionArray.push(act);
+            self.action[0] = tmpAct
+            self.action[1] = -tmpAct
+            console.log('agent-getSocketData 1 self.action=' + self.action);
+            self.actionArray.push(act[0]);
         } else {
-            self.action = act;
+            // self.action = act;
+            self.action[0] = act[0]
+            self.action[1] = -act[0]
         }
 
         self.action[0] += 0.5
         self.action[1] += 0.5
+        console.log('agent-getSocketData 2 self.action=' + self.action);
 
 
         self.car.sensorDataUpdated = false;
