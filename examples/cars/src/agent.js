@@ -83,13 +83,11 @@ agent.prototype.getSocketData = function(result) {
     if (result.data === 'reset') {
         console.log('agent-getSocketData reset');
         self.car.setInitialPosition(0);
-    }
-    if (result.data === 'stop') {
+    } else if (result.data === 'stop') {
         console.log('agent-getSocketData stop');
         self.car.setInitialPosition(0);
         window.gcd.doStop();
-    }
-    if (self.statemachine.currentState === 'request_action') {
+    } else if (self.statemachine.currentState === 'request_action') {
         let act = new Array();
         act = result.data.split(",");
         for (let a in act ) {
@@ -111,13 +109,20 @@ agent.prototype.getSocketData = function(result) {
         self.car.sensorDataUpdated = false;
         self.nextStateReady = false;
         self.car.handle(self.action[0], self.action[1])
+    } else {
+        var str = result.data;
+        var temp = new Array();
+        // this will return an array with strings "1", "2", etc.
+        temp = str.split(":");
 
-    } else if (self.statemachine.currentState === 'start_learn') {
+        if (temp[0] === 'loss') {
+            self.loss = parseFloat(temp[1], 10);
+        }
+    }
+    if (self.statemachine.currentState === 'start_learn') {
         // console.log('---!!! getSocketData currentState === start_learn');
         // console.log('---!!! getSocketData result.data =' + result.data);
         self.statemachine.setState('end_learn');
-    } else {
-        // console.log('---!!! getSocketData unknown statemachine')
     }
 };
 
@@ -222,22 +227,23 @@ agent.prototype.handleState = function (state) {
             }
             if (!this.car.manualControlOn) {
                 if (this.brain.learning) {
-                    this.statemachine.setState('reward_ready');
-                }
-            }
-            if (this.done === 0) {
-                this.reward = 0
-            } else {
-                this.reward = -1
-            }
-            break;
-        case 'reward_ready':
-            if (!this.car.manualControlOn) {
-                if (this.brain.learning) {
+                    // this.statemachine.setState('reward_ready');
                     this.sendSocketData('sendReward', [this.reward, this.done]);
                 }
             }
+            // if (this.done === 0) {
+            //     this.reward = 0
+            // } else {
+            //     this.reward = -1
+            // }
             break;
+        // case 'reward_ready':
+        //     if (!this.car.manualControlOn) {
+        //         if (this.brain.learning) {
+        //             this.sendSocketData('sendReward', [this.reward, this.done]);
+        //         }
+        //     }
+        //     break;
         case 'initial':
         case 'end_learn':
         case 'end_env_step':

@@ -270,7 +270,7 @@ world.prototype.updateChart = function () {
         } 
 
         else {
-            if (key === 'loss' || key === 'reward') {
+            if (key === 'reward') {
                series.push({
                     name: key,
                     data: this.chartData[key]
@@ -280,7 +280,8 @@ world.prototype.updateChart = function () {
                     name: key,
                     data: this.chartData[key]
                 })
-            } else if (key === 'koeff_reward0' || key === 'koeff_reward1' || key === 'rewardOnContactTop' ) {
+            // } else if (key === 'koeff_reward0' || key === 'koeff_reward1' || key === 'rewardOnContactTop' ) {
+            } else if (key === 'loss') {
                series3.push({
                     name: key,
                     data: this.chartData[key]
