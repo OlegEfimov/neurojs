@@ -84,9 +84,11 @@ agent.prototype.getSocketData = function(result) {
     if (result.data === 'reset') {
         console.log('agent-getSocketData reset');
         self.car.setInitialPosition(0);
+        self.action = self.car.action = [INITIAL_ACTION, INITIAL_ACTION];
     } else if (result.data === 'stop') {
         console.log('agent-getSocketData stop');
         self.car.setInitialPosition(0);
+        self.action = self.car.action = [INITIAL_ACTION, INITIAL_ACTION];
         window.gcd.doStop();
     } else if (self.statemachine.currentState === 'request_action') {
         let act = new Array();
@@ -112,8 +114,8 @@ agent.prototype.getSocketData = function(result) {
             self.action[1] = -act[0]
         }
 
-        self.action[0] += 0.5
-        self.action[1] += 0.5
+        self.action[0] += 1.0
+        self.action[1] += 1.0
         console.log('agent-getSocketData 2 self.action=' + self.action);
 
 
@@ -210,8 +212,10 @@ agent.prototype.handleState = function (state) {
             this.car.update(); // update sensor data
             this.statemachine.setState('end_env_step');
 
-            var speed1 = this.car.speed.velocity1
-            var speed2 = this.car.speed.velocity2
+            // var speed1 = this.car.speed.velocity1
+            // var speed2 = this.car.speed.velocity2
+            var speed1 = 0
+            var speed2 = 0
 
             this.rewardOnForce_0 =  speed1;
             this.rewardOnForce_1 =  speed2;
