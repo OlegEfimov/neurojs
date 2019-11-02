@@ -3,7 +3,7 @@ var StateMachine = require('./state.js');
 
 
 var INITIAL_ACTION = 0.0;
-var ACTIONS_DELAY = 2;
+var ACTIONS_DELAY = 0;
 
 
 function agent(opt, world) {
@@ -97,26 +97,26 @@ agent.prototype.getSocketData = function(result) {
             act[a] = parseFloat(act[a], 10);
         }
         // self.action = act;
-        console.log('agent-getSocketData act[0]=' + act[0]);
+        // console.log('agent-getSocketData act[0]=' + act[0]);
 
         self.statemachine.setState('action_received');
-        if (!self.car.hardwareOn) {
+        if (!self.car.hardwareOn && self.actionArray.length > 0) {
             let tmpAct = self.actionArray.shift();
-            console.log('agent-getSocketData tmpAct=' + tmpAct);
+            // console.log('agent-getSocketData tmpAct=' + tmpAct);
             // self.actionArray.push(act);
             self.action[0] = tmpAct
             self.action[1] = -tmpAct
-            console.log('agent-getSocketData 1 self.action=' + self.action);
+            // console.log('agent-getSocketData 1 self.action=' + self.action);
             self.actionArray.push(act[0]);
         } else {
             // self.action = act;
-            self.action[0] = act[0]
-            self.action[1] = -act[0]
+            self.action[0] = act[0]/2
+            self.action[1] = -act[0]/2
         }
 
         self.action[0] += 1.0
         self.action[1] += 1.0
-        console.log('agent-getSocketData 2 self.action=' + self.action);
+        // console.log('agent-getSocketData 2 self.action=' + self.action);
 
 
         self.car.sensorDataUpdated = false;
