@@ -75,8 +75,8 @@ class DistanceSensor extends Sensor {
             this.car.contactKoeff[this.index] = this.contactKoeff
 
             this.data[0] = 1.0 - this.distance
-            this.data[1] = 0.0 //this.car.contact[this.index]
-            this.data[2] = 0.0 // hit?
+            // this.data[1] = 0.0 //this.car.contact[this.index]
+            // this.data[2] = 0.0 // hit?
             return
         }
 
@@ -127,8 +127,8 @@ class DistanceSensor extends Sensor {
             // this.data[1] = angle
 //            this.data[1] = this.entity === car.ShapeEntity ? 1.0 : 0.0 // is car?
 //            this.data[2] = 1.0 // hit?
-            this.data[1] = 0.0 //this.car.contact[this.pos]
-            this.data[2] = 0.0 // hit?
+            // this.data[1] = 0.0 //this.car.contact[this.pos]
+            // this.data[2] = 0.0 // hit?
         } 
 
         else {
@@ -245,8 +245,8 @@ const sensorTypes = {
     "speed": SpeedSensor
 }
 
-DistanceSensor.dimensions = 3
-SpeedSensor.dimensions = 3
+DistanceSensor.dimensions = 1
+SpeedSensor.dimensions = 2
 
 class SensorArray {
 
