@@ -90,7 +90,7 @@ agent.prototype.step = function (dt) {
         this.car.update()
 
         var speed1 = this.car.speed.velocity1
-        var speed2 = this.car.speed.velocity2
+        var speed2 = this.car.speed.velocity1
 
         this.rewardOnForce_0 =  speed1;
         this.rewardOnForce_1 =  speed2;
