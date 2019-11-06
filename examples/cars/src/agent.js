@@ -212,8 +212,10 @@ agent.prototype.handleState = function (state) {
             this.car.update(); // update sensor data
             this.statemachine.setState('end_env_step');
 
-            var speed1 = this.car.speed.velocity1
-            var speed2 = this.car.speed.velocity1
+            // var speed1 = this.car.speed.velocity1
+            // var speed2 = this.car.speed.velocity1
+            var speed1 = 0
+            var speed2 = 0
 
             this.rewardOnForce_0 =  speed1;
             this.rewardOnForce_1 =  speed2;
