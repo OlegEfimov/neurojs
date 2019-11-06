@@ -220,9 +220,9 @@ class SpeedSensor extends Sensor {
             // this.velocity = Math.abs(this.car.action1+this.car.action2)/2 * ((this.car.action1+this.car.action2)> 0 ? 1.0 : -1.0)
             this.velocity1 = p2.vec2.len(this.car.chassisBody.velocity) * (this.car.action[0] < 0 ? -1.0 : 1.0)
             this.velocity2 = p2.vec2.len(this.car.chassisBody.velocity) * (this.car.action[1] < 0 ? -1.0 : 1.0)
-            this.data[0] = this.velocity1;
-            this.data[1] = this.velocity2;
-            this.data[2] = 0.0
+            this.data[0] = this.velocity1 + this.velocity2;
+            // this.data[1] = this.velocity2;
+            // this.data[2] = 0.0
         }
     }
 
