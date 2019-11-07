@@ -33,6 +33,9 @@ function agent(opt, world) {
     this.currentSensorsData = [];
     this.nextSensorsData = [];
     this.socketOpened = false;
+    this.sendStateCounter = 0;
+    this.sendRewardCounter = 0;
+    this.getActionCounter = 0;
 
     for (i = 0; i < ACTIONS_DELAY; i++) {
       // this.actionArray.push([INITIAL_ACTION, INITIAL_ACTION]);
@@ -51,12 +54,16 @@ function agent(opt, world) {
             // data = 'state:' + param.join(',');
             data = '' + param.join(',');
             this.socket.send(data);
+            this.sendStateCounter += 1
+            console.log('sendStateCounter = ' + this.sendStateCounter)
             this.statemachine.setState('request_action');
         }
         if (op === 'sendReward') {
             // data = 'reward:' + param;
             data = '' + param.join(',');
             this.socket.send(data);
+            this.sendRewardCounter += 1
+            console.log('-------------sendRewardCounter = ' + this.sendRewardCounter)
             this.statemachine.setState('start_learn');
         }
         // console.log('agent-sendSocketData=' + data); 
@@ -108,12 +115,15 @@ agent.prototype.getSocketData = function(result) {
             self.action[1] = -tmpAct
             // console.log('agent-getSocketData 1 self.action=' + self.action);
             self.actionArray.push(act[0]);
+            console.log('!!!!has not to be here!!!')
         } else {
             // self.action = act;
             self.action[0] = act[0]/2
             self.action[1] = -act[0]/2
         }
 
+        self.getActionCounter += 1
+        console.log('-------------getActionCounter = ' + self.getActionCounter)
         self.action[0] += 1.0
         self.action[1] += 1.0
         // console.log('agent-getSocketData 2 self.action=' + self.action);
@@ -226,7 +236,7 @@ agent.prototype.handleState = function (state) {
                 if (current > 0.5) {
                     this.reward += -1.0
                 }
-                if (current > 0.95) {
+                if (current > 0.8) {
                     this.done = 1
                 }
                 result += current.toFixed(3) + '\t';

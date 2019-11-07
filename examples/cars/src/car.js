@@ -418,8 +418,8 @@ class Car {
 
 
     setInitialPosition(number) {
-        // this.chassisBody.position[0] = 0.05 * number * this.world.size.w - this.world.size.w/3
-        this.chassisBody.position[0] = -14.0
+        this.chassisBody.position[0] = 0.05 * number * this.world.size.w - this.world.size.w/3
+        // this.chassisBody.position[0] = -14.0
         this.chassisBody.position[1] = 0.05 * number * this.world.size.h
         this.chassisBody.angle = 0 * Math.PI
         // console.log('setInitialPosition position[0]= ' + this.chassisBody.position[0]);
