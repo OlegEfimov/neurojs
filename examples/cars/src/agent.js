@@ -3,7 +3,7 @@ var StateMachine = require('./state.js');
 
 
 var INITIAL_ACTION = 0.0;
-var ACTIONS_DELAY = 2;
+var ACTIONS_DELAY = 0;
 
 
 function agent(opt, world) {
@@ -95,7 +95,7 @@ agent.prototype.getSocketData = function(result) {
         }
         self.action = act;
         self.statemachine.setState('action_received');
-        if (!self.car.hardwareOn) {
+        if (!self.car.hardwareOn && ACTIONS_DELAY !== 0) {
             self.action = self.actionArray.shift();
             self.actionArray.push(act);
         } else {
