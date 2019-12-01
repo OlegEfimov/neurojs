@@ -49,24 +49,28 @@ function agent(opt, world) {
     }
     
     this.sendSocketData = (op, param) => {
-        let data = ''
-        if (op === 'sendState') {
-            // data = 'state:' + param.join(',');
-            data = '' + param.join(',');
-            this.socket.send(data);
-            this.sendStateCounter += 1
-            console.log('sendStateCounter = ' + this.sendStateCounter)
-            this.statemachine.setState('request_action');
-        }
-        if (op === 'sendReward') {
-            // data = 'reward:' + param;
-            data = '' + param.join(',');
-            this.socket.send(data);
-            this.sendRewardCounter += 1
-            console.log('-------------sendRewardCounter = ' + this.sendRewardCounter)
-            this.statemachine.setState('start_learn');
-        }
-        // console.log('agent-sendSocketData=' + data); 
+        console.log('sendSocketData sendState data=' + data)
+        this.socket.send(data);
+        // let data = ''
+        // if (op === 'sendState') {
+        //     // data = 'state:' + param.join(',');
+        //     data = '' + param.join(',');
+        //     console.log('sendSocketData sendState data=' + data)
+        //     this.socket.send(data);
+        //     this.sendStateCounter += 1
+        //     // console.log('sendStateCounter = ' + this.sendStateCounter)
+        //     this.statemachine.setState('request_action');
+        // }
+        // if (op === 'sendReward') {
+        //     // data = 'reward:' + param;
+        //     data = '' + param.join(',');
+        //     console.log('sendSocketData sendReward data=' + data)
+        //     this.socket.send(data);
+        //     this.sendRewardCounter += 1
+        //     // console.log('-------------sendRewardCounter = ' + this.sendRewardCounter)
+        //     this.statemachine.setState('start_learn');
+        // }
+        // // console.log('agent-sendSocketData=' + data); 
     };
 
 };
@@ -86,20 +90,22 @@ agent.prototype.closeSocket = function () {
 
 agent.prototype.getSocketData = function(result) {
     let self = window.gcd.world.agents[0];
-    // console.log('agent-getSocketData result.data=' + result.data); 
+    console.log('agent-getSocketData result.data=' + result.data); 
     // console.log('agent-getSocketData state=' + self.statemachine.currentState);
-    if (result.data === 'reset') {
+    let rec_data_arr = result.data.split(",");
+
+    if (rec_data_arr[0] === 'reset') {
         console.log('agent-getSocketData reset');
         self.car.setInitialPosition(0);
         self.action = self.car.action = [INITIAL_ACTION, INITIAL_ACTION];
-    } else if (result.data === 'stop') {
+    } else if (rec_data_arr[0] === 'stop') {
         console.log('agent-getSocketData stop');
         self.car.setInitialPosition(0);
         self.action = self.car.action = [INITIAL_ACTION, INITIAL_ACTION];
         window.gcd.doStop();
-    } else if (self.statemachine.currentState === 'request_action') {
+    } else if (rec_data_arr[0] === 'step') {
         let act = new Array();
-        act = result.data.split(",");
+        act = rec_data_arr[1].split(",");
         for (let a in act ) {
             act[a] = parseFloat(act[a], 10);
         }
@@ -123,7 +129,7 @@ agent.prototype.getSocketData = function(result) {
         }
 
         self.getActionCounter += 1
-        console.log('-------------getActionCounter = ' + self.getActionCounter)
+        // console.log('-------------getActionCounter = ' + self.getActionCounter)
         self.action[0] += 1.0
         self.action[1] += 1.0
         // console.log('agent-getSocketData 2 self.action=' + self.action);
@@ -258,7 +264,9 @@ agent.prototype.handleState = function (state) {
             if (!this.car.manualControlOn) {
                 if (this.brain.learning) {
                     // this.statemachine.setState('reward_ready');
-                    this.sendSocketData('sendReward', [this.reward, this.done]);
+                    let s_r_done = 'step_done:' + this.car.sensors.data.join(',') + this.reward + this.done;
+                    // this.sendSocketData('sendReward', [this.reward, this.done]);
+                    this.sendSocketData('sendReward', s_r_done);
                 }
             }
             // if (this.done === 0) {
@@ -277,7 +285,7 @@ agent.prototype.handleState = function (state) {
         case 'initial':
         case 'end_learn':
         case 'end_env_step':
-            this.sendSocketData('sendState', this.car.sensors.data);
+            // this.sendSocketData('sendState', this.car.sensors.data);
             break;
         default:
     }
