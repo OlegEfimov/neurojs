@@ -11,7 +11,7 @@ function agent(opt, world) {
     // this.socket = new ReconnectingWebSocket("ws://localhost:9001/");
 
     this.car = new car(world, opt)
-    this.statemachine = new StateMachine('initial');
+    // this.statemachine = new StateMachine('initial');
     this.options = opt
     this.done = 0
 
@@ -112,7 +112,7 @@ agent.prototype.getSocketData = function(result) {
         // self.action = act;
         // console.log('agent-getSocketData act[0]=' + act[0]);
 
-        self.statemachine.setState('action_received');
+        // self.statemachine.setState('action_received');
         if (!self.car.hardwareOn && self.actionArray.length > 0) {
             let tmpAct = self.actionArray.shift();
             // console.log('agent-getSocketData tmpAct=' + tmpAct);
@@ -148,11 +148,11 @@ agent.prototype.getSocketData = function(result) {
             self.loss = parseFloat(temp[1], 10);
         }
     }
-    if (self.statemachine.currentState === 'start_learn') {
-        // console.log('---!!! getSocketData currentState === start_learn');
-        // console.log('---!!! getSocketData result.data =' + result.data);
-        self.statemachine.setState('end_learn');
-    }
+    // if (self.statemachine.currentState === 'start_learn') {
+    //     // console.log('---!!! getSocketData currentState === start_learn');
+    //     // console.log('---!!! getSocketData result.data =' + result.data);
+    //     self.statemachine.setState('end_learn');
+    // }
 };
 
 
@@ -212,7 +212,7 @@ agent.prototype.step = function (dt) {
     if ((!this.car.hardwareOn && this.timer % this.timerFrequency === 0) ||
         ( this.car.hardwareOn && this.car.sensorDataUpdated)) {
 
-        this.handleState(this.statemachine.getState());
+        // this.handleState(this.statemachine.getState());
         this.car.step() //only draw
     }
 
@@ -226,7 +226,7 @@ agent.prototype.handleState = function (state) {
         case 'action_received':
             this.done = 0
             this.car.update(); // update sensor data
-            this.statemachine.setState('end_env_step');
+            // this.statemachine.setState('end_env_step');
 
             // var speed1 = this.car.speed.velocity1
             // var speed2 = this.car.speed.velocity1
