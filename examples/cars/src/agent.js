@@ -55,7 +55,7 @@ function agent(opt, world) {
             data = '' + param.join(',');
             this.socket.send(data);
             this.sendStateCounter += 1
-            console.log('sendStateCounter = ' + this.sendStateCounter)
+            // console.log('sendStateCounter = ' + this.sendStateCounter)
             this.statemachine.setState('request_action');
         }
         if (op === 'sendReward') {
@@ -63,7 +63,7 @@ function agent(opt, world) {
             data = '' + param.join(',');
             this.socket.send(data);
             this.sendRewardCounter += 1
-            console.log('-------------sendRewardCounter = ' + this.sendRewardCounter)
+            // console.log('-------------sendRewardCounter = ' + this.sendRewardCounter)
             this.statemachine.setState('start_learn');
         }
         // console.log('agent-sendSocketData=' + data); 
@@ -123,7 +123,7 @@ agent.prototype.getSocketData = function(result) {
         }
 
         self.getActionCounter += 1
-        console.log('-------------getActionCounter = ' + self.getActionCounter)
+        // console.log('-------------getActionCounter = ' + self.getActionCounter)
         self.action[0] += 1.0
         self.action[1] += 1.0
         // console.log('agent-getSocketData 2 self.action=' + self.action);
