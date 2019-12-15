@@ -111,10 +111,19 @@ function saveAs(dv, name) {
 }
 
 function downloadBrain(n) {
-    let  dateNow = new Date().toJSON();
-	var buf = window.gcd.world.agents[n].brain.export()
-	saveAs(new DataView(buf), 'brain-' + dateNow + '.bin')
-    document.getElementById('brain-file-name').innerText='brain-' + dateNow + '.bin';
+    let sendData = 'save:0';
+    window.gcd.world.agents[n].socket.send(sendData);
+    console.log('request Save');
+    // let  dateNow = new Date().toJSON();
+    // var buf = window.gcd.world.agents[n].brain.export()
+    // saveAs(new DataView(buf), 'brain-' + dateNow + '.bin')
+    // document.getElementById('brain-file-name').innerText='brain-' + dateNow + '.bin';
+}
+
+function loadBrain(n) {
+    let sendData = 'load:0';
+    window.gcd.world.agents[n].socket.send(sendData);
+    console.log('request Load');
 }
 
 function saveEnv() {
@@ -166,6 +175,7 @@ function stats() {
 }
 
 window.gcd = boot();
+window.loadBrain = loadBrain;
 window.downloadBrain = downloadBrain;
 window.saveEnv = saveEnv
 window.readWorld = readWorld

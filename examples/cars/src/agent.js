@@ -11,7 +11,7 @@ function agent(opt, world) {
     // this.socket = new ReconnectingWebSocket("ws://localhost:9001/");
 
     this.car = new car(world, opt)
-    this.statemachine = new StateMachine('initial');
+    this.statemachine = new StateMachine('start');
     this.options = opt
     this.done = 0
 
@@ -84,69 +84,99 @@ agent.prototype.closeSocket = function () {
     console.log('world-socket closed'); 
 };
 
-agent.prototype.getSocketData = function(result) {
+agent.prototype.doReset = function () {
     let self = window.gcd.world.agents[0];
-    // console.log('agent-getSocketData result.data=' + result.data); 
-    // console.log('agent-getSocketData state=' + self.statemachine.currentState);
-    if (result.data === 'reset') {
-        console.log('agent-getSocketData reset');
+        console.log('agent---doReset');
         self.car.setInitialPosition(0);
         self.action = self.car.action = [INITIAL_ACTION, INITIAL_ACTION];
-    } else if (result.data === 'stop') {
-        console.log('agent-getSocketData stop');
+};
+
+agent.prototype.doStop = function () {
+    let self = window.gcd.world.agents[0];
+        console.log('agent---doStop');
         self.car.setInitialPosition(0);
         self.action = self.car.action = [INITIAL_ACTION, INITIAL_ACTION];
         window.gcd.doStop();
-    } else if (self.statemachine.currentState === 'request_action') {
-        let act = new Array();
-        act = result.data.split(",");
-        for (let a in act ) {
-            act[a] = parseFloat(act[a], 10);
-        }
-        // self.action = act;
-        // console.log('agent-getSocketData act[0]=' + act[0]);
+};
+agent.prototype.getSocketData = function(result) {
+    let self = window.gcd.world.agents[0];
+    // console.log('getSocketData -- ' + result.data);
+    if (result.data === 'register_done') {
+        self.action = self.car.action = [INITIAL_ACTION, INITIAL_ACTION];
+        self.action_ready = true;
+        // console.log('self.action_ready = true -- action = ' + self.action);
+        return; 
+    } 
+    let args = new Array();
+    args = result.data.split(":");
+    // let tmpAct = new Array();
+    // if (args[0] === 'action') {
+    //     tmpAct = args[1].split(",");
+    //     for (let a in tmpAct ) {
+    //         tmpAct[a] = parseFloat(tmpAct[a], 10);
+    //     }
+    // }
+    let tmpAct2 = '';
+    tmpAct2 = '0.0';
+    // console.log('tmpAct2_1 = ' + tmpAct2); 
+    tmpAct2 = args[1];
+    // console.log('tmpAct2_2 = ' + tmpAct2); 
+    let tmpAct2Float = parseFloat(tmpAct2, 10);
+    // console.log('tmpAct2Float = ' + tmpAct2Float); 
 
-        self.statemachine.setState('action_received');
-        if (!self.car.hardwareOn && self.actionArray.length > 0) {
-            let tmpAct = self.actionArray.shift();
-            // console.log('agent-getSocketData tmpAct=' + tmpAct);
-            // self.actionArray.push(act);
-            self.action[0] = tmpAct
-            self.action[1] = -tmpAct
-            // console.log('agent-getSocketData 1 self.action=' + self.action);
-            self.actionArray.push(act[0]);
-            console.log('!!!!has not to be here!!!')
-        } else {
-            // self.action = act;
-            self.action[0] = act[0]/2
-            self.action[1] = -act[0]/2
-        }
+    let tmpAct = '0.0';
+    // console.log('tmpAct = ' + tmpAct); 
+    let tmpActFloat = parseFloat(tmpAct, 10);
+    // console.log('tmpActFloat = ' + tmpActFloat); 
 
-        self.getActionCounter += 1
-        // console.log('-------------getActionCounter = ' + self.getActionCounter)
-        self.action[0] += 1.0
-        self.action[1] += 1.0
-        // console.log('agent-getSocketData 2 self.action=' + self.action);
+    tmpActFloat = tmpActFloat + tmpAct2Float;
+    // console.log('tmpActFloat + tmpAct2Float = ' + tmpActFloat); 
+    let tmpAction_0 = tmpActFloat * 0.5 + 1.0;
+    let tmpAction_1 = -tmpActFloat * 0.5 + 1.0;
+    // self.action[0] = act[0]/2
+    // self.action[1] = -act[0]/2
+    // self.action[0] += 1.0
+    // self.action[1] += 1.0
+
+    // console.log('tmpAction_0 = ' + tmpAction_0); 
+    // console.log('tmpAction_1 = ' + tmpAction_1); 
+    self.action[0] = tmpAction_0
+    self.action[1] = tmpAction_1
+    // self.action[0] = 0.5
+    // self.action[1] = 0.5
+
+    // console.log('self.action[0] = ' + self.action[0]); 
+    // console.log('self.action[1] = ' + self.action[1]); 
 
 
-        self.car.sensorDataUpdated = false;
-        self.nextStateReady = false;
-        self.car.handle(self.action[0], self.action[1])
-    } else {
-        var str = result.data;
-        var temp = new Array();
-        // this will return an array with strings "1", "2", etc.
-        temp = str.split(":");
 
-        if (temp[0] === 'loss') {
-            self.loss = parseFloat(temp[1], 10);
-        }
-    }
-    if (self.statemachine.currentState === 'start_learn') {
-        // console.log('---!!! getSocketData currentState === start_learn');
-        // console.log('---!!! getSocketData result.data =' + result.data);
-        self.statemachine.setState('end_learn');
-    }
+
+
+
+
+
+
+
+    // self.car.sensorDataUpdated = false;
+    self.action_ready = true;
+    console.log('action = ' + self.action); 
+    // self.nextStateReady = false;
+    // self.car.handle(self.action[0], self.action[1])
+    // } else {
+    //     var str = result.data;
+    //     var temp = new Array();
+    //     // this will return an array with strings "1", "2", etc.
+    //     temp = str.split(":");
+
+    //     if (temp[0] === 'loss') {
+    //         self.loss = parseFloat(temp[1], 10);
+    //     }
+    // }
+    // if (self.statemachine.currentState === 'start_learn') {
+    //     // console.log('---!!! getSocketData currentState === start_learn');
+    //     // console.log('---!!! getSocketData result.data =' + result.data);
+    //     self.statemachine.setState('end_learn');
+    // }
 };
 
 
@@ -206,13 +236,44 @@ agent.prototype.step = function (dt) {
     if ((!this.car.hardwareOn && this.timer % this.timerFrequency === 0) ||
         ( this.car.hardwareOn && this.car.sensorDataUpdated)) {
 
-        this.handleState(this.statemachine.getState());
-        this.car.step() //only draw
+        if (this.action_ready) {
+            this.actionHandler();
+        }
     }
-
+    this.car.step() //only draw
     return this.timer % this.timerFrequency === 0
 };
 
+agent.prototype.actionHandler = function () {
+    this.action_ready = false;
+    this.car.handle(this.action[0], this.action[1])
+
+    // this.car.step() //only draw
+
+    this.done = 0
+    this.car.update(); // update sensor data
+
+    this.reward = 0.0
+    this.car.contact.forEach( (current, i) => {
+        if (current > 0.8) {
+            this.done = 1
+        }
+    });
+    if (this.done === 0) {
+        this.reward = 0
+    } else {
+        this.reward = -1
+    }
+    if (!this.car.manualControlOn) {
+        const data = this.car.sensors.data;
+        let sendData = 'state:' + data.join(',');
+        sendData += ',' + this.reward + ',' + this.done;
+        this.socket.send(sendData);
+    }
+    if (this.done === 1) {
+        this.doReset();
+    }
+}
 
 agent.prototype.handleState = function (state) {
     // console.log('handleState -- ' + state); 
@@ -274,7 +335,7 @@ agent.prototype.handleState = function (state) {
         //         }
         //     }
         //     break;
-        case 'initial':
+        case 'start':
         case 'end_learn':
         case 'end_env_step':
             this.sendSocketData('sendState', this.car.sensors.data);
