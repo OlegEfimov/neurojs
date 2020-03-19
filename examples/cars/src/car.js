@@ -32,7 +32,7 @@ class Car {
         this.sensorData = [];
         this.action = [];
 
-        // this.socket = new WebSocket("ws://192.168.0.37:81/");
+        this.socket = new WebSocket("ws://192.168.0.37:81/");
        // this.socket = new ReconnectingWebSocket("ws://192.168.0.37:81/");
         // this.socket = {};
         // this.socket.debug = true;
@@ -96,9 +96,9 @@ class Car {
         // }
         // this.sensorData[16] =  Math.random() * 100
 
-        // this.socket.onopen = this.openSocket;
-        // this.socket.onclose = this.closeSocket;
-        // this.socket.onmessage = this.showData;
+        this.socket.onopen = this.openSocket;
+        this.socket.onclose = this.closeSocket;
+        this.socket.onmessage = this.showData;
 
     }
 
@@ -369,39 +369,39 @@ class Car {
             }
         }
 
-       // if (this.hardwareOn && (this.socket.readyState === 1)) {
-       //      let left = (forceLeftHW * 0.3);
-       //      let right = (forceRightHW * 0.3);
+       if (this.hardwareOn && (this.socket.readyState === 1)) {
+            let left = (forceLeftHW * 0.3);
+            let right = (forceRightHW * 0.3);
 
-       //      if (left > ZERO_ENGINE) {
-       //          left = left + ZERO_ENGINE_SHIFT;
-       //      } else if ((left + ZERO_ENGINE) < 0) {
-       //          left = left - ZERO_ENGINE_SHIFT;
-       //      } else {
-       //          left = 0;
-       //      }
+            if (left > ZERO_ENGINE) {
+                left = left + ZERO_ENGINE_SHIFT;
+            } else if ((left + ZERO_ENGINE) < 0) {
+                left = left - ZERO_ENGINE_SHIFT;
+            } else {
+                left = 0;
+            }
 
-       //      if (right > ZERO_ENGINE) {
-       //          right = right + ZERO_ENGINE_SHIFT;
-       //      } else if ((right + ZERO_ENGINE) < 0) {
-       //          right = right - ZERO_ENGINE_SHIFT;
-       //      } else {
-       //          right = 0;
-       //      }
+            if (right > ZERO_ENGINE) {
+                right = right + ZERO_ENGINE_SHIFT;
+            } else if ((right + ZERO_ENGINE) < 0) {
+                right = right - ZERO_ENGINE_SHIFT;
+            } else {
+                right = 0;
+            }
 
-       //      let forceLeftHW_str = left.toFixed(0);
-       //      let forceRightHW_str = right.toFixed(0);
+            let forceLeftHW_str = left.toFixed(0);
+            let forceRightHW_str = right.toFixed(0);
 
 
-       //      // if (forceLeft !== 0 || forceRight !== 0) {
-       //         this.socket.send(forceLeftHW_str + '=' + forceRightHW_str + '=;');
-       //          // this.socket.send(this.action[0] + '=' + this.action[1] + '=;');
-       //          // console.log(forceLeft + '=' + forceRight + '=;');
-       //          console.log(forceLeftHW_str + '=' + forceRightHW_str + '=;');
-       //      // }
-       //  // } else {
-       //     // console.log('socket.readyState !== 1');
-       // }
+            // if (forceLeft !== 0 || forceRight !== 0) {
+               this.socket.send(forceLeftHW_str + '=' + forceRightHW_str + '=;');
+                // this.socket.send(this.action[0] + '=' + this.action[1] + '=;');
+                // console.log(forceLeft + '=' + forceRight + '=;');
+                console.log(forceLeftHW_str + '=' + forceRightHW_str + '=;');
+            // }
+        // } else {
+           // console.log('socket.readyState !== 1');
+       }
     }
 
     handleKeyInput(k) {
@@ -418,7 +418,7 @@ class Car {
 
 
     setInitialPosition(number) {
-        this.chassisBody.position[0] = 0.05 * number * this.world.size.w - this.world.size.w/4
+        this.chassisBody.position[0] = 0.05 * number * this.world.size.w - this.world.size.w/3
         // this.chassisBody.position[0] = -14.0
         this.chassisBody.position[1] = 0.05 * number * this.world.size.h
         this.chassisBody.angle = 0 * Math.PI
