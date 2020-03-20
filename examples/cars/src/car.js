@@ -33,7 +33,8 @@ class Car {
         this.action = [];
 
         // this.socket = new WebSocket("ws://192.168.1.37:81/");
-       this.socket = new ReconnectingWebSocket("ws://192.168.0.37:81/");
+       // this.socket = new ReconnectingWebSocket("ws://192.168.0.37:81/");
+       this.socket = new ReconnectingWebSocket("ws://192.168.4.1:81/");
         // this.socket = {};
         // this.socket.debug = true;
 
