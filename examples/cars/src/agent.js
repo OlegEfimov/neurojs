@@ -112,41 +112,46 @@ agent.prototype.getSocketData = function(result) {
     } 
     let args = new Array();
     args = result.data.split(":");
-    // let tmpAct = new Array();
-    // if (args[0] === 'action') {
-    //     tmpAct = args[1].split(",");
-    //     for (let a in tmpAct ) {
-    //         tmpAct[a] = parseFloat(tmpAct[a], 10);
-    //     }
-    // }
-    let tmpAct2 = '';
-    tmpAct2 = '0.0';
-    // console.log('tmpAct2_1 = ' + tmpAct2); 
-    tmpAct2 = args[1];
-    // console.log('tmpAct2_2 = ' + tmpAct2); 
-    let tmpAct2Float = parseFloat(tmpAct2, 10);
-    // console.log('tmpAct2Float = ' + tmpAct2Float); 
 
-    let tmpAct = '0.0';
-    // console.log('tmpAct = ' + tmpAct); 
-    let tmpActFloat = parseFloat(tmpAct, 10);
-    // console.log('tmpActFloat = ' + tmpActFloat); 
+    //TBD - !!! need handle args[1] as array
+    
+    let tmpAct = new Array();
+    if (args[0] === 'action') {
+        tmpAct = args[1].split(",");
+        for (let a in tmpAct ) {
+            tmpAct[a] = parseFloat(tmpAct[a], 10);
+        }
+    }
 
-    tmpActFloat = tmpActFloat + tmpAct2Float;
-    // console.log('tmpActFloat + tmpAct2Float = ' + tmpActFloat); 
-    let tmpAction_0 = tmpActFloat * 0.5 + 1.0;
-    let tmpAction_1 = -tmpActFloat * 0.5 + 1.0;
-    // self.action[0] = act[0]/2
-    // self.action[1] = -act[0]/2
-    // self.action[0] += 1.0
-    // self.action[1] += 1.0
 
-    // console.log('tmpAction_0 = ' + tmpAction_0); 
-    // console.log('tmpAction_1 = ' + tmpAction_1); 
-    self.action[0] = tmpAction_0
-    self.action[1] = tmpAction_1
-    // self.action[0] = 0.5
-    // self.action[1] = 0.5
+    // let tmpAct2 = '';
+    // tmpAct2 = '0.0';
+    // // console.log('tmpAct2_1 = ' + tmpAct2); 
+    // tmpAct2 = args[1];
+    // // console.log('tmpAct2_2 = ' + tmpAct2); 
+    // let tmpAct2Float = parseFloat(tmpAct2, 10);
+    // // console.log('tmpAct2Float = ' + tmpAct2Float); 
+
+    // let tmpAct = '0.0';
+    // // console.log('tmpAct = ' + tmpAct); 
+    // let tmpActFloat = parseFloat(tmpAct, 10);
+    // // console.log('tmpActFloat = ' + tmpActFloat); 
+
+    // tmpActFloat = tmpActFloat + tmpAct2Float;
+    // // console.log('tmpActFloat + tmpAct2Float = ' + tmpActFloat); 
+    // let tmpAction_0 = tmpActFloat * 0.5 + 1.0;
+    // let tmpAction_1 = -tmpActFloat * 0.5 + 1.0;
+    self.action[0] = tmpAct[0];
+    self.action[1] = tmpAct[0];
+    self.action[0] += 0.5;
+    self.action[1] += 0.5;
+
+    // // console.log('tmpAction_0 = ' + tmpAction_0); 
+    // // console.log('tmpAction_1 = ' + tmpAction_1); 
+    // self.action[0] = tmpAction_0
+    // self.action[1] = tmpAction_1
+    // // self.action[0] = 0.5
+    // // self.action[1] = 0.5
 
     // console.log('self.action[0] = ' + self.action[0]); 
     // console.log('self.action[1] = ' + self.action[1]); 
