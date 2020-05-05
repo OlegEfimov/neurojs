@@ -49,6 +49,7 @@ function agent(opt, world) {
     }
     
     this.sendSocketData = (op, param) => {
+        console.log('------>>>>>>>>>>>>>>>> sendSocketData');
         let data = ''
         if (op === 'sendState') {
             // data = 'state:' + param.join(',');
@@ -99,9 +100,11 @@ agent.prototype.doStop = function () {
         window.gcd.doStop();
 };
 agent.prototype.getSocketData = function(result) {
+    // console.log('------<<<<<<<<<<<<<<<<< getSocketData');
     let self = window.gcd.world.agents[0];
     // console.log('getSocketData -- ' + result.data);
     if (result.data === 'register_done') {
+        // console.log('------<<<<<<<<<<<<<<<<< getSocketData data === register_done');
         self.action = self.car.action = [INITIAL_ACTION, INITIAL_ACTION];
         self.action_ready = true;
         // console.log('self.action_ready = true -- action = ' + self.action);
@@ -268,6 +271,7 @@ agent.prototype.actionHandler = function () {
         const data = this.car.sensors.data;
         let sendData = 'state:' + data.join(',');
         sendData += ',' + this.reward + ',' + this.done;
+        console.log('actionHandler socket.send(sendData=' + sendData); 
         this.socket.send(sendData);
     }
     if (this.done === 1) {
@@ -276,7 +280,7 @@ agent.prototype.actionHandler = function () {
 }
 
 agent.prototype.handleState = function (state) {
-    // console.log('handleState -- ' + state); 
+    console.log('handleState -- ' + state); 
     switch (state) {
         case 'action_received':
             this.done = 0
@@ -319,6 +323,7 @@ agent.prototype.handleState = function (state) {
             if (!this.car.manualControlOn) {
                 if (this.brain.learning) {
                     // this.statemachine.setState('reward_ready');
+                    console.log('handleState sendSocketData( sendReward ...)'); 
                     this.sendSocketData('sendReward', [this.reward, this.done]);
                 }
             }
@@ -338,6 +343,7 @@ agent.prototype.handleState = function (state) {
         case 'start':
         case 'end_learn':
         case 'end_env_step':
+             console.log('handleState sendSocketData( sendState ...)'); 
             this.sendSocketData('sendState', this.car.sensors.data);
             break;
         default:

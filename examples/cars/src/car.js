@@ -88,6 +88,7 @@ class Car {
     init() {
         this.createPhysicalBody()
 
+        console.log('------!!! sensors = ');
         this.sensors = Car.Sensors.build(this)
         this.speed = this.sensors.getByType("speed")[0]
         // Math.random()
@@ -505,13 +506,13 @@ Car.Sensors = (() => {
         { type: 'distance', angle: -15, length: 3.0, start: [ 0-0.05, t ], index: 2, contactKoeff: 1.0},
         { type: 'distance', angle: +15, length: 3.0, start: [ 0+0.05, t ], index: 3, contactKoeff: 1.0},
         { type: 'distance', angle: +45, length: 3.0, start: [ 0+0.13, t-0.04 ], index: 4, contactKoeff: 1.0},
-        { type: 'distance', angle: +75, length: 3.0, start: [ 0+0.18, t-0.08 ], index: 5, contactKoeff: 1.0}
+        { type: 'distance', angle: +75, length: 3.0, start: [ 0+0.18, t-0.08 ], index: 5, contactKoeff: 1.0},
 
         // { type: 'distance', angle: -105, length: 1.5, start: [ 0-0.18, b+0.08 ], index: 6, contactKoeff: 0.5},
-        // { type: 'distance', angle: -135, length: 3.0, start: [ 0-0.13, b+0.04 ], index: 7, contactKoeff: 0.5},
-        // { type: 'distance', angle: -165, length: 3.0, start: [ 0-0.05, b ], index: 8, contactKoeff: 0.5},
-        // { type: 'distance', angle: +165, length: 3.0, start: [ 0+0.05, b ], index: 9, contactKoeff: 0.5},
-        // { type: 'distance', angle: +135, length: 3.0, start: [ 0+0.13, b+0.04 ], index: 10, contactKoeff: 0.5}
+        { type: 'distance', angle: -135, length: 3.0, start: [ 0-0.13, b+0.04 ], index: 7, contactKoeff: 0.5},
+        { type: 'distance', angle: -165, length: 3.0, start: [ 0-0.05, b ], index: 8, contactKoeff: 0.5},
+        { type: 'distance', angle: +165, length: 3.0, start: [ 0+0.05, b ], index: 9, contactKoeff: 0.5},
+        { type: 'distance', angle: +135, length: 3.0, start: [ 0+0.13, b+0.04 ], index: 10, contactKoeff: 0.5}
         // // { type: 'distance', angle: +105, length: 1.5, start: [ 0+0.18, b+0.08 ], index: 11, contactKoeff: 0.5},
 
 //=====================================
