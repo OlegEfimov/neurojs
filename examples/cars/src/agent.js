@@ -143,8 +143,8 @@ agent.prototype.getSocketData = function(result) {
     // let tmpAction_1 = -tmpActFloat * 0.5 + 1.0;
     self.action[0] = tmpAct[0];
     self.action[1] = tmpAct[1];
-    self.action[0] += 0.5;
-    self.action[1] += 0.5;
+    self.action[0] += 1.0;
+    self.action[1] += 1.0;
 
     // // console.log('tmpAction_0 = ' + tmpAction_0); 
     // // console.log('tmpAction_1 = ' + tmpAction_1); 
@@ -263,7 +263,7 @@ agent.prototype.actionHandler = function () {
 
     this.reward = 0.0
     this.car.contact.forEach( (current, i) => {
-        if (current > 0.8) {
+        if (current > 0.95) {
             this.done = 1
         }
     });
@@ -272,6 +272,23 @@ agent.prototype.actionHandler = function () {
     } else {
         this.reward = -1
     }
+    // this.car.contact.forEach( (current, i) => {
+    //     if (current > 0.8) {
+    //         this.reward += -1.0
+    //     }
+    //     if (current > 0.95) {
+    //         this.done = 1
+    //     }
+    // });
+    // // if (this.reward >= -3.0) {
+    //     const action_diff = Math.abs(this.action[0] - this.action[1]);
+    //     this.reward += action_diff > 0.1 ?   -action_diff : 0.5
+    //     this.reward +=  (Math.abs(this.action[0]) < 0.5)?  -0.3 : 0.5
+    //     this.reward +=  (Math.abs(this.action[1]) < 0.5)?  -0.3 : 0.5
+    // // }
+    // if (this.done !== 0) {
+    //      this.reward += -5
+    // }
     if (!this.car.manualControlOn) {
         const data = this.car.sensors.data;
         let sendData = 'state:' + data.join(',');
