@@ -142,7 +142,7 @@ agent.prototype.getSocketData = function(result) {
     // let tmpAction_0 = tmpActFloat * 0.5 + 1.0;
     // let tmpAction_1 = -tmpActFloat * 0.5 + 1.0;
     self.action[0] = tmpAct[0];
-    self.action[1] = tmpAct[0];
+    self.action[1] = tmpAct[1];
     self.action[0] += 0.5;
     self.action[1] += 0.5;
 
