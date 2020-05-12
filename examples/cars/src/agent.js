@@ -36,6 +36,9 @@ function agent(opt, world) {
     this.sendStateCounter = 0;
     this.sendRewardCounter = 0;
     this.getActionCounter = 0;
+    this.rotationCounter = 0;
+    this.backCounter = 0;
+    this.lowspeedCounter = 0;
 
     for (i = 0; i < ACTIONS_DELAY; i++) {
       // this.actionArray.push([INITIAL_ACTION, INITIAL_ACTION]);
@@ -87,9 +90,12 @@ agent.prototype.closeSocket = function () {
 
 agent.prototype.doReset = function () {
     let self = window.gcd.world.agents[0];
-        console.log('agent---doReset');
+        // console.log('agent---doReset');
         self.car.setInitialPosition(0);
         self.action = self.car.action = [INITIAL_ACTION, INITIAL_ACTION];
+        self.rotationCounter = 0;
+        self.backCounter = 0;
+        self.lowspeedCounter = 0;
 };
 
 agent.prototype.doStop = function () {
@@ -143,8 +149,8 @@ agent.prototype.getSocketData = function(result) {
     // let tmpAction_1 = -tmpActFloat * 0.5 + 1.0;
     self.action[0] = tmpAct[0];
     self.action[1] = tmpAct[1];
-    self.action[0] += 1.0;
-    self.action[1] += 1.0;
+    self.action[0] += 0.7;
+    self.action[1] += 0.7;
 
     // // console.log('tmpAction_0 = ' + tmpAction_0); 
     // // console.log('tmpAction_1 = ' + tmpAction_1); 
@@ -167,7 +173,10 @@ agent.prototype.getSocketData = function(result) {
 
     // self.car.sensorDataUpdated = false;
     self.action_ready = true;
-    console.log('action = ' + self.action); 
+
+//action console log
+    // console.log('action = ' + self.action); 
+
     // self.nextStateReady = false;
     // self.car.handle(self.action[0], self.action[1])
     // } else {
@@ -267,6 +276,56 @@ agent.prototype.actionHandler = function () {
             this.done = 1
         }
     });
+    if (this.done === 1) {
+        console.log('current > 0.95');
+    }
+
+    const action_diff = Math.abs(this.action[0] - this.action[1]);
+    if (action_diff > 1.0) {
+        this.rotationCounter += 1;
+    }
+    if (action_diff < 0.5) {
+        this.rotationCounter -= 3;
+    }
+
+    if (this.rotationCounte < 0) {
+        this.rotationCounter = 0;
+    }
+
+    if (this.rotationCounter > 40) {
+        console.log('------------rotationCounter = ' + this.rotationCounter);
+        this.done = 1;
+    }
+////////////////////////////////
+    const back_move =  this.action[0] < 0 &&  this.action[1] < 0;
+    const forward_move =  this.action[0] > 0.99 &&  this.action[1] > 0.99;
+    if (back_move) {
+        this.backCounter += 1;
+    }
+    if (forward_move) {
+        this.backCounter = 0;
+    }
+
+    if (this.backCounter > 50) {
+        console.log('----------------------backCounter = ' + this.backCounter);
+        this.done = 1;
+    }
+////////////////////////////////
+    const lowspeed =  Math.abs(this.action[0]) < 0.7 && Math.abs(this.action[1]) < 0.7;
+    const highspeed =  Math.abs(this.action[0]) > 1.3 || Math.abs(this.action[1]) > 1.3;
+    if (back_move) {
+        this.lowspeedCounter += 1;
+    }
+    if (highspeed) {
+        this.lowspeedCounter = 0;
+    }
+
+    if (this.lowspeedCounter > 40) {
+        console.log('----------------------lowspeedCounter = ' + this.lowspeedCounter);
+        this.done = 1;
+    }
+
+////////////////////////////////
     if (this.done === 0) {
         this.reward = 0
     } else {
@@ -293,7 +352,7 @@ agent.prototype.actionHandler = function () {
         const data = this.car.sensors.data;
         let sendData = 'state:' + data.join(',');
         sendData += ',' + this.reward + ',' + this.done;
-        console.log('actionHandler socket.send(sendData=' + sendData); 
+        // console.log('actionHandler socket.send(sendData=' + sendData); 
         this.socket.send(sendData);
     }
     if (this.done === 1) {
