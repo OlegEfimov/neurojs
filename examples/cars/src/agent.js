@@ -274,11 +274,18 @@ agent.prototype.actionHandler = function () {
 
     this.emptySpace = true;
     this.reward = 0.0
-    const goodCond1 = (this.car.contact[2] < 0.35 && this.car.contact[3] < 0.35) && (this.action[0] > 0.7 && this.action[1] > 0.7);
-    const goodCond2 = (this.car.contact[1] > 0.6 && this.car.contact[4] > 0.6) &&
-        (this.car.contact[2] > 0.6 && this.car.contact[3] > 0.6) &&
-        (this.car.contact[7] < 0.5 && this.car.contact[8] < 0.5) &&
-        (this.action[0] < 0 && this.action[1] < 0);
+    const rule_1_front = 0.85;
+    const rule_1_act = 0.7;
+
+    const rule_2_front = 0.85;
+    const rule_2_back = 0.7;
+    const rule_2_act = -0.4;
+
+    const rule_1 = (this.car.contact[2] < rule_1_front && this.car.contact[3] < rule_1_front) && (this.action[0] > rule_1_act && this.action[1] > rule_1_act);
+    const rule_2 = (this.car.contact[1] > rule_2_front && this.car.contact[4] > rule_2_front) &&
+        (this.car.contact[2] > rule_2_front && this.car.contact[3] > rule_2_front) &&
+        (this.car.contact[7] < rule_2_back && this.car.contact[8] < rule_2_back) &&
+        (this.action[0] < rule_2_act && this.action[1] < rule_2_act);
     // if (badCondition_1) {
     //     this.badCondition_1_counter += 1;
     // } else {
@@ -362,11 +369,11 @@ agent.prototype.actionHandler = function () {
 ////////////////////////////////
     if (this.done === 0) {
         this.reward = 0;
-        if (goodCond1) {
-            this.reward = 1
+        if (rule_2) {
+            this.reward = 0.5
         }
-        if (goodCond2) {
-            this.reward = 0.8
+        if (rule_1) {
+            this.reward = 1
         }
     } else {
         this.reward = -10
