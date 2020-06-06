@@ -8,6 +8,10 @@
 
   <link rel="stylesheet" href="vendor/multirange.css">
 
+  <link href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="http://code.jquery.com/ui/1.12.0/jquery-ui.min.js" integrity="sha256-eGE6blurk5sHj+rmkfsGYeKyZx3M4bG+ZlFyA7Kns7E=" crossorigin="anonymous"></script>
+
 </head>
 <body>
   <div class="main">
@@ -44,13 +48,13 @@
       </div>
 
       <div class="row">
+        <button onclick="window.gcd.doStop();">Stop</button>
         <button onclick="window.gcd.goSlow();">Go slow</button>
         <button onclick="window.gcd.goFast();">Go fast</button>
 <!--       </div>
       <div class="row">
         <button onclick="window.gcd.doStart();">Start</button>
  -->
-        <button onclick="window.gcd.doStop();">Stop</button>
       </div>
 
       <div class="row">
@@ -64,6 +68,9 @@
          oninput="range_1_low.value=window.getValueLow('range_1');range_1_high.value=window.getValueHigh('range_1')">
         <output id="range_1_high"></output>
       </div>
+
+      <input class="form-control" name="price" id="price">
+      <div id="slider-range"></div>
 
 <!-- 
       <div class="row">
