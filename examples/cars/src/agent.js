@@ -96,6 +96,8 @@ agent.prototype.doReset = function () {
         self.rotationCounter = 0;
         self.backCounter = 0;
         self.lowspeedCounter = 0;
+        self.badCondition_1_counter = 0;
+
 };
 
 agent.prototype.doStop = function () {
@@ -149,8 +151,8 @@ agent.prototype.getSocketData = function(result) {
     // let tmpAction_1 = -tmpActFloat * 0.5 + 1.0;
     self.action[0] = tmpAct[0];
     self.action[1] = tmpAct[1];
-    self.action[0] += 0.7;
-    self.action[1] += 0.7;
+    // self.action[0] += 0.7;
+    // self.action[1] += 0.7;
 
     // // console.log('tmpAction_0 = ' + tmpAction_0); 
     // // console.log('tmpAction_1 = ' + tmpAction_1); 
@@ -270,66 +272,104 @@ agent.prototype.actionHandler = function () {
     this.done = 0
     this.car.update(); // update sensor data
 
+    this.emptySpace = true;
     this.reward = 0.0
+    const goodCond1 = (this.car.contact[2] < 0.35 && this.car.contact[3] < 0.35) && (this.action[0] > 0.7 && this.action[1] > 0.7);
+    const goodCond2 = (this.car.contact[1] > 0.6 && this.car.contact[4] > 0.6) &&
+        (this.car.contact[2] > 0.6 && this.car.contact[3] > 0.6) &&
+        (this.car.contact[7] < 0.5 && this.car.contact[8] < 0.5) &&
+        (this.action[0] < 0 && this.action[1] < 0);
+    // if (badCondition_1) {
+    //     this.badCondition_1_counter += 1;
+    // } else {
+    //     this.badCondition_1_counter -= 1;
+    // }
+    // if (this.badCondition_1_counter < 0) {
+    //     this.badCondition_1_counter = 0;
+    // }
+
+    // if (this.badCondition_1_counter > 3) {
+    //     console.log('badCondition_1 = ' + this.badCondition_1_counter);
+    //     this.done = 1;
+    //     this.badCondition_1_counter = 0;
+    // } else {
     this.car.contact.forEach( (current, i) => {
         if (current > 0.95) {
             this.done = 1
+        }
+        if (current > 0.5) {
+            this.emptySpace = false;
         }
     });
     if (this.done === 1) {
         console.log('current > 0.95');
     }
+    // }
 
-    const action_diff = Math.abs(this.action[0] - this.action[1]);
-    if (action_diff > 1.0) {
-        this.rotationCounter += 1;
-    }
-    if (action_diff < 0.5) {
-        this.rotationCounter -= 3;
-    }
+    // const action_diff = Math.abs(this.action[0] - this.action[1]);
+    // if (action_diff > 1.0) {
+    //     this.rotationCounter += 1;
+    // }
+    // if (action_diff < 0.4) {
+    //     this.rotationCounter -= 1;
+    // }
 
-    if (this.rotationCounte < 0) {
-        this.rotationCounter = 0;
-    }
+    // if (this.rotationCounte < 0) {
+    //     this.rotationCounter = 0;
+    // }
 
-    if (this.rotationCounter > 40) {
-        console.log('------------rotationCounter = ' + this.rotationCounter);
-        this.done = 1;
-    }
+    // if (this.rotationCounter > 50 && this.emptySpace) {
+    //     console.log('------------rotationCounter = ' + this.rotationCounter);
+    //     this.done = 1;
+    // }
 ////////////////////////////////
-    const back_move =  this.action[0] < 0 &&  this.action[1] < 0;
-    const forward_move =  this.action[0] > 0.99 &&  this.action[1] > 0.99;
-    if (back_move) {
-        this.backCounter += 1;
-    }
-    if (forward_move) {
-        this.backCounter = 0;
-    }
+    // const back_move =  this.action[0] < 0 &&  this.action[1] < 0;
+    // const forward_move =  this.action[0] > 0.99 &&  this.action[1] > 0.99;
+    // if (back_move) {
+    //     this.backCounter += 1;
+    //     this.lowspeedCounter = 0;
+    // }
+    // if (forward_move) {
+    //     this.backCounter -= 1;
+    // }
 
-    if (this.backCounter > 50) {
-        console.log('----------------------backCounter = ' + this.backCounter);
-        this.done = 1;
-    }
+    // if (this.backCounter < 0) {
+    //     this.backCounter = 0;
+    // }
+    // if (this.backCounter > 50 && this.emptySpace) {
+    //     console.log('----------------------backCounter = ' + this.backCounter);
+    //     this.done = 1;
+    // }
 ////////////////////////////////
-    const lowspeed =  Math.abs(this.action[0]) < 0.7 && Math.abs(this.action[1]) < 0.7;
-    const highspeed =  Math.abs(this.action[0]) > 1.3 || Math.abs(this.action[1]) > 1.3;
-    if (back_move) {
-        this.lowspeedCounter += 1;
-    }
-    if (highspeed) {
-        this.lowspeedCounter = 0;
-    }
+    // const lowspeed =  Math.abs(this.action[0]) < 0.7 && Math.abs(this.action[1]) < 0.7;
+    // const highspeed =  Math.abs(this.action[0]) > 1.3 || Math.abs(this.action[1]) > 1.3;
+    // if (back_move) {
+    //     this.lowspeedCounter += 1;
+    // }
+    // if (highspeed) {
+    //     this.lowspeedCounter -= 1;
+    // }
 
-    if (this.lowspeedCounter > 40) {
-        console.log('----------------------lowspeedCounter = ' + this.lowspeedCounter);
-        this.done = 1;
-    }
+    // if (this.lowspeedCounter < 0) {
+    //     this.lowspeedCounter = 0;
+    // }
+
+    // if (this.lowspeedCounter > 50 && this.emptySpace) {
+    //     console.log('----------------------lowspeedCounter = ' + this.lowspeedCounter);
+    //     this.done = 1;
+    // }
 
 ////////////////////////////////
     if (this.done === 0) {
-        this.reward = 0
+        this.reward = 0;
+        if (goodCond1) {
+            this.reward = 1
+        }
+        if (goodCond2) {
+            this.reward = 0.8
+        }
     } else {
-        this.reward = -1
+        this.reward = -10
     }
     // this.car.contact.forEach( (current, i) => {
     //     if (current > 0.8) {
