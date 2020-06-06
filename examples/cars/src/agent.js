@@ -281,11 +281,48 @@ agent.prototype.actionHandler = function () {
     const rule_2_back = 0.7;
     const rule_2_act = -0.4;
 
+    const rule_3_side_free = 0.5;
+    const rule_3_act_diff = 0.4;
+
+    const rule_4_act_diff = 0.4;
+
     const rule_1 = (this.car.contact[2] < rule_1_front && this.car.contact[3] < rule_1_front) && (this.action[0] > rule_1_act && this.action[1] > rule_1_act);
-    const rule_2 = (this.car.contact[1] > rule_2_front && this.car.contact[4] > rule_2_front) &&
+    const rule_2 =
+        (this.car.contact[1] > rule_2_front && this.car.contact[4] > rule_2_front) &&
         (this.car.contact[2] > rule_2_front && this.car.contact[3] > rule_2_front) &&
         (this.car.contact[7] < rule_2_back && this.car.contact[8] < rule_2_back) &&
         (this.action[0] < rule_2_act && this.action[1] < rule_2_act);
+
+    const rule_3_1 =
+        (this.car.contact[1] > rule_2_front &&
+         this.car.contact[2] > rule_2_front &&
+         this.car.contact[3] > rule_2_front &&
+         this.car.contact[4] < rule_3_side_free) &&
+        (this.action[1] > 0 && this.action[1] > this.action[0] &&
+         (this.action[1] - this.action[0]) > rule_3_act_diff);
+    const rule_3_2 =
+        (this.car.contact[1] < rule_3_side_free &&
+         this.car.contact[2] > rule_2_front &&
+         this.car.contact[3] > rule_2_front &&
+         this.car.contact[4] > rule_2_front) &&
+        (this.action[0] > 0 && this.action[0] > this.action[1] &&
+         (this.action[0] - this.action[1]) > rule_3_act_diff);
+
+    const rule_4_1 =
+        (this.car.contact[1] > rule_2_front &&
+         this.car.contact[2] > rule_2_front &&
+         this.car.contact[3] < rule_3_side_free &&
+         this.car.contact[4] < rule_3_side_free) &&
+        (this.action[1] > 0 && this.action[1] > this.action[0] &&
+         (this.action[1] - this.action[0]) > rule_4_act_diff);
+    const rule_4_2 =
+        (this.car.contact[1] < rule_3_side_free &&
+         this.car.contact[2] < rule_3_side_free &&
+         this.car.contact[3] > rule_2_front &&
+         this.car.contact[4] > rule_2_front) &&
+        (this.action[0] > 0 && this.action[0] > this.action[1] &&
+         (this.action[0] - this.action[1]) > rule_4_act_diff);
+
     // if (badCondition_1) {
     //     this.badCondition_1_counter += 1;
     // } else {
@@ -369,6 +406,18 @@ agent.prototype.actionHandler = function () {
 ////////////////////////////////
     if (this.done === 0) {
         this.reward = 0;
+        if (rule_4_1) {
+            this.reward = 0.4
+        }
+        if (rule_4_2) {
+            this.reward = 0.4
+        }
+        if (rule_3_1) {
+            this.reward = 0.6
+        }
+        if (rule_3_2) {
+            this.reward = 0.6
+        }
         if (rule_2) {
             this.reward = 0.5
         }
